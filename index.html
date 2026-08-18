@@ -3116,10 +3116,18 @@
     }
   }
 
-  /* Floating Vertical Side Navigation */
+  /* Proximity side navigation (rareui.com/components/proximitysidebar)
+     A dash-only minimap: quiet by default, each mark growing as the pointer
+     nears it, and the mark for the section you are reading pulsing briefly on
+     scroll before settling back.
+
+     Geometry is the reference's: a 110px track per dash, 1px thick, 8px apart,
+     scaled along X rather than animated in width so the motion never touches
+     layout. Because the rail sits on the right, the marks grow from the right
+     edge - the transform-origin is what anchors the motion to the outside. */
   .side-nav {
     position: fixed;
-    right: 18px;
+    right: 22px;
     top: 50%;
     transform: translateY(-50%) translateX(12px);
     z-index: 95;
@@ -3136,98 +3144,56 @@
   body.au-ty-open .side-nav {
     display: none !important;
   }
-  .side-nav-pill {
-    position: relative;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 16px;
-    padding: 6px 4px;
-    width: 22px;
-    overflow: hidden;
-    transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-                padding 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-                background 0.22s ease,
-                box-shadow 0.22s ease,
-                border-color 0.22s ease;
-  }
-  .side-nav:hover .side-nav-pill,
-  .side-nav.is-expanded .side-nav-pill {
-    width: 136px;
-    padding: 12px 16px;
-    background: rgba(10, 14, 24, 0.94);
-    backdrop-filter: blur(24px) saturate(1.8);
-    -webkit-backdrop-filter: blur(24px) saturate(1.8);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  }
   .side-nav-items {
     display: flex;
     flex-direction: column;
-    gap: 4.5px;
-    min-width: max-content;
+    align-items: flex-end;
+    gap: 8px;
   }
-  .side-nav:hover .side-nav-items,
-  .side-nav.is-expanded .side-nav-items {
-    gap: 6px;
-  }
+  /* The button is the full 110px track and only 1px tall, so the hit area comes
+     from padding that does not disturb the 8px rhythm. */
   .side-nav-item {
     display: flex;
     align-items: center;
-    text-decoration: none;
+    justify-content: flex-end;
+    width: 110px;
+    height: 1px;
+    padding: 5px 0;
+    margin: -5px 0;
+    border: 0;
+    background: transparent;
     cursor: pointer;
-    height: 10px;
-    position: relative;
-    transition: all 0.18s ease;
-  }
-  .side-nav:hover .side-nav-item,
-  .side-nav.is-expanded .side-nav-item {
-    height: 16px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
   }
   .side-nav-dash {
-    width: 10px;
-    height: 1.5px;
-    border-radius: 100px;
-    background: rgba(15, 23, 42, 0.28);
-    flex-shrink: 0;
-    transition: width 0.2s ease, opacity 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    display: block;
+    width: 110px;
+    height: 1px;
+    transform-origin: right center;
+    transform: scaleX(var(--dash-scale, 0.36));
+    transition: background-color 0.15s ease-out;
   }
+  /* Weight by length and colour, not by stroke: titles and subtitles carry the
+     full ink, the quieter kinds sit at 40% so they read as density. */
+  .side-nav-item[data-kind="title"] .side-nav-dash,
+  .side-nav-item[data-kind="subtitle"] .side-nav-dash {
+    background-color: var(--ink);
+  }
+  .side-nav-item[data-kind="section"] .side-nav-dash,
+  .side-nav-item[data-kind="body"] .side-nav-dash {
+    background-color: rgba(100, 116, 139, 0.4);
+  }
+  /* Kept from the previous rail: the section you are in is worth marking in
+     brand colour, not only pulsing. */
   .side-nav-item.active .side-nav-dash {
-    background: #059669;
-    width: 13px;
+    background-color: #059669;
     height: 2px;
-    box-shadow: 0 0 5px rgba(5, 150, 105, 0.55);
   }
-  .side-nav:hover .side-nav-dash,
-  .side-nav.is-expanded .side-nav-dash {
-    width: 0;
-    opacity: 0;
-    margin: 0;
-  }
-  .side-nav-label {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    color: rgba(255, 255, 255, 0.42);
-    white-space: nowrap;
-    opacity: 0;
-    transform: translateX(4px);
-    transition: opacity 0.2s ease, transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), color 0.18s ease;
-    pointer-events: none;
-  }
-  .side-nav:hover .side-nav-label,
-  .side-nav.is-expanded .side-nav-label {
-    opacity: 1;
-    transform: translateX(0);
-    pointer-events: auto;
-  }
-  .side-nav-item:hover .side-nav-label {
-    color: rgba(255, 255, 255, 0.9);
-  }
-  .side-nav-item.active .side-nav-label {
-    color: #FFFFFF;
-    font-weight: 600;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  .side-nav-item:focus-visible .side-nav-dash {
+    outline: 2px solid #059669;
+    outline-offset: 3px;
   }
   @media (max-width: 900px) {
     .side-nav {
@@ -3292,42 +3258,40 @@
 <main id="top">
 
   <!-- Floating Vertical Side Navigation -->
-  <nav class="side-nav" id="sideNav" aria-label="Page Sections Navigation">
-    <div class="side-nav-pill">
-      <div class="side-nav-items">
-        <a href="#hero" class="side-nav-item active" data-target="hero">
-          <span class="side-nav-dash"></span>
-          <span class="side-nav-label">Intro</span>
-        </a>
-        <a href="#auProblem" class="side-nav-item" data-target="auProblem">
-          <span class="side-nav-dash"></span>
-          <span class="side-nav-label">Problem</span>
-        </a>
-        <a href="#auSpotlight" class="side-nav-item" data-target="auSpotlight">
-          <span class="side-nav-dash"></span>
-          <span class="side-nav-label">Advocates</span>
-        </a>
-        <a href="#auMath" class="side-nav-item" data-target="auMath">
-          <span class="side-nav-dash"></span>
-          <span class="side-nav-label">The Math</span>
-        </a>
-        <a href="#auHow" class="side-nav-item" data-target="auHow">
-          <span class="side-nav-dash"></span>
-          <span class="side-nav-label">How It Works</span>
-        </a>
-        <a href="#auRoi" class="side-nav-item" data-target="auRoi">
-          <span class="side-nav-dash"></span>
-          <span class="side-nav-label">ROI Calc</span>
-        </a>
-        <a href="#auProof" class="side-nav-item" data-target="auProof">
-          <span class="side-nav-dash"></span>
-          <span class="side-nav-label">Case Studies</span>
-        </a>
-        <a href="#auCta" class="side-nav-item" data-target="auCta">
-          <span class="side-nav-dash"></span>
-          <span class="side-nav-label">Get Playbook</span>
-        </a>
-      </div>
+  <nav class="side-nav" id="sideNav" aria-label="Page sections">
+    <div class="side-nav-items" id="sideNavItems">
+      <button type="button" class="side-nav-item active" data-target="hero" data-kind="title"
+              title="Intro" aria-label="Go to Intro" aria-current="location">
+        <span class="side-nav-dash"></span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="auProblem" data-kind="subtitle"
+              title="Problem" aria-label="Go to Problem">
+        <span class="side-nav-dash"></span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="auSpotlight" data-kind="section"
+              title="Advocates" aria-label="Go to Advocates">
+        <span class="side-nav-dash"></span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="auMath" data-kind="subtitle"
+              title="The Math" aria-label="Go to The Math">
+        <span class="side-nav-dash"></span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="auHow" data-kind="subtitle"
+              title="How It Works" aria-label="Go to How It Works">
+        <span class="side-nav-dash"></span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="auRoi" data-kind="subtitle"
+              title="ROI Calc" aria-label="Go to ROI Calc">
+        <span class="side-nav-dash"></span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="auProof" data-kind="section"
+              title="Case Studies" aria-label="Go to Case Studies">
+        <span class="side-nav-dash"></span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="auCta" data-kind="title"
+              title="Get Playbook" aria-label="Go to Get Playbook">
+        <span class="side-nav-dash"></span>
+      </button>
     </div>
   </nav>
 
@@ -6864,71 +6828,215 @@ function fireConfetti() {
 (function initSideNav() {
   const sideNav = document.getElementById('sideNav');
   if (!sideNav) return;
-  const items = sideNav.querySelectorAll('.side-nav-item');
-  if (!items.length) return;
+  const rail = document.getElementById('sideNavItems');
+  const items = [...sideNav.querySelectorAll('.side-nav-item')];
+  if (!rail || !items.length) return;
 
-  const sectionIds = Array.from(items).map((item) => item.dataset.target);
-  const sections = sectionIds.map((id) => document.getElementById(id)).filter(Boolean);
+  // ---- the reference's constants, unchanged -------------------------------
+  // RADIUS is the vertical reach of the pointer's influence; MAX_DASH_WIDTH is
+  // the track every dash is drawn at, so a dash of width w renders at scaleX
+  // w / MAX_DASH_WIDTH. IDLE_RESET is how long after the last scroll tick the
+  // pulled-out active dash is released.
+  const RADIUS = 40;
+  const MAX_DASH_WIDTH = 110;
+  const IDLE_RESET = 80;
+  const ACTIVE_OFFSET = 0.4;
+  const SPRING = { stiffness: 320, damping: 34, mass: 0.7 };
+  const PRESETS = {
+    title:    { base: 40, bump: 70 },
+    subtitle: { base: 36, bump: 64 },
+    section:  { base: 30, bump: 56 },
+    body:     { base: 24, bump: 50 },
+  };
 
-  items.forEach((item) => {
-    item.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = item.dataset.target;
-      const targetEl = document.getElementById(targetId);
-      if (!targetEl) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-      items.forEach((it) => it.classList.toggle('active', it === item));
-
-      if (typeof lenis !== 'undefined' && lenis && typeof lenis.scrollTo === 'function') {
-        lenis.scrollTo(targetEl, { offset: targetId === 'hero' ? 0 : -30, duration: 1.2 });
-      } else {
-        const topPos = targetEl.getBoundingClientRect().top + window.scrollY - (targetId === 'hero' ? 0 : 40);
-        window.scrollTo({
-          top: Math.max(0, topPos),
-          behavior: 'smooth'
-        });
-      }
-    });
+  const dashes = items.map((item) => {
+    const preset = PRESETS[item.dataset.kind] || PRESETS.body;
+    const rest = preset.base / MAX_DASH_WIDTH;
+    const node = item.querySelector('.side-nav-dash');
+    node.style.setProperty('--dash-scale', rest.toFixed(4));
+    return {
+      item, node, preset, rest,
+      peak: (preset.base + preset.bump) / MAX_DASH_WIDTH,
+      x: rest,          // current scaleX
+      v: 0,             // spring velocity
+      target: rest,
+    };
   });
 
-  const laptopTrack = document.getElementById('auLaptopTrack');
-  function updateSideNavState() {
-    // Visibility: reveal only after scrolling below the hero laptop video
-    if (laptopTrack) {
-      const rect = laptopTrack.getBoundingClientRect();
-      const isPastLaptop = rect.bottom < window.innerHeight * 0.7;
-      sideNav.classList.toggle('is-visible', isPastLaptop);
-    } else {
-      sideNav.classList.toggle('is-visible', window.scrollY > 400);
-    }
+  const sectionIds = items.map((item) => item.dataset.target);
+  const sectionEl = (id) => document.getElementById(id);
 
-    // ScrollSpy active section tracking
-    const scrollY = window.scrollY;
-    const viewportHeight = window.innerHeight;
-    const triggerPoint = scrollY + viewportHeight * 0.38;
+  // ---- pointer proximity --------------------------------------------------
+  // One shared pointer position; each dash measures its own distance from it,
+  // which is what makes the falloff continuous rather than per-item hover.
+  let pointerY = Infinity;
+  let pointerInside = false;
+  let resetTimer = null;
 
-    let activeId = sectionIds[0];
-
-    for (let i = 0; i < sections.length; i++) {
-      const sec = sections[i];
-      const top = sec.offsetTop;
-      if (triggerPoint >= top) {
-        activeId = sec.id;
+  function retarget() {
+    for (const d of dashes) {
+      let t = 0;
+      if (pointerY !== Infinity) {
+        const rect = d.item.getBoundingClientRect();
+        const dist = Math.abs(pointerY - (rect.top + rect.height / 2));
+        t = Math.max(0, 1 - dist / RADIUS);      // the reference's clamped tent
       }
+      d.target = d.rest + (d.peak - d.rest) * t;
+    }
+    wake();
+  }
+
+  // ---- the spring ---------------------------------------------------------
+  // motion's useSpring, integrated here: a = (-k(x - target) - cv) / m, stepped
+  // at a fixed 1/240s so a long frame cannot make it explode. The loop parks
+  // itself once every dash is at rest, so an idle rail costs nothing.
+  let raf = 0, lastT = 0;
+  const STEP = 1 / 240;
+
+  function tick(now) {
+    raf = 0;
+    const dt = lastT ? Math.min((now - lastT) / 1000, 0.064) : STEP;
+    lastT = now;
+
+    let moving = false;
+    let steps = Math.max(1, Math.round(dt / STEP));
+    for (const d of dashes) {
+      for (let i = 0; i < steps; i++) {
+        const a = (-SPRING.stiffness * (d.x - d.target) - SPRING.damping * d.v) / SPRING.mass;
+        d.v += a * STEP;
+        d.x += d.v * STEP;
+      }
+      if (Math.abs(d.x - d.target) < 0.0004 && Math.abs(d.v) < 0.004) {
+        d.x = d.target;
+        d.v = 0;
+      } else {
+        moving = true;
+      }
+      d.node.style.setProperty('--dash-scale', d.x.toFixed(4));
     }
 
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 60) {
-      activeId = sectionIds[sectionIds.length - 1];
-    }
+    if (moving) raf = requestAnimationFrame(tick);
+    else lastT = 0;
+  }
 
+  function wake() {
+    if (reduce.matches) {
+      // No spring under reduced motion - the dashes still resize, instantly.
+      for (const d of dashes) {
+        d.x = d.target; d.v = 0;
+        d.node.style.setProperty('--dash-scale', d.x.toFixed(4));
+      }
+      return;
+    }
+    if (!raf) { lastT = 0; raf = requestAnimationFrame(tick); }
+  }
+
+  rail.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'touch') return;
+    if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
+    pointerInside = true;
+    pointerY = e.clientY;
+    retarget();
+  });
+  rail.addEventListener('pointerleave', () => {
+    pointerInside = false;
+    pointerY = Infinity;
+    retarget();
+  });
+
+  // ---- the scroll pulse ---------------------------------------------------
+  // Reuses the same pointer channel: park the virtual pointer on the active
+  // dash, then release it a beat after scrolling stops. The spring turns that
+  // brief pull into a bump that settles on its own.
+  function pulse(id) {
+    const d = dashes.find((entry) => entry.item.dataset.target === id);
+    if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
+    if (!d || pointerInside) return;
+    const rect = d.item.getBoundingClientRect();
+    pointerY = rect.top + rect.height / 2;
+    retarget();
+    resetTimer = setTimeout(() => {
+      resetTimer = null;
+      if (pointerInside) return;
+      pointerY = Infinity;
+      retarget();
+    }, IDLE_RESET);
+  }
+
+  // ---- active section -----------------------------------------------------
+  // Nearest section to an anchor line 40% down the viewport, the section that
+  // straddles it winning outright.
+  let activeId = sectionIds[0];
+
+  function setActive(id) {
+    if (id === activeId) return;
+    activeId = id;
     items.forEach((item) => {
-      item.classList.toggle('active', item.dataset.target === activeId);
+      const on = item.dataset.target === id;
+      item.classList.toggle('active', on);
+      if (on) item.setAttribute('aria-current', 'location');
+      else item.removeAttribute('aria-current');
     });
   }
 
-  window.addEventListener('scroll', updateSideNavState, { passive: true });
-  window.addEventListener('resize', updateSideNavState);
-  updateSideNavState();
+  let pending = 0;
+  function update() {
+    pending = 0;
+    const anchorY = window.innerHeight * ACTIVE_OFFSET;
+    let nextId = sectionIds[0];
+    let shortest = Infinity;
+
+    for (const id of sectionIds) {
+      const el = sectionEl(id);
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      const holds = rect.top <= anchorY && rect.bottom >= anchorY;
+      const dist = holds ? 0 : Math.min(Math.abs(rect.top - anchorY), Math.abs(rect.bottom - anchorY));
+      if (dist < shortest) { shortest = dist; nextId = id; }
+    }
+
+    setActive(nextId);
+    if (!pointerInside) pulse(nextId);
+
+    // Visibility gate, carried over: the rail stays out of the hero.
+    const laptopTrack = document.getElementById('auLaptopTrack');
+    if (laptopTrack) {
+      sideNav.classList.toggle('is-visible', laptopTrack.getBoundingClientRect().bottom < window.innerHeight * 0.7);
+    } else {
+      sideNav.classList.toggle('is-visible', window.scrollY > 400);
+    }
+  }
+
+  function schedule() {
+    if (!pending) pending = requestAnimationFrame(update);
+  }
+
+  // ---- click --------------------------------------------------------------
+  items.forEach((item) => {
+    item.addEventListener('click', () => {
+      const id = item.dataset.target;
+      const el = sectionEl(id);
+      if (!el) return;
+
+      setActive(id);
+      // Lenis owns the scroll on this page, so hand it the target rather than
+      // calling scrollIntoView - native smooth scrolling fights its inertia.
+      if (typeof lenis !== 'undefined' && lenis && typeof lenis.scrollTo === 'function') {
+        lenis.scrollTo(el, { offset: id === 'hero' ? 0 : -30, duration: reduce.matches ? 0 : 1.2 });
+      } else {
+        const top = el.getBoundingClientRect().top + window.scrollY - (id === 'hero' ? 0 : 40);
+        window.scrollTo({ top: Math.max(0, top), behavior: reduce.matches ? 'auto' : 'smooth' });
+      }
+      history.replaceState(null, '', '#' + id);
+      pulse(id);
+    });
+  });
+
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  update();
 })();
 
 </script>
