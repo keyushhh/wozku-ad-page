@@ -12,8 +12,8 @@ const NOTE_COLORS = [
   { bg: "#fce7f3", shadow: "#fbcfe8", fold: "#f9a8d4", backBg: "#fce7f3" }, // pink
 ];
 
-const PEEL_SIZE = 80;        // px – side length of the peeled corner triangle
-const DRAG_THRESHOLD = 120;  // px – drag distance to trigger advance
+const PEEL_SIZE = 80;        // px - side length of the peeled corner triangle
+const DRAG_THRESHOLD = 120;  // px - drag distance to trigger advance
 
 // ──────────────────────────────────────────────────────
 // Types
@@ -24,7 +24,7 @@ interface PeelCornerProps {
 }
 
 // ──────────────────────────────────────────────────────
-// Peel corner — the interactive lifting flap
+// Peel corner - the interactive lifting flap
 // ──────────────────────────────────────────────────────
 function PeelCorner({ color, onPeelComplete }: PeelCornerProps) {
   const dragX = useMotionValue(0);
@@ -130,7 +130,7 @@ function PeelCorner({ color, onPeelComplete }: PeelCornerProps) {
         }}
         whileTap={{ cursor: "grabbing" }}
       >
-        {/* Outer triangle — the back face of the fold */}
+        {/* Outer triangle - the back face of the fold */}
         <motion.div
           style={{
             position: "absolute",
@@ -145,7 +145,7 @@ function PeelCorner({ color, onPeelComplete }: PeelCornerProps) {
             boxShadow: `inset -3px -3px 6px rgba(0,0,0,0.1)`,
           }}
         />
-        {/* Fold edge line — the shiny crease */}
+        {/* Fold edge line - the shiny crease */}
         <motion.div
           style={{
             position: "absolute",
@@ -320,7 +320,7 @@ function StickyNote({
         </p>
       </div>
 
-      {/* Peel corner — only on top card */}
+      {/* Peel corner - only on top card */}
       {isTop && <PeelCorner color={color} onPeelComplete={onPeelComplete} />}
 
       {/* Peel hint label */}
