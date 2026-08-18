@@ -245,10 +245,10 @@
   .hero-br{ display:none; }
   @media (min-width: 900px){ .hero-br{ display:inline; } }
   .hero-editorial-sub{
-    font-size:18px; line-height:1.6;
+    font-size:20px; line-height:1.55;
     color:#FFFFFF;
     max-width:740px; margin:0 auto 34px;
-    font-weight:400;
+    font-weight:500;
     text-shadow:0 1px 12px rgba(0, 0, 0, 0.3);
   }
   .hero-editorial-actions{
@@ -336,12 +336,21 @@
     position:absolute; width:1px; height:1px; padding:0; margin:-1px;
     overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
   }
+  .hero-mesh-btn-secondary:hover{
+    background:rgba(255, 255, 255, 0.2) !important;
+    border-color:rgba(255, 255, 255, 0.4) !important;
+    transform:translateY(-1.5px);
+  }
 
-  .au-section{padding:96px 0;}
-  .au-interstitial{padding:40px 0;}
-  .au-math{padding:104px 0 108px;}
-  /* The calculator is a single tall object and wants to be read in one */
-  .au-roi{padding:44px 0 40px;}
+  /* ---- Section Spacing & Sizing Tokens ---- */
+  .au-section{padding:96px 0; position:relative;}
+  @media (max-width:768px){ .au-section{padding:64px 0;} }
+  .au-hero{padding:120px 0 100px; min-height:85vh; display:flex; align-items:center;}
+  .au-problem{padding:80px 0 96px;}
+  .au-features{padding:100px 0;}
+  .au-how{padding:96px 0;}
+  .au-proof{padding:96px 0 104px;}
+  .au-roi{padding:96px 0;}
   .au-cta{padding:64px 0 104px;}
 
   /* ---- shared section furniture ---- */
@@ -356,7 +365,7 @@
     font-family:var(--font-display); font-size:clamp(28px, 3.4vw, 42px); font-weight:700;
     letter-spacing:-0.025em; line-height:1.15; color:var(--ink); margin:0 0 16px;
   }
-  .au-sub{font-size:17px; line-height:1.6; color:var(--ink-dim); margin:0;}
+  .au-sub{font-size:19px; font-weight:500; line-height:1.55; color:var(--ink-dim); margin:0;}
 
   /* hero lockup */
   .au-hero-lockup{
@@ -535,7 +544,7 @@
   .au-problem .au-head{margin-bottom:0;}
   .au-problem .au-tag{margin-bottom:10px;}
   .au-problem .au-h2{font-size:clamp(26px, 2.9vw, 34px); margin-bottom:12px;}
-  .au-problem .au-sub{font-size:16px; line-height:1.55;}
+  .au-problem .au-sub{font-size:18px; font-weight:500; line-height:1.55;}
   @media (min-width:920px){
     .au-prob-grid{
       grid-template-columns:repeat(5, minmax(0, 1fr));
@@ -1292,9 +1301,9 @@
     margin:0 0 14px;
   }
   .au-norma-how .au-sub{
-    font-size:17px;
+    font-size:19px;
     line-height:1.55;
-    color:#000000;
+    color:#334155;
     font-weight:500;
     margin:0;
     max-width:540px;
@@ -1367,9 +1376,9 @@
     line-height:1.2;
   }
   .au-norma-desc{
-    font-size:14px;
-    line-height:1.5;
-    color:#1E293B;
+    font-size:16px;
+    line-height:1.55;
+    color:#334155;
     font-weight:500;
     margin:0;
   }
@@ -1653,7 +1662,7 @@
   .au-roi .au-head{margin-bottom:24px;}
   .au-roi .au-tag{margin-bottom:10px;}
   .au-roi .au-h2{font-size:clamp(26px, 2.9vw, 34px); margin-bottom:10px;}
-  .au-roi .au-sub{font-size:15.5px; line-height:1.55;}
+  .au-roi .au-sub{font-size:17.5px; font-weight:500; line-height:1.55;}
   .au-calc{max-width:1120px; margin:0 auto;}
   /* Light on the left is the point of the object - the dark half is what makes */
   .au-calc-panel{
@@ -2123,7 +2132,7 @@
     letter-spacing:-0.022em; line-height:1.28; color:var(--ink);
   }
   .bn-desc{
-    margin:9px 0 0; font-size:14px; line-height:1.55; color:var(--ink-dim);
+    margin:9px 0 0; font-size:16px; font-weight:500; line-height:1.55; color:var(--ink-dim);
   }
 
   /* ---- card footer: metrics & download button ---- */
@@ -2256,7 +2265,7 @@
     font-family:var(--font-display); font-size:clamp(27px,3.2vw,38px); font-weight:700;
     letter-spacing:-0.028em; line-height:1.15; color:#FFFFFF; margin:0 0 14px;
   }
-  .au-cta-sub{font-size:16px; line-height:1.6; color:rgba(255,255,255,0.68); margin:0;}
+  .au-cta-sub{font-size:18px; font-weight:500; line-height:1.55; color:rgba(255,255,255,0.78); margin:0;}
   /* the playbook, as an actual book */
   .au-cta-vis{
     position:relative; z-index:1; display:flex; justify-content:flex-end;
