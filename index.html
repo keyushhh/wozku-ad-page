@@ -2069,11 +2069,12 @@
     position:relative; display:flex; flex-direction:column; padding:8px;
     border:1px solid var(--line); border-radius:26px; background:var(--bg-card);
     box-shadow:0 1px 2px rgba(15, 23, 42, 0.03), 0 22px 44px -32px rgba(15, 23, 42, 0.20);
-    transition:transform .32s cubic-bezier(.22,1,.36,1), box-shadow .32s ease, border-color .32s ease;
+    transition:transform .32s cubic-bezier(.22,1,.36,1), box-shadow .32s ease, border-color .32s ease, background .32s ease;
   }
   .bn:hover{
-    transform:translateY(-3px); border-color:rgba(16, 185, 129, 0.28);
-    box-shadow:0 2px 4px rgba(15, 23, 42, 0.04), 0 34px 60px -34px rgba(15, 23, 42, 0.26);
+    transform:translateY(-3px); border-color:rgba(16, 185, 129, 0.38);
+    background:radial-gradient(130% 120% at 50% 0%, #FFFFFF 30%, rgba(236, 253, 245, 0.75) 75%, rgba(209, 250, 229, 0.45) 100%), #FFFFFF;
+    box-shadow:0 6px 16px -2px rgba(16, 185, 129, 0.10), 0 28px 50px -22px rgba(16, 185, 129, 0.18), 0 34px 60px -34px rgba(15, 23, 42, 0.22);
   }
 
   /* ---- the inset photo, and the two labels that ride on it ---- */
@@ -2123,44 +2124,52 @@
   .bn-desc{
     margin:9px 0 0; font-size:14px; line-height:1.55; color:var(--ink-dim);
   }
-  /* margin-top:auto pins this to the card floor whatever the card is spanning */
-  .bn-metrics{
-    margin:18px 0 0; margin-top:auto; padding-top:13px;
+
+  /* ---- card footer: metrics & download button ---- */
+  .bn-footer{
+    margin-top:auto; padding-top:14px;
     border-top:1px solid var(--line);
+    display:flex; flex-direction:column; gap:11px;
+  }
+  .bn-sf .bn-footer{
+    flex-direction:row; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  }
+  .bn-footer .bn-metrics{
+    margin:0; padding-top:0; border-top:0;
     font-family:var(--font-mono); font-size:9.5px; font-weight:500;
     letter-spacing:0.08em; text-transform:uppercase; line-height:1.6; color:var(--ink-dim);
   }
-
-  /* ---- the feature card's quote ---- */
-  .bn-quote{
-    display:flex; gap:11px; margin:16px 0 0; padding-top:15px;
-    border-top:1px solid var(--line);
+  .bn-btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:6px;
+    padding:8px 13px; border-radius:10px;
+    background:rgba(16, 185, 129, 0.08);
+    color:#065F46; font-family:var(--font-display);
+    font-size:11.5px; font-weight:600; text-decoration:none;
+    border:1px solid rgba(16, 185, 129, 0.22);
+    transition:all .22s cubic-bezier(.22,1,.36,1);
+    white-space:nowrap; cursor:pointer;
   }
-  .bn-quote img{
-    flex:none; width:34px; height:34px; border-radius:50%; object-fit:cover;
-    border:1px solid var(--line);
+  .bn-btn svg{
+    stroke:currentColor; transition:transform .2s ease;
   }
-  .bn-quote p{
-    margin:0; font-size:13.5px; line-height:1.45; color:var(--ink); letter-spacing:-0.01em;
+  .bn:hover .bn-btn{
+    background:#10B981; color:#FFFFFF; border-color:#10B981;
+    box-shadow:0 3px 12px -2px rgba(16, 185, 129, 0.4);
   }
-  .bn-quote small{
-    display:block; margin-top:5px; font-family:var(--font-mono); font-size:9.5px;
-    font-weight:500; letter-spacing:0.07em; text-transform:uppercase; color:var(--ink-dim);
+  .bn:hover .bn-btn svg{
+    transform:translateY(1px);
+  }
+  .bn-btn:hover{
+    background:#059669 !important; border-color:#059669 !important;
+    color:#FFFFFF !important; transform:translateY(-1px);
   }
 
   /* ---- per-slot sizing ---- */
   .bn-sf .bn-media{height:178px;}
   .bn-sf .bn-stat b{font-size:46px;}
   .bn-sf .bn-title{font-size:19px;}
-  /* No margin-top override here: the inherited margin-top:auto is what pins the */
 
-  /* Red Hat and Elastic read across rather than down - photo beside the figure. */
-  .bn-rh, .bn-el{flex-direction:row;}
-  .bn-rh .bn-media{width:40%; min-width:150px;}
-  /* the wide card's photo is too narrow to carry both labels on one line */
-  .bn-rh .bn-ov{flex-direction:column; align-items:flex-start; gap:2px;}
-  .bn-rh .bn-cat{padding-bottom:0; order:-1;}
-  .bn-rh .bn-body{padding:16px 16px 13px 18px;}
+  .bn-el{flex-direction:row;}
   .bn-el .bn-media{width:250px; min-width:170px;}
   .bn-el .bn-body{padding:20px 18px 16px 20px;}
 
@@ -2169,29 +2178,26 @@
   .bn-vm .bn-title, .bn-wc .bn-title{font-size:14.5px; margin-top:12px;}
 
   @media (min-width:1020px){
-    /* the band's figure and title sit on one line, its metrics at the far end */
+    /* the band's figure and title sit on one line, its metrics & button at the far end */
     .bn-el .bn-body{
-      flex-direction:row; align-items:center; gap:30px;
+      flex-direction:row; align-items:center; gap:26px;
     }
-    .bn-el .bn-lead{flex:none; width:158px;}
-    /* absorbs the slack, so the metrics rail stays against the right edge */
+    .bn-el .bn-lead{flex:none; width:150px;}
     .bn-el .bn-el-mid{flex:1; min-width:0;}
     .bn-el .bn-title{margin:0;}
     .bn-el .bn-desc{margin:7px 0 0;}
-    .bn-el .bn-metrics{
-      margin:0; padding:0 0 0 30px; flex:none; width:196px;
+    .bn-el .bn-footer{
+      margin:0; padding:0 0 0 24px; flex:none; width:260px;
       border-top:0; border-left:1px solid var(--line); align-self:stretch;
-      display:flex; align-items:center;
+      display:flex; flex-direction:column; justify-content:center; gap:10px;
     }
   }
 
-  /* Below the bento breakpoint nothing spans two rows, so a side-by-side photo */
   @media (max-width:1019px){
-    .bn-rh, .bn-el{flex-direction:column;}
-    .bn-rh .bn-media, .bn-el .bn-media{width:auto; height:152px;}
+    .bn-el{flex-direction:column;}
+    .bn-el .bn-media{width:auto; height:152px;}
   }
   @media (min-width:720px) and (max-width:1019px){
-    /* five cards into two columns leaves a hole unless the last one runs wide */
     .bn-el{grid-column:1 / 3;}
     .bn-el .bn-media{height:180px;}
   }
@@ -3968,7 +3974,13 @@
             <div class="bn-stat"><b>11&times;</b><span>Verified<br>program ROI</span></div>
             <h3 class="bn-title">Proved community advocacy delivers 11&times; ROI</h3>
             <p class="bn-desc">Advocacy embedded into post-conversion flows turned quiet moments into an automated growth loop &mdash; 23.3K clicks and 46.2K reactions.</p>
-            <p class="bn-metrics">&minus;70% cost per reg &middot; 10.7M potential reach</p>
+            <div class="bn-footer">
+              <p class="bn-metrics">&minus;70% cost per reg &middot; 10.7M potential reach</p>
+              <a href="#auCta" class="bn-btn" aria-label="Download Salesforce case study">
+                <span>Download case study</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </a>
+            </div>
           </div>
         </article>
 
@@ -3980,7 +3992,13 @@
           <div class="bn-body">
             <div class="bn-stat"><b>2.1M</b><span>Potential reach</span></div>
             <h3 class="bn-title">Reach earned through the global partner network</h3>
-            <p class="bn-metrics">15K likes &middot; partner activation</p>
+            <div class="bn-footer">
+              <p class="bn-metrics">15K likes &middot; partner activation</p>
+              <a href="#auCta" class="bn-btn" aria-label="Download Veeam case study">
+                <span>Download case study</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </a>
+            </div>
           </div>
         </article>
 
@@ -3992,7 +4010,13 @@
           <div class="bn-body">
             <div class="bn-stat"><b>3.9M</b><span>Potential reach</span></div>
             <h3 class="bn-title">Member advocacy across 120K members, 80+ countries</h3>
-            <p class="bn-metrics">9.7K clicks &middot; 25.1K reactions</p>
+            <div class="bn-footer">
+              <p class="bn-metrics">9.7K clicks &middot; 25.1K reactions</p>
+              <a href="#auCta" class="bn-btn" aria-label="Download Women In Cloud case study">
+                <span>Download case study</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </a>
+            </div>
           </div>
         </article>
 
@@ -4009,7 +4033,13 @@
               <h3 class="bn-title">930K+ reach from gamified attendee engagement</h3>
               <p class="bn-desc">A social-media contest series turned on-site participants into advocates across cities, using real-time leaderboards and rewards during live sessions.</p>
             </div>
-            <p class="bn-metrics">Live attendee engagement &middot; multi-geo activation</p>
+            <div class="bn-footer">
+              <p class="bn-metrics">Live attendee engagement &middot; multi-geo activation</p>
+              <a href="#auCta" class="bn-btn" aria-label="Download Elastic case study">
+                <span>Download case study</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </a>
+            </div>
           </div>
         </article>
 
