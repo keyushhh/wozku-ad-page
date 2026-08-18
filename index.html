@@ -3950,6 +3950,30 @@
   @media (prefers-reduced-motion:reduce){
     .au-roi-peek-l::before{animation:none;}
   }
+
+  /* --- Hero mobile sizing (content-v2). Previously no override existed, so
+     the sub rendered at 20px centred across the full phone width. --- */
+  /* The note sits inside the hero's green-to-white dissolve, so a flat colour
+     is unreadable at one size or the other. A chip reads on both. */
+  .au-form-hero .au-form-note{
+    width:fit-content;
+    max-width:100%;
+    padding:7px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.9);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    box-shadow:0 2px 14px rgba(3,32,24,0.14);
+  }
+
+  @media (max-width:640px){
+    .hero-editorial-sub{
+      font-size:16px;
+      line-height:1.5;
+      max-width:34ch;
+      margin-bottom:26px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -4037,8 +4061,8 @@
         <div class="au-eyebrow" id="auHeroEyebrow">For B2B field marketers &amp; event managers</div>
       </div>
 
-      <h1 class="hero-editorial-title" id="auHeroTitle">Stop <em>begging</em> your sales reps and speakers <br class="hero-br">to promote your events.</h1>
-      <p class="hero-editorial-sub" id="auHeroSub">You spend months planning B2B events, but your attendees, speakers, and sponsors aren't sharing them. Wozku uses 1-click sharing and gamification to turn your captive audience into a massive digital growth engine.</p>
+      <h1 class="hero-editorial-title" id="auHeroTitle">Get more leads from the events <br class="hero-br">you&rsquo;re <em>already</em> paying for.</h1>
+      <p class="hero-editorial-sub" id="auHeroSub">At your booth, attendees scan a QR code and tap once &mdash; a ready-made post goes out to their LinkedIn, and they earn points toward swag.</p>
 
       <!-- Single-field playbook capture (primary conversion on the page) -->
       <form class="au-form au-form-hero" id="auHeroForm" novalidate>
@@ -4054,7 +4078,7 @@
           </button>
         </div>
         <div class="au-form-err" id="auHeroErr" role="alert" aria-live="polite"></div>
-        <div class="au-form-note" id="auHeroPill"><strong>Get the free playbook:</strong> the exact 1-click system top B2B teams use so speakers and reps actually share your events.</div>
+        <div class="au-form-note" id="auHeroPill"><strong>Free playbook</strong> &middot; 4 chapters &middot; no sales call</div>
       </form>
 
       <!-- MOBILE DEVICE FRAME (< 700px, replaces the laptop rig entirely).
