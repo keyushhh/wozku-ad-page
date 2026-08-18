@@ -240,7 +240,7 @@
     text-shadow:0 2px 24px rgba(0, 0, 0, 0.35);
   }
   h1.hero-editorial-title em{
-    font-family:"Instrument Serif", "Newsreader", Georgia, serif;
+    font-family:"Instrument Serif", Georgia, serif;
     font-weight:400;
     font-style:italic;
     letter-spacing:0;
@@ -2029,12 +2029,12 @@
 
   /* ------------------------------- under panel ----------------------------- */
   .au-calc-note{
-    margin:14px 0 0; text-align:center; font-size:12px; line-height:1.55; color:var(--ink-dim);
+    margin:28px 0 0; text-align:center; font-size:13px; font-weight:500; line-height:1.55; color:var(--ink-dim);
   }
   .au-row-math{margin-top:10px;}
   .au-row-math summary,
   .au-calc-how summary{
-    cursor:pointer; font-size:13px; font-weight:600; color:var(--ink-dim);
+    cursor:pointer; font-size:13.5px; font-weight:600; color:var(--ink-dim);
     list-style:none; display:flex; align-items:center; gap:7px;
   }
   .au-row-math summary::-webkit-details-marker,
@@ -2062,7 +2062,7 @@
   .au-math-step b{
     flex:none; font-weight:600; color:var(--ink);
   }
-  .au-calc-how{margin-top:14px; display:flex; flex-direction:column; align-items:center;}
+  .au-calc-how{margin-top:16px; display:flex; flex-direction:column; align-items:center;}
   .au-calc-how-body{max-width:760px; margin-top:14px;}
   .au-calc-how-body p{font-size:14px; line-height:1.65; color:var(--ink-dim); margin:0 0 12px;}
   .au-calc-how-body strong{color:var(--ink); font-weight:600;}
@@ -2298,7 +2298,7 @@
     background:
       linear-gradient(190deg, #FCFBF7 0%, #F4F1E9 62%, #EDE9DF 100%);
     box-shadow:0 34px 64px -26px rgba(0, 0, 0, 0.8);
-    font-family:"Newsreader", Georgia, serif;
+    font-family:Georgia, "Times New Roman", serif;
   }
   /* the sheet curving into the binding */
   .au-book-pages::before{
@@ -3401,9 +3401,12 @@
               <div class="laptop-face laptop-screen">
                 <div class="laptop-screen-inner">
                   <div class="laptop-screen-idle" aria-hidden="true"><span>Wozku</span></div>
-                  <video class="laptop-video" id="auHeroVideo" loop muted playsinline preload="auto" aria-label="Wozku Platform Demo Video">
-                    <source src="/video/hero-demo.mp4" type="video/mp4">
-                    <source src="/video/IMG_3513.MOV" type="video/quicktime">
+                  <!-- preload="none" + data-src: the sources are attached by JS once the
+                       laptop track nears the viewport (see the reveal rig below). With
+                       preload="auto" the browser pulled ~2.8MB of this file during initial
+                       load, starving the CSS, fonts and hero image on a mobile connection. -->
+                  <video class="laptop-video" id="auHeroVideo" loop muted playsinline preload="none" poster="/video/hero-demo-poster.jpg" aria-label="Wozku Platform Demo Video">
+                    <source data-src="/video/hero-demo.mp4" type="video/mp4">
                   </video>
                 </div>
                 <div class="laptop-bezel" aria-hidden="true"><span class="laptop-camera"></span></div>
@@ -3968,7 +3971,6 @@
           <summary>How is this calculated?</summary>
           <div class="au-calc-how-body">
             <p>Each row models one activation. We take your audience size, apply the share rate to get the number of people who actually post, then multiply by their average network to get reach. Reach becomes clicks at your click-through rate, and clicks become conversions at your conversion rate.</p>
-            <p>Wozku spend is charged per person who shares, at <strong>$2 each</strong>. The comparison cost is what those same conversions would have cost through paid channels, at your cost-per-registration. Savings are the difference, and the multiple is the paid-channel cost divided by the Wozku spend.</p>
           </div>
         </details>
     </div>
@@ -3988,7 +3990,7 @@
 
         <article class="bn bn-sf">
           <div class="bn-media">
-            <img src="/cs-salesforce.jpg" alt="Salesforce event floor" loading="lazy">
+            <img src="/cs-salesforce.opt.jpg" alt="Salesforce event floor" loading="lazy">
             <div class="bn-ov"><span class="bn-co">Salesforce</span><span class="bn-cat">Community &amp; customers</span></div>
           </div>
           <div class="bn-body">
@@ -4007,7 +4009,7 @@
 
         <article class="bn bn-vm">
           <div class="bn-media">
-            <img src="/cs-veeam.jpg" alt="Veeam partner summit" loading="lazy">
+            <img src="/cs-veeam.opt.jpg" alt="Veeam partner summit" loading="lazy">
             <div class="bn-ov"><span class="bn-co">Veeam</span></div>
           </div>
           <div class="bn-body">
@@ -4025,7 +4027,7 @@
 
         <article class="bn bn-wc">
           <div class="bn-media">
-            <img src="/cs-wic.jpg" alt="Women In Cloud community" loading="lazy">
+            <img src="/cs-wic.opt.jpg" alt="Women In Cloud community" loading="lazy">
             <div class="bn-ov"><span class="bn-co">Women In Cloud</span></div>
           </div>
           <div class="bn-body">
@@ -4043,7 +4045,7 @@
 
         <article class="bn bn-el">
           <div class="bn-media">
-            <img src="/cs-elastic.jpg" alt="Elastic live session" loading="lazy">
+            <img src="/cs-elastic.opt.jpg" alt="Elastic live session" loading="lazy">
             <div class="bn-ov"><span class="bn-co">Elastic</span><span class="bn-cat">Events &amp; experiences</span></div>
           </div>
           <div class="bn-body">
@@ -4112,7 +4114,7 @@
             <!-- the cover, hinged on the spine -->
             <div class="au-book-cover">
               <div class="au-book-face">
-                <img src="/playbook-cover.jpg" alt="" width="564" height="780" loading="lazy">
+                <img src="/playbook-cover.opt.jpg" alt="" width="564" height="780" loading="lazy">
                 <div class="au-book-spine"></div>
               </div>
               <div class="au-book-liner"><span>Wozku &middot; 2026 Edition</span></div>
@@ -4578,6 +4580,22 @@ if (auVideo) {
   const video = document.getElementById('auHeroVideo');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+  // The <source> carries data-src rather than src, so the browser cannot start
+  // buffering during initial page load. We attach it the first time the laptop
+  // section becomes live, which is well before the lid opens far enough to play.
+  let videoArmed = false;
+  function armVideo() {
+    if (videoArmed || !video) return;
+    videoArmed = true;
+    let attached = false;
+    video.querySelectorAll('source[data-src]').forEach((s) => {
+      s.src = s.dataset.src;
+      s.removeAttribute('data-src');
+      attached = true;
+    });
+    if (attached) video.load();
+  }
+
   // Sample a [progress, value] keyframe curve. Linear between stops: the easing
   function at(p, stops) {
     if (p <= stops[0][0]) return stops[0][1];
@@ -4624,6 +4642,7 @@ if (auVideo) {
       const revealed = p > 0.34;
       video.dataset.gate = revealed ? 'open' : 'closed';
       if (revealed) {
+        armVideo();
         if (video.paused) video.play().catch(() => {});
       } else if (!video.paused) {
         video.pause();
@@ -4658,6 +4677,7 @@ if (auVideo) {
     if (reduce.matches) {
       // The stylesheet already renders the static open state; just let the demo
       if (video) {
+        armVideo();
         video.dataset.gate = 'open';
         video.play().catch(() => {});
       }
@@ -4666,7 +4686,10 @@ if (auVideo) {
     render();
     if ('IntersectionObserver' in window) {
       observer = new IntersectionObserver(
-        (entries) => entries.forEach((entry) => setLive(entry.isIntersecting)),
+        (entries) => entries.forEach((entry) => {
+          if (entry.isIntersecting) armVideo();
+          setLive(entry.isIntersecting);
+        }),
         { rootMargin: '15% 0px' },
       );
       observer.observe(track);
@@ -5580,34 +5603,34 @@ initBookingCalendar();
     {
       avatar: '',
       fallbackAvatar: '',
-      logo: '/src/assets/MongoDB_Forest-Green.svg',
+      logo: '/MongoDB_Forest-Green.svg',
       fallbackLogo: '/MongoDB_Forest-Green.svg',
       name: 'Abhishek Sharma',
       role: 'Growth & Field Marketing',
       verified: 'Verified Customer Spotlight'
     },
     {
-      avatar: '/src/assets/Ajit-Belani.webp',
+      avatar: '/avatars/Ajit-Belani.opt.jpg',
       fallbackAvatar: '/Ajit-Belani.webp',
-      logo: '/src/assets/Salesforce.com_logo.svg',
+      logo: '/Salesforce.com_logo.svg',
       fallbackLogo: '/Salesforce.com_logo.svg',
       name: 'Ajit Belani',
       role: 'Head of Growth & ABM, Salesforce',
       verified: 'Verified Enterprise ABM Impact'
     },
     {
-      avatar: '/src/assets/kushagra.jpeg',
+      avatar: '/avatars/kush.opt.jpeg',
       fallbackAvatar: '/kushagra.jpeg',
-      logo: '/src/assets/veeam-seeklogo.svg',
+      logo: '/veeam-seeklogo.svg',
       fallbackLogo: '/veeam-seeklogo.svg',
       name: 'Kushagra Sharma',
       role: 'Head of Marketing - India & SAARC, Veeam Software',
       verified: 'Verified Partner Summit Campaign'
     },
     {
-      avatar: '/src/assets/chaitra.jpeg',
+      avatar: '/avatars/chaitra.opt.jpg',
       fallbackAvatar: '/chaitra.jpeg',
-      logo: '/src/assets/womenincloud.webp',
+      logo: '/womenincloud.webp',
       fallbackLogo: '/womenincloud.webp',
       name: 'Chaitra Vedullapalli',
       role: 'President & Co-Founder, Women In Cloud',
