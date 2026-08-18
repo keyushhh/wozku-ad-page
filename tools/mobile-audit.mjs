@@ -206,9 +206,16 @@ console.log('\n=== BEHAVIOUR ===');
     atLoad.poster ? pass('video has a poster') : fail('video has no poster');
   }
 
-  // scroll through the laptop pin and confirm playback still starts
-  const H = await page.evaluate(() => document.getElementById('auLaptopTrack')?.offsetHeight || 0);
-  for (let i = 1; i <= 14; i++) { await page.evaluate((y) => window.scrollTo(0, y), Math.round(H * i / 14)); await page.waitForTimeout(420); }
+  // Scroll to whichever surface owns the demo at this width and confirm playback
+  // starts. Below 700px that is the cropped phone frame; above it, the laptop pin.
+  const target = await page.evaluate(() => {
+    const phone = document.getElementById('auPhoneWrap');
+    if (phone && getComputedStyle(phone).display !== 'none') {
+      return Math.round(phone.getBoundingClientRect().top + window.scrollY - 220);
+    }
+    return document.getElementById('auLaptopTrack')?.offsetHeight || 0;
+  });
+  for (let i = 1; i <= 14; i++) { await page.evaluate((y) => window.scrollTo(0, y), Math.round(target * i / 14)); await page.waitForTimeout(420); }
   await page.waitForTimeout(2500);
   const played = await page.evaluate(() => { const v = document.querySelector('video');
     return v ? { ready: v.readyState, paused: v.paused, t: v.currentTime } : null; });

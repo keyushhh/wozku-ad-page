@@ -3741,6 +3741,215 @@
     .au-roi-peek{transition:opacity .15s ease; transform:none;}
     .au-roi-peek.is-on{transform:none;}
   }
+
+  /* ============ MOBILE DEVICE FRAME =====================================
+     Below 700px the laptop rig is replaced by a cropped phone. The device is
+     deliberately cut off at the bottom: we only need enough of it to read as a
+     phone, and the crop is what buys back the ~930px the pinned rig was using.
+
+     The screen well is exactly 16:9 so the landscape demo fills it with no
+     letterbox bars, which is why the frame is shorter than a full handset.
+     Drawn in CSS rather than shipped as an image, matching the laptop above -
+     it stays sharp at any DPR and adds no bytes.
+     ==================================================================== */
+  .ph-wrap{display:none;}
+
+  @media (max-width:700px){
+    .ph-wrap{
+      display:block;
+      /* Breaks out of the 24px page gutter to 10px, so the device - and therefore
+         the video inside it - is as large as the screen allows. */
+      margin:26px -14px 0;
+      width:auto;
+      /* the device is cropped, so the frame's own bottom edge is the cut line */
+      filter:drop-shadow(0 26px 44px rgba(4, 26, 20, 0.30));
+    }
+    .ph{
+      position:relative;
+      border-radius:44px 44px 0 0;
+      /* the bezel is only this padding; everything inside is screen */
+      padding:9px 9px 0;
+      background:linear-gradient(168deg, #2C3240 0%, #14171F 44%, #0A0C11 100%);
+      /* the hairline highlight that reads as a machined edge */
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.10),
+        inset 0 2px 0 rgba(255, 255, 255, 0.16);
+      overflow:hidden;
+    }
+    /* The display. The video is inset within this rather than butting against the
+       bezel, so the gap above and below it reads as screen - which is what makes
+       the frame feel like a real device instead of a picture in a border. */
+    .ph-display{
+      position:relative;
+      border-radius:36px 36px 0 0;
+      background:linear-gradient(178deg, #071410 0%, #04100C 60%, #030B08 100%);
+      /* Breathing room above the status bar. A real handset does not sit its
+         clock and island hard against the bezel. */
+      padding-top:14px;
+      padding-bottom:78px;
+      overflow:hidden;
+    }
+    .ph-top{
+      position:relative;
+      display:flex; align-items:center; justify-content:space-between;
+      height:34px; padding:0 14px 0 18px;
+      color:#FFFFFF;
+    }
+    .ph-time{
+      font-family:var(--font-body); font-size:13px; font-weight:700;
+      letter-spacing:0.01em; line-height:1;
+    }
+    .ph-island{
+      position:absolute; left:50%; top:2px; transform:translateX(-50%);
+      width:82px; height:26px; border-radius:999px;
+      background:#05070A;
+      box-shadow:inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    }
+    .ph-ind{display:flex; align-items:center; gap:5px;}
+    .ph-ind svg{height:11px; width:auto; fill:currentColor;}
+
+    .ph-screen{
+      position:relative;
+      aspect-ratio:16 / 9;
+      width:calc(100% - 12px);
+      margin:18px auto 0;
+      border-radius:14px;
+      overflow:hidden;
+      background:#05100C;
+      /* the inner glass edge */
+      box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+        0 10px 24px -10px rgba(0, 0, 0, 0.7);
+    }
+    /* The single hero video, once JS has moved it in here. */
+    .ph-screen video{
+      display:block; width:100%; height:100%;
+      object-fit:cover;
+      border-radius:inherit;
+    }
+    .ph-fs{
+      position:absolute;
+      right:10px; bottom:10px;
+      width:40px; height:40px;
+      display:grid; place-items:center;
+      padding:0;
+      border:1px solid rgba(255, 255, 255, 0.22);
+      border-radius:12px;
+      background:rgba(6, 20, 16, 0.62);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      color:#FFFFFF;
+      cursor:pointer;
+      z-index:3;
+      transition:background .18s ease, border-color .18s ease;
+    }
+    .ph-fs svg{width:17px; height:17px;}
+    .ph-fs:active{background:rgba(6, 20, 16, 0.86); border-color:rgba(110, 231, 183, 0.6);}
+    /* 44px touch target without growing the visible chip */
+    .ph-fs::after{
+      content:""; position:absolute; top:50%; left:50%;
+      transform:translate(-50%, -50%);
+      width:44px; height:44px;
+    }
+
+    /* The rig and everything it drives is gone at this width. */
+    .lt-track{display:none;}
+    /* The device is the last thing in the hero and is cropped at its own bottom
+       edge, so the section ends exactly there and the sponsor carousel begins
+       immediately below it. */
+    .hero-editorial{padding-bottom:0;}
+    .au-trust{padding-top:26px;}
+  }
+
+  /* While the platform player owns the video, the page's own chrome must not
+     float above it. */
+  body.au-fs-active .scroll-to-top-btn,
+  body.au-fs-active .au-roi-peek,
+  body.au-fs-active header{display:none !important;}
+
+  /* ============ MOBILE REFINEMENTS (round 2) ============================ */
+  @media (max-width:700px){
+    /* #2 - the carousel closed with 40px and the reality-check section opened
+       with 64px, so 104px of nothing sat between the logos and the eyebrow. */
+    .au-trust{padding-bottom:18px;}
+    #auProblem{padding-top:28px;}
+
+    /* #3 - the three metric cards repeat figures the headline already makes, and
+       cost 284px to do it. Gone on mobile; the link that followed them becomes
+       the section's actual call to action instead of a quiet text link. */
+    .au-pb-stack{display:none;}
+    .au-pb-link{
+      margin-top:22px;
+      width:100%;
+      min-height:52px;
+      justify-content:center;
+      padding:14px 20px;
+      border-radius:14px;
+      background:var(--brand-emerald);
+      color:#04241B;
+      font-size:15px;
+      box-shadow:0 14px 30px -14px rgba(16, 185, 129, 0.7);
+    }
+    .au-pb-link svg{width:16px; height:16px;}
+
+    /* #5 - the playbook leads on mobile: the artifact first, then the pitch, then
+       the field. And it sits straight - the 9.5deg lean reads as clutter at this
+       size. A little rotateY is kept so the spine still gives it depth. */
+    .au-cta-card{gap:26px; padding:34px 22px 30px;}
+    .au-cta-vis{order:-1; padding-top:0;}
+    /* Scaled rather than resized. The page furniture inside (running title,
+       Contents heading, the four TOC lines, folio) is set in fixed px, so
+       shrinking the box alone left the content 35px too tall and sliced the last
+       entry off. Scaling the whole object keeps every proportion and clips
+       nothing; the negative margin reclaims the space the untransformed layout
+       box would otherwise still reserve. 156 / 246 = 0.634. */
+    .au-book{
+      width:246px; height:340px;
+      transform-origin:top center;
+      transform:scale(0.634) rotateY(-10deg);
+      margin-bottom:-124px;
+    }
+    /* The cover swings rotateY(-116deg) about its left edge, and perspective
+       projects it about 0.7x its own width to the LEFT of the book - roughly
+       110px here, far more than flat geometry suggests. Centred, that ran past
+       the card's overflow:hidden and the flap was sliced off. So on open the
+       whole book steps right, opening the cover into space that exists.
+       (A tap synthesises :hover on touch, which is what opens it.) */
+    .au-book:hover{transform:translateX(44px) scale(0.634) rotateY(-10deg);}
+  }
+
+  /* #4 - the live ROI readout was easy to miss at 61px. Taller, brighter, with a
+     pulsing dot so it reads as live, and the figure set large enough to be the
+     thing your eye lands on while you are dragging a slider. */
+  @media (max-width:900px){
+    .au-roi-peek{
+      gap:14px;
+      padding:15px 18px;
+      border-radius:20px;
+      border-color:rgba(110, 231, 183, 0.5);
+      background:rgba(4, 26, 20, 0.97);
+      box-shadow:0 22px 48px -16px rgba(0, 0, 0, 0.72),
+                 inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .au-roi-peek-l{
+      font-size:10px; letter-spacing:0.14em; margin-bottom:4px;
+      display:flex; align-items:center; gap:6px;
+    }
+    .au-roi-peek-l::before{
+      content:""; width:6px; height:6px; border-radius:50%;
+      background:#34D399; flex:none;
+      animation:auPeekPulse 1.9s ease-in-out infinite;
+    }
+    .au-roi-peek-v{font-size:29px;}
+    .au-roi-peek-m{font-size:11px; max-width:40%;}
+  }
+  @keyframes auPeekPulse{
+    0%, 100%{opacity:1; box-shadow:0 0 0 0 rgba(52, 211, 153, 0.55);}
+    70%{opacity:0.75; box-shadow:0 0 0 7px rgba(52, 211, 153, 0);}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .au-roi-peek-l::before{animation:none;}
+  }
 </style>
 </head>
 <body>
@@ -3847,6 +4056,36 @@
         <div class="au-form-err" id="auHeroErr" role="alert" aria-live="polite"></div>
         <div class="au-form-note" id="auHeroPill"><strong>Get the free playbook:</strong> the exact 1-click system top B2B teams use so speakers and reps actually share your events.</div>
       </form>
+
+      <!-- MOBILE DEVICE FRAME (< 700px, replaces the laptop rig entirely).
+           A cropped phone: the demo plays inline at its native 16:9 in the screen
+           well, and the fullscreen button hands off to the platform's own player
+           so it can be watched in landscape. The rig's 210vh of pinned scroll and
+           its per-frame 3D transform are simply not present at this width.
+           The <video> is NOT duplicated here - the single #auHeroVideo node is
+           moved into .ph-screen by JS, so it can never be fetched twice. -->
+      <div class="ph-wrap" id="auPhoneWrap">
+        <div class="ph">
+          <div class="ph-display">
+          <div class="ph-top">
+            <span class="ph-time">9:41</span>
+            <span class="ph-island" aria-hidden="true"></span>
+            <span class="ph-ind" aria-hidden="true">
+              <svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+              <svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 10.2a1.3 1.3 0 1 0 0 .1zM4.6 7.1a4.8 4.8 0 0 1 6.8 0M2.1 4.4a8.3 8.3 0 0 1 11.8 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <svg viewBox="0 0 26 12" aria-hidden="true"><rect x="0.6" y="0.6" width="21" height="10.8" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/><rect x="2.2" y="2.2" width="17.8" height="7.6" rx="1.8"/><path d="M23.2 4.2v3.6a2 2 0 0 0 0-3.6z" opacity="0.5"/></svg>
+            </span>
+          </div>
+          <div class="ph-screen" id="auPhoneScreen">
+            <button type="button" class="ph-fs" id="auPhoneFs" aria-label="Watch the demo fullscreen">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
+              </svg>
+            </button>
+          </div>
+          </div>
+        </div>
+      </div>
 
       <!-- LAPTOP REVEAL -->
       <div class="lt-track" id="auLaptopTrack">
@@ -4831,6 +5070,138 @@ if (scrollToTopBtn) {
   sttSync();
 }
 
+// 2D. MOBILE PHONE FRAME. Owns the hero demo below 700px, where the laptop rig
+// is display:none. Three jobs: host the one shared <video>, play it inline while
+// it is on screen, and hand off to the platform's fullscreen player on demand.
+(function phoneFrame() {
+  const wrap = document.getElementById('auPhoneWrap');
+  const screen_ = document.getElementById('auPhoneScreen');
+  const fsBtn = document.getElementById('auPhoneFs');
+  const video = document.getElementById('auHeroVideo');
+  if (!wrap || !screen_ || !video) return;
+
+  const mq = window.matchMedia('(max-width:700px)');
+  const laptopHome = video.parentElement;      // where the rig keeps it
+  let mounted = false;
+
+  // The same node is moved between the two frames rather than cloned. Moving a
+  // media element preserves its buffer and playback position, so this costs no
+  // extra network at all.
+  function mount(on) {
+    if (on === mounted) return;
+    mounted = on;
+    if (on) {
+      screen_.insertBefore(video, fsBtn || null);
+      video.dataset.gate = 'open';
+      // Deliberately NOT armed here: mount runs at page load, so arming would
+      // pull the demo down before anyone has scrolled to it. Arming belongs to
+      // the visibility gate below.
+    } else if (laptopHome) {
+      laptopHome.appendChild(video);
+    }
+  }
+
+  function play() {
+    if (!mounted) return;
+    armHeroVideo();
+    if (video.paused) video.play().catch(() => {});
+  }
+  function pause() {
+    if (mounted && !video.paused) video.pause();
+  }
+
+  // Inline playback only while the frame is actually on screen.
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) play(); else pause(); });
+    }, { threshold: 0.35 }).observe(wrap);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pause(); else play();
+  });
+
+  // ---- fullscreen -------------------------------------------------------
+  // Two genuinely different platforms:
+  //  - iPhone Safari has no Fullscreen API for elements. The only route is
+  //    video.webkitEnterFullscreen(), which opens the native iOS player - that
+  //    player rotates to landscape and brings its own controls, which is exactly
+  //    the behaviour we want. It must be called synchronously inside the tap and
+  //    needs metadata already loaded, which is why the video is armed on mount.
+  //  - Android/Chromium supports element fullscreen, but our <video> has no
+  //    controls attribute, so they have to be switched on for the duration or
+  //    there is no way to scrub, unmute or exit. Orientation lock is available
+  //    there and not on iOS.
+  let wasMuted = true;
+  let restoreControls = false;
+
+  function enterState() {
+    document.body.classList.add('au-fs-active');
+    wasMuted = video.muted;
+    // The tap is a valid user gesture, so audio is allowed to start here.
+    video.muted = false;
+    if (!video.hasAttribute('controls')) { video.setAttribute('controls', ''); restoreControls = true; }
+  }
+  function exitState() {
+    document.body.classList.remove('au-fs-active');
+    video.muted = wasMuted;
+    if (restoreControls) { video.removeAttribute('controls'); restoreControls = false; }
+    try {
+      if (window.screen && screen.orientation && typeof screen.orientation.unlock === 'function') {
+        screen.orientation.unlock();
+      }
+    } catch (err) { /* not supported, nothing to undo */ }
+  }
+
+  if (fsBtn) {
+    fsBtn.addEventListener('click', () => {
+      armHeroVideo();
+      enterState();
+
+      // iPhone route first: if the standard API is unavailable, this is the only one.
+      const iosNative = typeof video.webkitEnterFullscreen === 'function';
+      const standard = video.requestFullscreen || video.webkitRequestFullscreen;
+
+      if (!document.fullscreenEnabled && iosNative) {
+        try { video.webkitEnterFullscreen(); } catch (err) { exitState(); }
+        video.play().catch(() => {});
+        return;
+      }
+
+      if (standard) {
+        Promise.resolve(standard.call(video))
+          .then(() => {
+            video.play().catch(() => {});
+            // Best effort: unsupported on iOS, and rejects unless fullscreen is active.
+            if (screen.orientation && typeof screen.orientation.lock === 'function') {
+              screen.orientation.lock('landscape').catch(() => {});
+            }
+          })
+          .catch(() => {
+            // Blocked or unsupported - fall back to the native player if present.
+            if (iosNative) { try { video.webkitEnterFullscreen(); } catch (err) { exitState(); } }
+            else exitState();
+          });
+        return;
+      }
+
+      if (iosNative) { try { video.webkitEnterFullscreen(); } catch (err) { exitState(); } }
+      else exitState();
+    });
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) exitState();
+  });
+  // iOS fires these on the video element instead of the document.
+  video.addEventListener('webkitendfullscreen', exitState);
+
+  // ---- breakpoint ------------------------------------------------------
+  const sync = () => mount(mq.matches);
+  sync();
+  if (typeof mq.addEventListener === 'function') mq.addEventListener('change', sync);
+  else if (typeof mq.addListener === 'function') mq.addListener(sync);
+})();
+
 // 6B. LIVE ROI READOUT (mobile). The results panel sits below a 945px input
 // panel once the calculator stacks, so dragging a slider changes numbers that
 // are off screen. This mirrors the headline figures into a pinned bar that is
@@ -4916,6 +5287,22 @@ applyNavTargets();
 
 // Hero video autoplay & scroll pause/resume
 const auVideo = document.getElementById('auHeroVideo');
+
+// The deferred <source> is attached exactly once, by whichever surface asks
+// first: the desktop laptop rig or the mobile phone frame. Kept at module scope
+// so the two cannot race and start two downloads of the same 53MB file.
+let heroVideoArmed = false;
+function armHeroVideo() {
+  if (heroVideoArmed || !auVideo) return;
+  heroVideoArmed = true;
+  let attached = false;
+  auVideo.querySelectorAll('source[data-src]').forEach((sr) => {
+    sr.src = sr.dataset.src;
+    sr.removeAttribute('data-src');
+    attached = true;
+  });
+  if (attached) auVideo.load();
+}
 if (auVideo) {
   // Ensure video is muted for policy compliance & looped
   auVideo.muted = true;
@@ -5116,6 +5503,9 @@ if (auVideo) {
   const track = document.getElementById('auLaptopTrack');
   const stage = document.getElementById('auLaptopStage');
   if (!track || !stage) return;
+  // Under 700px the rig is display:none and the phone frame owns the demo, so
+  // none of this should run: no rAF loop, no per-frame 3D transform, no blur.
+  if (window.matchMedia('(max-width:700px)').matches) return;
 
   const video = document.getElementById('auHeroVideo');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -5123,18 +5513,7 @@ if (auVideo) {
   // The <source> carries data-src rather than src, so the browser cannot start
   // buffering during initial page load. We attach it the first time the laptop
   // section becomes live, which is well before the lid opens far enough to play.
-  let videoArmed = false;
-  function armVideo() {
-    if (videoArmed || !video) return;
-    videoArmed = true;
-    let attached = false;
-    video.querySelectorAll('source[data-src]').forEach((s) => {
-      s.src = s.dataset.src;
-      s.removeAttribute('data-src');
-      attached = true;
-    });
-    if (attached) video.load();
-  }
+  const armVideo = armHeroVideo;
 
   // Sample a [progress, value] keyframe curve. Linear between stops: the easing
   function at(p, stops) {
