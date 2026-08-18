@@ -5,17 +5,185 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wozku | Advocacy-Led Growth Platform for B2B Field Marketers &amp; Events</title>
 <meta name="description" content="Stop begging your sales reps and speakers to promote your events. Turn attendees, speakers, and sponsors into a massive digital growth engine.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-<!-- Satoshi is the Wozku brand body face. It is not on Google Fonts, so it loads -->
-<link href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700&amp;display=swap" rel="stylesheet">
-<!-- Only the faces a selector actually reaches. Caveat and Kalam sat behind
-     Shadows Into Light in the same stack, Plus Jakarta Sans was never referenced,
-     and Newsreader cost 273KB to style one decorative book card (now Georgia).
-     Instrument Serif is only ever used italic, so the roman face is dropped too. -->
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500;700&family=Shadows+Into+Light&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<!-- Fonts are self-hosted from /fonts (see the @font-face block below), so there
+     are no third-party font origins left to preconnect to. Only the faces a
+     selector actually reaches are shipped, latin/latin-ext only: Caveat and Kalam
+     sat behind Shadows Into Light in the same stack, Plus Jakarta Sans was never
+     referenced, and Newsreader cost 273KB to style one decorative book card.
+     These three are what the hero paints with, so they are fetched immediately
+     rather than after the stylesheet is parsed. -->
+<link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-400.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/satoshi-700.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-var.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/instrument-serif-400-italic.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/jetbrains-mono-var.woff2" crossorigin>
 <style>
+  /* ---- Self-hosted fonts -------------------------------------------------
+     Previously two render-blocking stylesheets on two third-party origins
+     (fonts.googleapis.com + api.fontshare.com), which meant two serialized
+     cross-origin round trips before any text could paint. Now same-origin,
+     latin/latin-ext only, with the three hero faces preloaded in <head>.
+     ---------------------------------------------------------------------- */
+  @font-face{
+    font-family:"Instrument Serif";
+    font-style:italic;
+    font-weight:400;
+    font-display:optional;
+    src:url("/fonts/instrument-serif-400-italic-ext.woff2") format("woff2");
+    unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face{
+    font-family:"Instrument Serif";
+    font-style:italic;
+    font-weight:400;
+    font-display:optional;
+    src:url("/fonts/instrument-serif-400-italic.woff2") format("woff2");
+    unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face{
+    font-family:"Shadows Into Light";
+    font-style:normal;
+    font-weight:400;
+    font-display:swap;
+    src:url("/fonts/shadows-into-light-400-ext.woff2") format("woff2");
+    unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face{
+    font-family:"Shadows Into Light";
+    font-style:normal;
+    font-weight:400;
+    font-display:swap;
+    src:url("/fonts/shadows-into-light-400.woff2") format("woff2");
+    unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face{
+    font-family:"Satoshi";
+    font-style:normal;
+    font-weight:400;
+    font-display:optional;
+    src:url("/fonts/satoshi-400.woff2") format("woff2");
+  }
+  @font-face{
+    font-family:"Satoshi";
+    font-style:normal;
+    font-weight:500;
+    font-display:optional;
+    src:url("/fonts/satoshi-500.woff2") format("woff2");
+  }
+  @font-face{
+    font-family:"Satoshi";
+    font-style:normal;
+    font-weight:700;
+    font-display:optional;
+    src:url("/fonts/satoshi-700.woff2") format("woff2");
+  }
+  /* Variable faces: one file per family covering the whole weight axis.
+     Cheaper than the static instances it replaces (31KB vs 92KB for mono)
+     and, unlike them, it renders 600 and 800 exactly instead of snapping
+     to the nearest shipped weight. */
+  @font-face{
+    font-family:"JetBrains Mono";
+    font-style:normal;
+    font-weight:400 800;
+    font-display:optional;
+    src:url("/fonts/jetbrains-mono-var-ext.woff2") format("woff2");
+    unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face{
+    font-family:"JetBrains Mono";
+    font-style:normal;
+    font-weight:400 800;
+    font-display:optional;
+    src:url("/fonts/jetbrains-mono-var.woff2") format("woff2");
+    unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face{
+    font-family:"Space Grotesk";
+    font-style:normal;
+    font-weight:400 700;
+    font-display:optional;
+    src:url("/fonts/space-grotesk-var-ext.woff2") format("woff2");
+    unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face{
+    font-family:"Space Grotesk";
+    font-style:normal;
+    font-weight:400 700;
+    font-display:optional;
+    src:url("/fonts/space-grotesk-var.woff2") format("woff2");
+    unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  /* ---- Metric-matched fallbacks ------------------------------------------
+     size-adjust equalises advance widths so swapping in the real face changes
+     no line breaks and therefore shifts no layout. This is the CLS fix.
+
+     The font-weight descriptors are load-bearing, not decoration: without them
+     each family declares only a 400 face, so the engine SYNTHESISES bold for
+     every 600/700 rule. Synthetic bold is wider than the metric it was
+     calibrated against, which pushed the hero h1 to an extra line and then
+     reflowed it away on swap - 39px of movement and most of the page's CLS.
+     Declaring a 500-900 range face pointed at a real bold local font stops the
+     synthesis, so the ratio holds.
+
+     Ratios were measured against each face rendered at its real size and
+     letter-spacing, then chosen mid-band rather than at the edge: the h1's
+     zero-delta window ends abruptly at 96%, so 88% leaves headroom for the
+     metric differences between Helvetica Neue, Arial and Roboto.
+     ---------------------------------------------------------------------- */
+  @font-face{
+    font-family:"Satoshi Fallback Apple";
+    src:local("Helvetica Neue"), local("Helvetica");
+    font-weight:400;
+    size-adjust:104%; ascent-override:100%; descent-override:25%; line-gap-override:0%;
+  }
+  @font-face{
+    font-family:"Satoshi Fallback Apple";
+    src:local("HelveticaNeue-Bold"), local("Helvetica Neue Bold"), local("Arial Bold");
+    font-weight:500 900;
+    size-adjust:100%; ascent-override:100%; descent-override:25%; line-gap-override:0%;
+  }
+  @font-face{
+    font-family:"Satoshi Fallback Android";
+    src:local("Roboto");
+    font-weight:400;
+    size-adjust:110%; ascent-override:100%; descent-override:25%; line-gap-override:0%;
+  }
+  @font-face{
+    font-family:"Satoshi Fallback Android";
+    src:local("Roboto-Bold"), local("Roboto Bold");
+    font-weight:500 900;
+    size-adjust:106%; ascent-override:100%; descent-override:25%; line-gap-override:0%;
+  }
+  @font-face{
+    font-family:"Grotesk Fallback Apple";
+    src:local("Helvetica Neue"), local("Helvetica");
+    font-weight:400;
+    size-adjust:100%; ascent-override:100%; descent-override:25%; line-gap-override:0%;
+  }
+  @font-face{
+    font-family:"Grotesk Fallback Apple";
+    src:local("HelveticaNeue-Bold"), local("Helvetica Neue Bold"), local("Arial Bold");
+    font-weight:500 900;
+    size-adjust:88%; ascent-override:100%; descent-override:25%; line-gap-override:0%;
+  }
+  @font-face{
+    font-family:"Grotesk Fallback Android";
+    src:local("Roboto");
+    font-weight:400;
+    size-adjust:106%; ascent-override:100%; descent-override:25%; line-gap-override:0%;
+  }
+  @font-face{
+    font-family:"Grotesk Fallback Android";
+    src:local("Roboto-Bold"), local("Roboto Bold");
+    font-weight:500 900;
+    size-adjust:94%; ascent-override:100%; descent-override:25%; line-gap-override:0%;
+  }
+  @font-face{
+    font-family:"Mono Fallback";
+    src:local("Courier New");
+    font-weight:400 800;
+    size-adjust:100%; ascent-override:100%; descent-override:25%; line-gap-override:0%;
+  }
   :root{
     --bg:#FFFFFF;
     --bg-2:#FFFFFF;
@@ -36,17 +204,30 @@
     --brand-emerald:#10B981;
     --brand-emerald-deep:#059669;
     /* Wozku brand type: Space Grotesk display, Satoshi body, JetBrains Mono labels. */
-    --font-display:"Space Grotesk", "Satoshi", -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body:"Satoshi", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    --font-mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --font-display:"Space Grotesk", "Grotesk Fallback Apple", "Grotesk Fallback Android", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body:"Satoshi", "Satoshi Fallback Apple", "Satoshi Fallback Android", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono:"JetBrains Mono", "Mono Fallback", ui-monospace, SFMono-Regular, Menlo, monospace;
     --radius-lg:24px;
     --radius-md:18px;
     --radius-sm:12px;
     --shadow:0 1px 3px rgba(15, 23, 42, 0.04), 0 12px 32px -16px rgba(15, 23, 42, 0.07);
     --shadow-lg:0 2px 8px rgba(15, 23, 42, 0.04), 0 32px 64px -24px rgba(15, 23, 42, 0.11);
     --container:1120px;
+    /* The hero plate is reused by two cards further down the page. Declared once
+       here so the mobile swap below happens in a single place. */
+    --plate:url('/hero-plate-emerald.jpg');
   }
 
+  /* 900px WebP: 6.7KB against 113KB, visually identical at phone width, and it
+     is the mobile LCP element. The two cards that reuse it sit under 52-90%
+     dark gradient overlays, so the lower resolution is invisible there. */
+  @media (max-width:760px){
+    :root{
+      --plate:image-set(
+        url('/hero-plate-emerald-900.webp') type('image/webp'),
+        url('/hero-plate-emerald-900.jpg') type('image/jpeg'));
+    }
+  }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{scroll-behavior:auto;}
   html.lenis, html.lenis body{height:auto;}
@@ -173,11 +354,14 @@
     --hero-fade-top:50vh;
   }
 
+  /* The 1600x920 plate is the mobile LCP element. A 900px WebP is 6.7KB against
+     113KB for the full-size JPEG and is visually identical at phone width, so
+     narrow viewports get that instead (see the media query after this rule). */
   .hero-mesh-bg{
     position:absolute; left:0; right:0; top:0; bottom:auto;
     height:var(--hero-band);
     z-index:0; pointer-events:none;
-    background-image:url('/hero-plate-emerald.jpg');
+    background-image:var(--plate);
     background-position:center center;
     background-repeat:no-repeat;
     background-size:cover;
@@ -206,10 +390,18 @@
   #hero.fx-live .hero-overlay-mask,
   #hero.fx-live .hero-fade{ display:none; }
 
+  #hero.hero-band-ready .hero-fade{opacity:1;}
+  @media (prefers-reduced-motion:reduce){ .hero-fade{transition:none;} }
   .hero-fade{
     position:absolute; left:0; right:0;
     top:var(--hero-fade-top); height:calc(var(--hero-band) - var(--hero-fade-top));
     z-index:1; pointer-events:none;
+    /* The band is seeded in svh but then overwritten with measured pixels by
+       heroBandGeometry(), which moved this gradient ~150px after first paint and
+       was the second largest layout shift on the page. Held at opacity 0 until
+       the measurement lands, then faded in - opacity is not a layout shift. */
+    opacity:0;
+    transition:opacity 260ms ease;
     background:linear-gradient(180deg,
       rgba(255,255,255,0) 0%,
       rgba(255,255,255,0.04) 10%,
@@ -506,6 +698,11 @@
     animation:marqueeScroll 32s linear infinite;
   }
   .marquee:hover .marquee-track{
+    animation-play-state:paused;
+  }
+  /* This ran forever, including when scrolled kilometres off-screen. The class is
+     toggled by an IntersectionObserver so it only animates while it can be seen. */
+  .marquee:not(.is-onscreen) .marquee-track{
     animation-play-state:paused;
   }
   @keyframes marqueeScroll{
@@ -1174,7 +1371,7 @@
   .au-mcard.is-new{
     background:
       linear-gradient(178deg, rgba(2, 22, 17, 0.52) 0%, rgba(2, 20, 16, 0.74) 58%, rgba(2, 16, 13, 0.90) 100%),
-      url('/hero-plate-emerald.jpg') center/cover no-repeat,
+      var(--plate) center/cover no-repeat,
       #04211A;
     box-shadow:0 34px 76px -38px rgba(4, 120, 87, 0.5);
   }
@@ -1478,13 +1675,17 @@
     height:2px;
     background:linear-gradient(90deg, transparent, #10B981 30%, #34D399 50%, #10B981 70%, transparent);
     box-shadow:0 0 6px #10B981;
+    /* Was animating `top` from 6% to 92%, which relayouts and repaints on every
+       frame, forever. translateY is compositor-only: same motion, no layout. */
+    top:6%;
     animation:auNormaLaser 2.2s ease-in-out infinite;
   }
   @keyframes auNormaLaser{
-    0%{ top:6%; opacity:0; }
+    0%{ transform:translateY(0); opacity:0; }
     20%{ opacity:1; }
     80%{ opacity:1; }
-    100%{ top:92%; opacity:0; }
+    /* 86% of the 84px .au-norma-qr-box, matching the old 6% -> 92% travel. */
+    100%{ transform:translateY(72px); opacity:0; }
   }
   .au-norma-portal-meta strong{
     font-size:12px;
@@ -1961,7 +2162,7 @@
     padding:24px 22px; color:#FFFFFF;
     background:
       linear-gradient(178deg, rgba(2, 22, 17, 0.52) 0%, rgba(2, 20, 16, 0.74) 58%, rgba(2, 16, 13, 0.90) 100%),
-      url('/hero-plate-emerald.jpg') center/cover no-repeat,
+      var(--plate) center/cover no-repeat,
       #04211A;
   }
   /* The plate keeps light passages even under the scrim, same as up there. */
@@ -2253,8 +2454,15 @@
   }
   .au-cta-card:hover::before{opacity:0.9; transform:translateY(0);}
   @media (hover:none){
-    /* no hover to reward on touch, so the bloom is simply present */
-    .au-cta-card::before{opacity:0.55; transform:none;}
+    /* No hover to reward on touch, so the bloom is simply present - but a
+       permanent filter:blur(100px) is the most expensive thing on the page, and
+       it was landing only on the phones least able to afford it while desktop
+       paid nothing until hover. A radial-gradient paints the same glow for free. */
+    .au-cta-card::before{
+      opacity:0.5; transform:none;
+      filter:none;
+      background:radial-gradient(closest-side, var(--brand-emerald) 0%, rgba(16, 185, 129, 0.55) 45%, transparent 100%);
+    }
   }
   @media (prefers-reduced-motion:reduce){
     .au-cta-card::before{transition:opacity .3s ease; transform:none;}
@@ -3260,6 +3468,27 @@
     }
   }
 
+  /* Touch devices skip the frosted-glass header. backdrop-filter on a fixed,
+     full-width element forces a full-screen GPU readback, and syncHeader toggles
+     it on every scroll direction change - it was also in the 400ms transition
+     list, so it animated. An opaque background reads the same at phone size. */
+  @media (pointer:coarse){
+    header,
+    header.is-floating.scrolled,
+    header.scrolled:not(.is-floating){
+      backdrop-filter:none !important;
+      -webkit-backdrop-filter:none !important;
+      transition:top 400ms cubic-bezier(.2, .7, .3, 1),
+                 max-width 400ms cubic-bezier(.2, .7, .3, 1),
+                 border-radius 400ms cubic-bezier(.2, .7, .3, 1),
+                 border-color 400ms cubic-bezier(.2, .7, .3, 1),
+                 box-shadow 400ms cubic-bezier(.2, .7, .3, 1),
+                 background-color 400ms cubic-bezier(.2, .7, .3, 1);
+    }
+    header.is-floating.scrolled{background:rgba(255, 255, 255, 0.96);}
+    header.scrolled:not(.is-floating){background:rgba(255, 255, 255, 0.97);}
+  }
+
   /* SCROLL TO TOP. This had no rules at all, so the button rendered as a raw
      browser-chrome control sitting in normal flow under the footer. Same
      visibility contract as .side-nav (.is-visible, toggled from the rAF-batched
@@ -3332,6 +3561,68 @@
   }
   @media (pointer:coarse){
     footer a{display:inline-block; padding:7px 0;}
+  }
+
+  /* ==================== TOUCH TARGETS ====================================
+     Everything tappable reaches the 44px minimum on a coarse pointer. Two
+     techniques, picked per element:
+
+     1. Grow the box (padding / min-height) where the element owns its space.
+     2. Keep the visual box and expand only the hit area with a centred ::after
+        overlay, where growing the box would break a tight layout - the icon
+        buttons sitting inside calculator rows and on the laptop chrome.
+
+     Desktop geometry is untouched: this whole block is behind pointer:coarse.
+     ====================================================================== */
+  @media (pointer:coarse){
+    /* --- 1. elements that can simply grow --- */
+    .btn-small{padding:12px 18px;}
+    .bn-btn{padding:13px 16px; font-size:12px;}
+    .au-calc-add{padding:13px 14px;}
+    .au-mpill{padding:13px 20px;}
+    .au-form-input{padding:12px 4px;}
+    /* Also here rather than only under max-width:600px - iPads have a coarse
+       pointer and the same 16px focus-zoom behaviour, at 768px wide. */
+    .au-form-input, .au-row-num, .au-cs-trigger{font-size:16px;}
+    .au-row-num, .au-cs-trigger{height:44px;}
+    .au-cs-option{padding:12px 10px; min-height:44px;}
+    .au-cal-ampm-btn{padding:12px 14px; min-height:44px; min-width:44px;}
+    .au-cal-slot-btn{min-height:44px;}
+    .au-ty-back{min-height:44px; padding-left:16px; padding-right:16px;}
+
+    /* Inline text links: inline-flex + min-height gives them a real box without
+       disturbing the surrounding text flow. */
+    .au-pb-link{min-height:44px;}
+    .footer-links a{display:inline-flex; align-items:center; min-height:44px;}
+
+    /* The logo link grows to 44px while the wordmark itself stays 30px, so the
+       header bar height is unchanged. */
+    .logo{display:inline-flex; align-items:center; min-height:44px;}
+
+    /* Sliders: a 44px track with a proportionally taller thumb. */
+    .au-sl input[type=range]{height:44px;}
+    .au-sl input[type=range]::-webkit-slider-thumb{width:22px; height:40px;}
+    .au-sl input[type=range]::-moz-range-thumb{width:22px; height:40px;}
+
+    /* Calendar days fill their already-square cell rather than sitting 36px
+       inside it, and the cell is floored at 44px. */
+    .au-cal-day-cell{min-width:44px; min-height:44px;}
+    .au-cal-day-btn{width:100%; height:100%; min-width:44px; min-height:44px;}
+
+    /* --- 2. hit-area expansion, visual size preserved --- */
+    .au-row-del,
+    .au-sound-btn,
+    .au-cal-arrow-btn{position:relative;}
+    .au-row-del::after,
+    .au-sound-btn::after,
+    .au-cal-arrow-btn::after{
+      content:"";
+      position:absolute;
+      top:50%; left:50%;
+      transform:translate(-50%, -50%);
+      width:44px; height:44px;
+      border-radius:inherit;
+    }
   }
 </style>
 </head>
@@ -3658,7 +3949,7 @@
         <div class="au-proof-split-left" id="auProofMeta">
           <!-- Avatar Circle -->
           <div class="au-proof-avatar-circle" id="auProofAvatar" aria-hidden="true">
-            <img src="/avatars/abhishek.png" alt="Abhishek Sharma" class="au-proof-avatar-img" onerror="this.src='/src/assets/abhishek.png'" />
+            <img src="/avatars/abhishek.opt.jpg" alt="Abhishek Sharma" class="au-proof-avatar-img" width="58" height="58" decoding="async" onerror="this.src='/avatars/abhishek.jpg'" />
           </div>
 
           <!-- Person Name & Role -->
@@ -4857,6 +5148,23 @@ document.querySelectorAll('.marquee-track').forEach((el) => {
   [...sponsorLogos, ...sponsorLogos].forEach((item) => el.appendChild(buildLogo(item)));
 });
 
+// Pause the sponsor marquee whenever it is off-screen. The CSS animation is
+// compositor-friendly but it was running unconditionally for the life of the
+// page, keeping a compositor layer awake far below the fold.
+(function gateSponsorMarquee() {
+  const rails = document.querySelectorAll('.marquee');
+  if (!rails.length) return;
+  if (!('IntersectionObserver' in window)) {
+    rails.forEach((r) => r.classList.add('is-onscreen'));
+    return;
+  }
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => e.target.classList.toggle('is-onscreen', e.isIntersecting)),
+    { rootMargin: '10% 0px' },
+  );
+  rails.forEach((r) => io.observe(r));
+})();
+
 // 9. MOBILE NAV TOGGLE
 const navToggle = document.querySelector('.nav-toggle');
 const navLinks = document.querySelector('.nav-links');
@@ -5671,8 +5979,8 @@ initBookingCalendar();
 
   const TESTIMONIALS = [
     {
-      avatar: '/avatars/abhishek.png',
-      fallbackAvatar: '/src/assets/abhishek.png',
+      avatar: '/avatars/abhishek.opt.jpg',
+      fallbackAvatar: '/avatars/abhishek.jpg',
       logo: '/MongoDB_Forest-Green.svg',
       fallbackLogo: '/MongoDB_Forest-Green.svg',
       name: 'Abhishek Sharma',
@@ -5891,6 +6199,7 @@ initBookingCalendar();
 
     hero.style.setProperty('--hero-band', Math.round(band) + 'px');
     hero.style.setProperty('--hero-fade-top', Math.round(Math.min(fadeTop, band - 80)) + 'px');
+    hero.classList.add('hero-band-ready');
     // The shader paints the dissolve, so it needs to know when these move.
     window.dispatchEvent(new Event('hero:band'));
   }
@@ -5923,8 +6232,13 @@ initBookingCalendar();
   const LITE = 'vec3(0.655, 0.953, 0.816)';   // #A7F3D0 emerald light
   const TINT = LITE;                          // stands in for rgb(1,.459,.792)
   // backgrounds.supply's own hero plate, hue-rotated to emerald. Same pixels,
-  const PLATE_SRC = '/hero-plate-emerald.jpg';
-  const PLATE_W = 1600, PLATE_H = 920;
+  // Matches the CSS breakpoint above so the small plate is reused from cache
+  // rather than pulling the 113KB original a second time for the texture.
+  const PLATE_SMALL = window.matchMedia('(max-width:760px)').matches;
+  // WebP so this shares the exact file the CSS already fetched, instead of
+  // pulling a second copy of the same pixels as JPEG.
+  const PLATE_SRC = PLATE_SMALL ? '/hero-plate-emerald-900.webp' : '/hero-plate-emerald.jpg';
+  const PLATE_W = PLATE_SMALL ? 900 : 1600, PLATE_H = PLATE_SMALL ? 518 : 920;
 
   const COMMON = `
     precision highp float;
