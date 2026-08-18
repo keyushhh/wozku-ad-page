@@ -2799,7 +2799,9 @@
     position:absolute;
     inset:0;
     overflow:hidden;
-    border-radius:var(--lr);
+    /* Top corners only: the bottom edge IS the hinge line, and rounding it left
+       an unpainted quarter-disc at each bottom corner with page white behind. */
+    border-radius:var(--lr) var(--lr) 0 0;
     -webkit-backface-visibility:hidden;
     backface-visibility:hidden;
   }
@@ -2813,7 +2815,7 @@
     position:absolute;
     inset:0;
     overflow:hidden;
-    border-radius:var(--lr);
+    border-radius:var(--lr) var(--lr) 0 0;
   }
   .laptop-screen-idle{
     position:absolute;
@@ -2845,7 +2847,7 @@
     inset:0;
     border:calc(var(--lw) * 0.013) solid #0A0F0C;
     border-bottom-width:calc(var(--lw) * 0.03);
-    border-radius:var(--lr);
+    border-radius:var(--lr) var(--lr) 0 0;
     box-shadow:
       inset 0 0 0 1px rgba(255,255,255,0.07),
       inset 0 0 calc(var(--lw) * 0.05) rgba(0,0,0,0.5);
@@ -2871,6 +2873,8 @@
       0 40px 80px -34px rgba(4, 20, 14, 0.55);
     /* rotateX, not rotateY: the lid itself rotates about X, and turning this face */
     transform:rotateX(180deg) translateZ(3px);
+    /* Mirrored: this face is upside down, so its CSS bottom is the world top. */
+    border-radius:0 0 var(--lr) var(--lr);
   }
   .laptop-shell-mark{
     width:19%;
@@ -2891,7 +2895,6 @@
     gap:calc(var(--lw) * 0.022);
     padding:calc(var(--lw) * 0.032) calc(var(--lw) * 0.05);
     box-sizing:border-box;
-    border-radius:0 0 calc(var(--lw) * 0.024) calc(var(--lw) * 0.024);
     background:linear-gradient(180deg, #333938 0%, #3E4544 30%, #262B2A 100%);
     box-shadow:inset 0 1px 0 rgba(255,255,255,0.16);
     transform-origin:50% 0;
