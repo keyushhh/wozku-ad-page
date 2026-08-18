@@ -9,8 +9,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
 <!-- Satoshi is the Wozku brand body face. It is not on Google Fonts, so it loads -->
-<link href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700,900&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700;800&family=Kalam:wght@400;700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Shadows+Into+Light&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700&amp;display=swap" rel="stylesheet">
+<!-- Only the faces a selector actually reaches. Caveat and Kalam sat behind
+     Shadows Into Light in the same stack, Plus Jakarta Sans was never referenced,
+     and Newsreader cost 273KB to style one decorative book card (now Georgia).
+     Instrument Serif is only ever used italic, so the roman face is dropped too. -->
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=JetBrains+Mono:wght@400;500;700&family=Shadows+Into+Light&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#FFFFFF;
@@ -348,9 +352,9 @@
   .au-hero{padding:120px 0 100px; min-height:85vh; display:flex; align-items:center;}
   .au-problem{padding:80px 0 96px;}
   .au-features{padding:100px 0;}
-  .au-how{padding:96px 0;}
-  .au-proof{padding:96px 0 104px;}
-  .au-roi{padding:96px 0;}
+  .au-how{padding:80px 0 36px;}
+  .au-roi{padding:36px 0 40px;}
+  .au-proof{padding:44px 0 104px;}
   .au-cta{padding:64px 0 104px;}
 
   /* ---- shared section furniture ---- */
@@ -1276,12 +1280,16 @@
   }
 
   /* HOW IT WORKS (NORMA STYLE 3-CARDS) */
-  /* HOW IT WORKS (NORMA STYLE 3-CARDS) */
   .au-norma-how{
     position:relative;
-    padding:100px 0 110px;
+    padding:80px 0 36px;
     background:#FFFFFF;
     overflow:visible;
+  }
+  @media (max-width:768px){
+    .au-norma-how{padding:54px 0 28px;}
+    .au-roi{padding:28px 0 32px;}
+    .au-proof{padding:32px 0 64px;}
   }
   .au-norma-how .wrap{
     position:relative;
