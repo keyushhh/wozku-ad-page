@@ -871,7 +871,10 @@
     flex-direction:column;
     justify-content:center;
     cursor:grab;
-    touch-action:none;
+    /* pan-y, not none: the note fills a ~360px block, so touch-action:none meant a
+       vertical swipe anywhere inside it was swallowed by the drag handler and the
+       page would not scroll. Horizontal drag-to-peel still reaches the handler. */
+    touch-action:pan-y;
     box-shadow:
       0 20px 45px -10px rgba(0, 0, 0, 0.15),
       0 8px 20px rgba(0, 0, 0, 0.06),
@@ -2410,6 +2413,9 @@
     padding:80px 0 100px;
     background:radial-gradient(circle at 50% 15%, rgba(16, 185, 129, 0.06) 0%, transparent 65%);
     min-height:100vh;
+    /* dvh tracks the mobile URL bar; 100vh is the *largest* viewport, which left a
+       dead scroll region below the fold on a view that has no footer to absorb it. */
+    min-height:100dvh;
   }
   .au-ty-back{
     display:inline-flex; align-items:center; gap:8px; margin-bottom:34px; cursor:pointer;
@@ -2706,6 +2712,13 @@
     /* the book is a fixed-ratio 3D object now, so it scales rather than reflows */
     .au-book{width:214px; height:296px; transform:rotate(-7deg) rotateX(4deg) rotateY(-10deg);}
     .au-metrics{grid-template-columns:1fr; }
+    /* iOS Safari zooms the viewport whenever a focused control computes under
+       16px, and it never zooms back out - the visitor is left on a panned page,
+       on the primary conversion path. 16px is the threshold, not a preference. */
+    .au-form-input, .au-row-num, .au-cs-trigger{font-size:16px;}
+    /* The number/select controls were 34px tall; 44px is the minimum comfortable
+       touch target and it keeps them aligned now that the font grew. */
+    .au-row-num, .au-cs-trigger{height:44px;}
   }
 
   /* Reveal Motion System */
@@ -3247,6 +3260,45 @@
     }
   }
 
+  /* SCROLL TO TOP. This had no rules at all, so the button rendered as a raw
+     browser-chrome control sitting in normal flow under the footer. Same
+     visibility contract as .side-nav (.is-visible, toggled from the rAF-batched
+     scroll pass) so the two can never both animate on their own timer. */
+  .scroll-to-top-btn {
+    position: fixed;
+    right: 18px;
+    bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--ink);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    z-index: 94;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .scroll-to-top-btn.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  .scroll-to-top-btn .stt-icon { width: 20px; height: 20px; }
+  /* Clear of the desktop rail, which occupies right:22px at the vertical centre. */
+  @media (min-width: 901px) { .scroll-to-top-btn { right: 74px; } }
+  body.au-ty-open .scroll-to-top-btn { display: none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-to-top-btn { transition: opacity 0.2s ease; transform: none; }
+    .scroll-to-top-btn.is-visible { transform: none; }
+  }
+
   /* ---------- Modern Seamless Footer ----------
      Restored: the footer markup survived the single-view flatten but every one
      of these rules lived in the deleted block, so the footer had been rendering
@@ -3604,9 +3656,9 @@
         
         <!-- Left Section: Dynamic Speaker, Designation, Company -->
         <div class="au-proof-split-left" id="auProofMeta">
-          <!-- Blank Avatar Circle (Placeholder) -->
+          <!-- Avatar Circle -->
           <div class="au-proof-avatar-circle" id="auProofAvatar" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <img src="/avatars/abhishek.png" alt="Abhishek Sharma" class="au-proof-avatar-img" onerror="this.src='/src/assets/abhishek.png'" />
           </div>
 
           <!-- Person Name & Role -->
@@ -4352,6 +4404,23 @@ if (scrollToTopBtn) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
+
+  // Its own visibility gate, independent of the desktop-only proximity rail.
+  // Reads scrollY and nothing else, so it forces no layout, and coalesces to
+  // one class write per frame.
+  let sttPending = false;
+  let sttShown = false;
+  const sttSync = () => {
+    sttPending = false;
+    const show = window.scrollY > window.innerHeight * 0.9;
+    if (show === sttShown) return;
+    sttShown = show;
+    scrollToTopBtn.classList.toggle('is-visible', show);
+  };
+  window.addEventListener('scroll', () => {
+    if (!sttPending) { sttPending = true; requestAnimationFrame(sttSync); }
+  }, { passive: true });
+  sttSync();
 }
 
 // Nav targets
@@ -4639,6 +4708,10 @@ if (auVideo) {
     stage.classList.toggle('lt-ui-on', p > 0.48);
 
     if (video) {
+      // The track starts in the hero, so an IntersectionObserver on it fires
+      // immediately and is useless as a defer signal. Scroll progress is the real
+      // one: arm at 0.12 so there is buffer headroom before playback at 0.34.
+      if (p > 0.12) armVideo();
       const revealed = p > 0.34;
       video.dataset.gate = revealed ? 'open' : 'closed';
       if (revealed) {
@@ -4686,10 +4759,7 @@ if (auVideo) {
     render();
     if ('IntersectionObserver' in window) {
       observer = new IntersectionObserver(
-        (entries) => entries.forEach((entry) => {
-          if (entry.isIntersecting) armVideo();
-          setLive(entry.isIntersecting);
-        }),
+        (entries) => entries.forEach((entry) => setLive(entry.isIntersecting)),
         { rootMargin: '15% 0px' },
       );
       observer.observe(track);
@@ -5601,8 +5671,8 @@ initBookingCalendar();
 
   const TESTIMONIALS = [
     {
-      avatar: '',
-      fallbackAvatar: '',
+      avatar: '/avatars/abhishek.png',
+      fallbackAvatar: '/src/assets/abhishek.png',
       logo: '/MongoDB_Forest-Green.svg',
       fallbackLogo: '/MongoDB_Forest-Green.svg',
       name: 'Abhishek Sharma',
@@ -7023,6 +7093,14 @@ function fireConfetti() {
 (function initSideNav() {
   const sideNav = document.getElementById('sideNav');
   if (!sideNav) return;
+  // The rail is display:none under 900px, but the JS behind it was still running:
+  // a getBoundingClientRect() per tracked section on every scroll frame, plus a
+  // proximity pulse, all to drive an invisible element. It is a pointer-proximity
+  // affordance with no touch equivalent, so on mobile we drop it outright.
+  if (!window.matchMedia('(min-width: 901px) and (hover: hover)').matches) {
+    sideNav.remove();
+    return;
+  }
   const rail = document.getElementById('sideNavItems');
   const items = [...sideNav.querySelectorAll('.side-nav-item')];
   if (!rail || !items.length) return;
@@ -7200,11 +7278,13 @@ function fireConfetti() {
 
     // Visibility gate, carried over: the rail stays out of the hero.
     const laptopTrack = document.getElementById('auLaptopTrack');
+    let past;
     if (laptopTrack) {
-      sideNav.classList.toggle('is-visible', laptopTrack.getBoundingClientRect().bottom < window.innerHeight * 0.7);
+      past = laptopTrack.getBoundingClientRect().bottom < window.innerHeight * 0.7;
     } else {
-      sideNav.classList.toggle('is-visible', window.scrollY > 400);
+      past = window.scrollY > 400;
     }
+    sideNav.classList.toggle('is-visible', past);
   }
 
   function schedule() {
