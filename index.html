@@ -765,13 +765,12 @@
   @media (min-width:920px){
     .au-prob-grid{
       grid-template-columns:repeat(5, minmax(0, 1fr));
-      grid-template-rows:auto auto;
+      grid-template-rows:auto;
       gap:16px;
     }
-    /* Explicit placement, not auto - and the same arrangement as theirs: the tall */
-    .au-prob-tall{grid-column:1 / span 2; grid-row:1 / span 2;}
+    /* Two bottlenecks, one row. The file list keeps the narrower column. */
+    .au-prob-tall{grid-column:1 / span 2; grid-row:1;}
     .au-prob-wide:nth-of-type(2){grid-column:3 / span 3; grid-row:1;}
-    .au-prob-wide:nth-of-type(3){grid-column:3 / span 3; grid-row:2;}
   }
 
   .au-prob-card{
@@ -3958,11 +3957,14 @@
   /* Plain text, no chip. The note straddles the hero's green to white
      dissolve, and the dissolve ends higher on small screens, so the colour
      flips at the same breakpoint. */
-  .au-form-hero .au-form-note{ color:#10B981; }
-  .au-form-hero .au-form-note strong{ color:#34D399; }
+  /* Measured: this note sits on near-black green above 640px and on white
+     below it, so one value cannot serve both. Both tones are brand emerald
+     and both clear 7:1 against what is actually behind them. */
+  .au-form-hero .au-form-note{ color:#6EE7B7; font-weight:600; }
+  .au-form-hero .au-form-note strong{ color:#A7F3D0; font-weight:700; }
   @media (max-width:640px){
-    .au-form-hero .au-form-note{ color:#059669; }
-    .au-form-hero .au-form-note strong{ color:#047857; }
+    .au-form-hero .au-form-note{ color:#065F46; }
+    .au-form-hero .au-form-note strong{ color:#064E3B; }
   }
 
   @media (max-width:640px){
@@ -3974,6 +3976,12 @@
     }
   }
 
+
+  .au-proof-cta{
+    display:flex;
+    justify-content:center;
+    margin-top:34px;
+  }
 </style>
 </head>
 <body>
@@ -4125,8 +4133,8 @@
                        laptop track nears the viewport (see the reveal rig below). With
                        preload="auto" the browser pulled ~2.8MB of this file during initial
                        load, starving the CSS, fonts and hero image on a mobile connection. -->
-                  <video class="laptop-video" id="auHeroVideo" loop muted playsinline preload="none" poster="/video/hero-demo-poster.jpg" aria-label="Wozku Platform Demo Video">
-                    <source data-src="/video/hero-demo.mp4" type="video/mp4">
+                  <video class="laptop-video" id="auHeroVideo" loop muted playsinline preload="none" poster="/video/laptop-demo-poster.jpg" aria-label="Wozku Platform Demo Video">
+                    <source data-src="/video/laptop-demo.mp4" type="video/mp4">
                   </video>
                 </div>
                 <div class="laptop-bezel" aria-hidden="true"><span class="laptop-camera"></span></div>
@@ -4353,9 +4361,7 @@
                 <div class="au-file"><img class="au-file-ico" src="/file-icons/zip.svg" alt="" width="16" height="16"><span class="au-file-n">banners-1200x628.zip</span></div>
                 <div class="au-file"><img class="au-file-ico" src="/file-icons/docx-icon.svg" alt="" width="16" height="16"><span class="au-file-n">suggested-posts.docx</span></div>
                 <div class="au-file"><img class="au-file-ico" src="/file-icons/zip.svg" alt="" width="16" height="16"><span class="au-file-n">logo-pack-final.zip</span></div>
-                <div class="au-file"><img class="au-file-ico" src="/file-icons/google-chrome-icon.svg" alt="" width="16" height="16"><span class="au-file-n">email-template.html</span></div>
-                <div class="au-file"><img class="au-file-ico" src="/file-icons/pdf-icon.svg" alt="" width="16" height="16"><span class="au-file-n">hashtag-guide.pdf</span></div>
-              </div>
+                </div>
             </div>
             <span class="au-well-fade is-vertical"></span>
           </div>
@@ -4379,7 +4385,7 @@
               </div>
             </div>
             <h3 class="au-prob-title">The $50k ghost town</h3>
-            <p class="au-prob-txt">A booth buys you one room for three days. Once the doors close, reaching those same people starts over, and this time you pay per click.</p>
+            <p class="au-prob-txt">A booth buys you one room for three days. The doors close, the buzz is gone within a day, and reaching those same people starts over. This time you pay per click.</p>
           </div>
 
           <div class="au-prob-well" aria-hidden="true">
@@ -4412,35 +4418,8 @@
         </article>
 
         <!-- 03 - wide. Buzz spikes on the day and decays to nothing; the loop is -->
-        <article class="au-prob-card au-prob-wide">
-          <div class="au-prob-body">
-            <div class="au-prob-header">
-              <span class="au-prob-num">03 / BOTTLENECK</span>
-              <div class="au-prob-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                </svg>
-              </div>
-            </div>
-            <h3 class="au-prob-title">The dead hashtag</h3>
-            <p class="au-prob-txt">The conference wraps, everyone flies home, and the buzz drops to zero overnight. Months of planning, gone in a day.</p>
-          </div>
 
-          <div class="au-prob-well" aria-hidden="true">
-            <div class="au-decay" data-decay>
-<div class="au-decay-dots" data-decay-dots></div>
-              <span class="au-decay-axis">
-                <em>Day 0</em><em>+1</em><em>+2</em><em>+3</em><em>+7</em>
-              </span>
-            </div>
-          </div>
-
-          <div class="au-prob-meta-line">
-            <span class="au-prob-dot"></span>
-            <span>Momentum vanishes within 24 hours</span>
-          </div>
-        </article>
-      </div>
+</div>
     </div>
   </section>
 
@@ -4647,10 +4626,6 @@
             <p class="bn-desc">Sharing built into post-signup flows turned quiet moments into a steady growth loop, generating 23.3K clicks and 46.2K reactions.</p>
             <div class="bn-footer">
               <p class="bn-metrics">&minus;70% cost per reg &middot; 10.7M potential reach</p>
-              <a href="#auCta" class="bn-btn" aria-label="Download Salesforce case study">
-                <span>Get the playbook</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              </a>
             </div>
           </div>
         </article>
@@ -4665,10 +4640,6 @@
             <h3 class="bn-title">Reach earned through the global partner network</h3>
             <div class="bn-footer">
               <p class="bn-metrics">15K likes &middot; partner activation</p>
-              <a href="#auCta" class="bn-btn" aria-label="Download Veeam case study">
-                <span>Get the playbook</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              </a>
             </div>
           </div>
         </article>
@@ -4683,10 +4654,6 @@
             <h3 class="bn-title">Member advocacy across 120K members, 80+ countries</h3>
             <div class="bn-footer">
               <p class="bn-metrics">9.7K clicks &middot; 25.1K reactions</p>
-              <a href="#auCta" class="bn-btn" aria-label="Download Women In Cloud case study">
-                <span>Get the playbook</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              </a>
             </div>
           </div>
         </article>
@@ -4706,15 +4673,15 @@
             </div>
             <div class="bn-footer">
               <p class="bn-metrics">Live attendee engagement &middot; multi-geo activation</p>
-              <a href="#auCta" class="bn-btn" aria-label="Download Elastic case study">
-                <span>Get the playbook</span>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              </a>
             </div>
           </div>
         </article>
 
       </div>
+      <div class="au-proof-cta">
+        <a href="#auCta" class="btn btn-primary">Download all four case studies</a>
+      </div>
+
     </div>
   </section>
 
