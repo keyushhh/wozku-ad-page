@@ -748,46 +748,25 @@
     gap:18px;
     align-items:flex-start;
   }
-  .au-proof-badge-chip{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    font-family:var(--font-mono);
-    font-size:9.5px;
-    font-weight:700;
-    letter-spacing:0.08em;
-    color:var(--brand-emerald-deep);
-    background:rgba(16, 185, 129, 0.1);
-    border:1px solid rgba(16, 185, 129, 0.25);
-    padding:3.5px 10px;
-    border-radius:100px;
-    text-transform:uppercase;
-    transition:all .3s ease;
-  }
-  .au-proof-company-row{
+  .au-proof-avatar-circle{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+    border:2px solid #CBD5E1;
     display:flex;
     align-items:center;
-    gap:12px;
-    min-height:40px;
+    justify-content:center;
+    color:#94A3B8;
+    box-shadow:0 3px 10px -2px rgba(15, 23, 42, 0.08);
+    position:relative;
+    overflow:hidden;
   }
-  .au-proof-logo-split{
-    height:34px;
-    max-width:180px;
-    width:auto;
-    display:block;
-    object-fit:contain;
-    transition:opacity .25s ease, transform .25s ease;
-  }
-  .au-proof-company-text{
-    font-family:var(--font-display);
-    font-size:22px;
-    font-weight:700;
-    color:#0F172A;
-    letter-spacing:-0.02em;
-    display:none;
-  }
-  .au-proof-company-text.is-shown{
-    display:inline-block;
+  .au-proof-avatar-circle svg{
+    width:32px;
+    height:32px;
+    fill:#94A3B8;
+    margin-top:4px;
   }
   .au-proof-person-info{
     display:flex;
@@ -810,6 +789,20 @@
     color:#475569;
     margin:0;
     letter-spacing:-0.01em;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .au-proof-company-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-height:36px;
+  }
+  .au-proof-logo-split{
+    height:32px;
+    max-width:180px;
+    width:auto;
+    display:block;
+    object-fit:contain;
     transition:opacity .25s ease, transform .25s ease;
   }
   .au-proof-verified-pill{
@@ -3581,22 +3574,25 @@
     <div class="wrap">
       <div class="au-proof-split-card reveal" id="auProofSplit">
         
-        <!-- Left Section: Dynamic Company, Speaker, Designation -->
+        <!-- Left Section: Dynamic Speaker, Designation, Company -->
         <div class="au-proof-split-left" id="auProofMeta">
-          <div class="au-proof-badge-chip" id="auProofBadge">
-            <span class="au-prob-dot is-good"></span>
-            <span id="auProofBadgeText">PROOF / MONGODB</span>
+          <!-- Blank Avatar Circle (Placeholder) -->
+          <div class="au-proof-avatar-circle" id="auProofAvatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
           </div>
 
-          <div class="au-proof-company-row">
-            <img src="/src/assets/MongoDB_Forest-Green.svg" alt="MongoDB" class="au-proof-logo-split" id="auProofLogo" onerror="this.src='/MongoDB_Forest-Green.svg'" />
-          </div>
-
+          <!-- Person Name & Role -->
           <div class="au-proof-person-info">
             <h3 class="au-proof-person-name" id="auProofName">Abhishek Sharma</h3>
             <p class="au-proof-person-role" id="auProofRole">Growth &amp; Field Marketing</p>
           </div>
 
+          <!-- Company Logo (below name/role, above verified tag) -->
+          <div class="au-proof-company-row">
+            <img src="/src/assets/MongoDB_Forest-Green.svg" alt="MongoDB" class="au-proof-logo-split" id="auProofLogo" onerror="this.src='/MongoDB_Forest-Green.svg'" />
+          </div>
+
+          <!-- Verified Tag -->
           <div class="au-proof-verified-pill" id="auProofVerified">
             <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
             <span id="auProofVerifiedText">Verified Customer Spotlight</span>
@@ -5591,7 +5587,6 @@ initBookingCalendar();
   ];
 
   const notes = [...stack.querySelectorAll('.au-sticky-note')];
-  const badgeText = document.getElementById('auProofBadgeText');
   const logoImg = document.getElementById('auProofLogo');
   const nameEl = document.getElementById('auProofName');
   const roleEl = document.getElementById('auProofRole');
@@ -5610,8 +5605,6 @@ initBookingCalendar();
 
     const data = TESTIMONIALS[current];
     if (!data) return;
-
-    if (badgeText) badgeText.textContent = data.badge;
 
     if (logoImg) {
       logoImg.style.opacity = '0';
