@@ -587,6 +587,10 @@
   .au-eyebrow{
     font-family:var(--font-mono); font-size:11px; font-weight:500; letter-spacing:0.2em;
     text-transform:uppercase; color:#FFFFFF; margin:0;
+    /* Pure white measures only 3.4:1 on the lit part of the hero shader and
+       cannot go brighter, so the surround is darkened instead. Same treatment
+       the hero sub-headline already uses. */
+    text-shadow:0 1px 10px rgba(3, 32, 24, 0.55);
   }
   .au-hero-lockup::after{
     content:""; order:1; width:34px; height:1px; background:rgba(255,255,255,0.28);
@@ -3957,15 +3961,11 @@
   /* Plain text, no chip. The note straddles the hero's green to white
      dissolve, and the dissolve ends higher on small screens, so the colour
      flips at the same breakpoint. */
-  /* Measured: this note sits on near-black green above 640px and on white
-     below it, so one value cannot serve both. Both tones are brand emerald
-     and both clear 7:1 against what is actually behind them. */
-  .au-form-hero .au-form-note{ color:#6EE7B7; font-weight:600; }
-  .au-form-hero .au-form-note strong{ color:#A7F3D0; font-weight:700; }
-  @media (max-width:640px){
-    .au-form-hero .au-form-note{ color:#065F46; }
-    .au-form-hero .au-form-note strong{ color:#064E3B; }
-  }
+  /* Measured over HTTP with the hero shader live, this note sits on the pale
+     end of the dissolve at every viewport, so one dark tone serves them all
+     (6.5:1 to 8.3:1 from 375px to 1920px). */
+  .au-form-hero .au-form-note{ color:#07422F; font-weight:600; }
+  .au-form-hero .au-form-note strong{ color:#07422F; font-weight:700; }
 
   @media (max-width:640px){
     .hero-editorial-sub{
