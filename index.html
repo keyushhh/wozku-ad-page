@@ -57,6 +57,22 @@
     unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
   }
   @font-face{
+    font-family:"Caveat";
+    font-style:normal;
+    font-weight:400 700;
+    font-display:swap;
+    src:url("/fonts/caveat-var-ext.woff2") format("woff2");
+    unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+  }
+  @font-face{
+    font-family:"Caveat";
+    font-style:normal;
+    font-weight:400 700;
+    font-display:swap;
+    src:url("/fonts/caveat-var.woff2") format("woff2");
+    unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  @font-face{
     font-family:"Satoshi";
     font-style:normal;
     font-weight:400;
@@ -1132,8 +1148,8 @@
   }
 
   .au-sticky-text{
-    font-family:'Shadows Into Light', 'Caveat', 'Kalam', cursive, sans-serif;
-    font-size:25px;
+    font-family:'Caveat', 'Shadows Into Light', 'Kalam', cursive, sans-serif;
+    font-size:27px;
     font-weight:600;
     line-height:1.45;
     margin:0;
@@ -1334,9 +1350,15 @@
     .au-pb{padding:26px 22px 24px; border-radius:18px;}
     .au-pb::after{border-radius:18px;}
     .au-pb-frame{padding:8px; border-radius:24px;}
-    /* shingled cards need the width to overlap legibly; stacked, they are a list */
+    /* shingled cards need the width to overlap legibly; stacked, they are a list.
+       The .is-1/.is-2/.is-3 rules carry two classes each, so this reset needs the
+       same weight or the desktop shingle (85%/93%/100% width, 0.72/0.88 opacity)
+       leaks through and the rows read as broken alignment on a phone. */
     .au-pb-stack{height:auto; display:flex; flex-direction:column; gap:10px;}
-    .au-pb-card{position:static; opacity:1; width:auto; left:auto; transform:none;}
+    .au-pb-card,
+    .au-pb-card.is-1,
+    .au-pb-card.is-2,
+    .au-pb-card.is-3{position:static; opacity:1; width:auto; left:auto; top:auto; transform:none;}
     .au-pb-brand{flex-wrap:wrap; gap:10px 12px;}
     .au-pb-meta{padding-left:0; border-left:0;}
   }
@@ -3341,7 +3363,16 @@
   }
 
   @media (max-width: 860px){
-    .lt-track{ height:210vh; margin-top:36px; }
+    /* 210vh of track was 2.1 screens of scrolling for one reveal. */
+    .lt-track{ height:160vh; margin-top:24px; }
+    /* The closed lid is a ~108px sliver. Centring it in a full-height stage
+       parked roughly 300px of emptiness above it, which read as a large blank
+       gap after the hero copy. Anchor the rig near the top of the stage
+       instead - 13svh keeps it clear of the fixed header once pinned. */
+    .lt-viewport{ align-items:flex-start; padding-top:13svh; }
+    /* 62vw is inert below 484px, so the laptop sat at a fixed 300px on every
+       phone. Let it actually scale with the screen. */
+    .lt-stage{ --lw:clamp(300px, 86vw, 780px); }
     /* No room beside the lid at this width - back to the corner. */
     .lt-stage .au-vol{ right:18px; bottom:18px; }
   }
@@ -3623,6 +3654,92 @@
       width:44px; height:44px;
       border-radius:inherit;
     }
+  }
+
+  /* ============ MOBILE DENSITY =========================================
+     The page ran to 17.4 screens on a 390px phone. These rules close dead
+     space and compact the tall blocks; none of them change desktop.
+     ==================================================================== */
+  @media (max-width:700px){
+    /* #2 - the bottleneck section closed with 64px of padding and the proof
+       spotlight opened with its own, stacking into a ~124px band of nothing
+       between two white sections. */
+    #auProblem{padding-bottom:30px;}
+    #auProofSplit{padding-top:4px;}
+
+    /* #3 - the notes are rotated, and rotation inflates each one's bounding box
+       by ~10px per side on top of the fan offsets, so they broke past the 24px
+       page gutter (one reached 2px from the screen edge). Narrowing the stack
+       keeps the whole fan inside the gutter. */
+    .au-sticky-stack{width:84%; margin-left:auto; margin-right:auto;}
+    /* Narrower notes rewrap the text taller, and the longest quote (364 chars)
+       then ran 23px past the note it sits on. 18px fits it with room to spare;
+       the stack height is fixed, so this is the lever that has to give. */
+    .au-sticky-text{font-size:18px; line-height:1.42;}
+
+    /* #5 - three steps at 512px each meant 3-4 swipes to read them. The visual
+       under each step is a supporting mockup, not the message. */
+    .au-norma-card-visual{min-height:0; padding:16px 16px;}
+    .au-norma-card-head{padding:22px 20px 16px;}
+    #auHow{padding-top:44px; padding-bottom:44px;}
+
+    /* #7 - the playbook cover was 296px of very dark, low-contrast artwork at
+       the bottom of an already 788px card. */
+    .au-cta-vis{padding-top:6px;}
+    .au-book{width:176px; height:244px;}
+  }
+
+  /* ============ #6 LIVE ROI READOUT (mobile) ============================
+     Stacked, the inputs panel is 945px tall and the results panel starts
+     below it, so the first slider sits ~470px above the output - drag it and
+     nothing you can see changes. This pins a compact readout to the bottom of
+     the screen for as long as the inputs are on screen, so every slider gives
+     immediate feedback. Tapping it jumps to the full breakdown.
+     ==================================================================== */
+  .au-roi-peek{
+    position:fixed;
+    left:12px; right:12px;
+    bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index:93;
+    display:flex; align-items:center; gap:12px;
+    padding:11px 14px;
+    border-radius:16px;
+    border:1px solid rgba(110, 231, 183, 0.28);
+    background:rgba(4, 26, 20, 0.94);
+    box-shadow:0 18px 40px -18px rgba(0, 0, 0, 0.6);
+    color:#FFFFFF;
+    text-align:left;
+    font-family:var(--font-body);
+    cursor:pointer;
+    opacity:0; pointer-events:none;
+    transform:translateY(12px);
+    transition:opacity .24s ease, transform .24s cubic-bezier(.16,1,.3,1);
+  }
+  .au-roi-peek.is-on{opacity:1; pointer-events:auto; transform:translateY(0);}
+  .au-roi-peek-l{
+    font-family:var(--font-mono); font-size:9.5px; font-weight:700;
+    letter-spacing:0.12em; text-transform:uppercase; color:#6EE7B7;
+    display:block; margin-bottom:2px;
+  }
+  .au-roi-peek-v{
+    font-family:var(--font-display); font-size:21px; font-weight:700;
+    letter-spacing:-0.02em; line-height:1.05; display:block;
+  }
+  .au-roi-peek-m{
+    margin-left:auto; flex:none;
+    font-family:var(--font-mono); font-size:10px; font-weight:700;
+    letter-spacing:0.04em; color:#A7F3D0; text-align:right; max-width:38%;
+  }
+  /* Desktop shows both panels side by side, so it never needs this. */
+  @media (min-width:901px){ .au-roi-peek{display:none;} }
+  /* Move the scroll-to-top clear of the bar while it is up. */
+  body.au-roi-peek-on .scroll-to-top-btn{
+    bottom:calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+  body.au-ty-open .au-roi-peek{display:none;}
+  @media (prefers-reduced-motion:reduce){
+    .au-roi-peek{transition:opacity .15s ease; transform:none;}
+    .au-roi-peek.is-on{transform:none;}
   }
 </style>
 </head>
@@ -4713,6 +4830,69 @@ if (scrollToTopBtn) {
   }, { passive: true });
   sttSync();
 }
+
+// 6B. LIVE ROI READOUT (mobile). The results panel sits below a 945px input
+// panel once the calculator stacks, so dragging a slider changes numbers that
+// are off screen. This mirrors the headline figures into a pinned bar that is
+// only up while the inputs are visible.
+(function roiPeek() {
+  const side = document.querySelector('.au-calc-side');
+  const out = document.querySelector('.au-calc-out');
+  if (!side || !out) return;
+  if (window.matchMedia('(min-width:901px)').matches) return;
+
+  const bar = document.createElement('button');
+  bar.type = 'button';
+  bar.className = 'au-roi-peek';
+  bar.id = 'auRoiPeek';
+  bar.setAttribute('aria-label', 'Estimated ROI so far. Tap to see the full breakdown.');
+  bar.innerHTML =
+    '<span><span class="au-roi-peek-l">Estimated ROI</span>' +
+    '<span class="au-roi-peek-v" id="auRoiPeekVal">&nbsp;</span></span>' +
+    '<span class="au-roi-peek-m" id="auRoiPeekMult"></span>';
+  document.body.appendChild(bar);
+
+  bar.addEventListener('click', () => {
+    if (lenis && typeof lenis.scrollTo === 'function') {
+      lenis.scrollTo(out, { offset: -80, duration: 0.9 });
+    } else {
+      out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  const show = (on) => {
+    bar.classList.toggle('is-on', on);
+    document.body.classList.toggle('au-roi-peek-on', on);
+  };
+
+  // Up while the inputs are on screen, down once the real output is reached so
+  // the two are never showing the same number at the same time.
+  if ('IntersectionObserver' in window) {
+    let inputsVisible = false, outputVisible = false;
+    const sync = () => show(inputsVisible && !outputVisible);
+    new IntersectionObserver((es) => { es.forEach((e) => { inputsVisible = e.isIntersecting; }); sync(); },
+      { rootMargin: '-70px 0px -10% 0px' }).observe(side);
+    new IntersectionObserver((es) => { es.forEach((e) => { outputVisible = e.isIntersecting; }); sync(); },
+      { rootMargin: '0px 0px -35% 0px' }).observe(out);
+  }
+
+  // The calculator writes #auOutSaveSr and #auOutMult on every recalc; mirroring
+  // those keeps this in step without duplicating any of the maths.
+  const src = document.getElementById('auOutSaveSr');
+  const mult = document.getElementById('auOutMult');
+  const valEl = document.getElementById('auRoiPeekVal');
+  const multEl = document.getElementById('auRoiPeekMult');
+  const sync = () => {
+    if (src && valEl) valEl.textContent = (src.textContent || '').replace(/ estimated ROI$/i, '').trim() || '\u00a0';
+    if (mult && multEl) {
+      const t = (mult.textContent || '').trim();
+      multEl.textContent = /^\d/.test(t) ? t.replace(' cheaper than paid', '\u00a0cheaper') : '';
+    }
+  };
+  sync();
+  if (src) new MutationObserver(sync).observe(src, { childList: true, characterData: true, subtree: true });
+  if (mult) new MutationObserver(sync).observe(mult, { childList: true, characterData: true, subtree: true });
+})();
 
 // Nav targets
 const NAV_TARGETS = {
