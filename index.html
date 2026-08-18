@@ -761,12 +761,20 @@
     box-shadow:0 3px 10px -2px rgba(15, 23, 42, 0.08);
     position:relative;
     overflow:hidden;
+    transition:opacity .25s ease, transform .25s ease, border-color .25s ease;
   }
   .au-proof-avatar-circle svg{
     width:32px;
     height:32px;
     fill:#94A3B8;
     margin-top:4px;
+  }
+  .au-proof-avatar-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:50%;
+    display:block;
   }
   .au-proof-person-info{
     display:flex;
@@ -5553,7 +5561,8 @@ initBookingCalendar();
 
   const TESTIMONIALS = [
     {
-      badge: 'PROOF / MONGODB',
+      avatar: '',
+      fallbackAvatar: '',
       logo: '/src/assets/MongoDB_Forest-Green.svg',
       fallbackLogo: '/MongoDB_Forest-Green.svg',
       name: 'Abhishek Sharma',
@@ -5561,7 +5570,8 @@ initBookingCalendar();
       verified: 'Verified Customer Spotlight'
     },
     {
-      badge: 'PROOF / SALESFORCE',
+      avatar: '/src/assets/Ajit-Belani.webp',
+      fallbackAvatar: '/Ajit-Belani.webp',
       logo: '/src/assets/Salesforce.com_logo.svg',
       fallbackLogo: '/Salesforce.com_logo.svg',
       name: 'Ajit Belani',
@@ -5569,7 +5579,8 @@ initBookingCalendar();
       verified: 'Verified Enterprise ABM Impact'
     },
     {
-      badge: 'PROOF / VEEAM SOFTWARE',
+      avatar: '/src/assets/kushagra.jpeg',
+      fallbackAvatar: '/kushagra.jpeg',
       logo: '/src/assets/veeam-seeklogo.svg',
       fallbackLogo: '/veeam-seeklogo.svg',
       name: 'Kushagra Sharma',
@@ -5577,7 +5588,8 @@ initBookingCalendar();
       verified: 'Verified Partner Summit Campaign'
     },
     {
-      badge: 'PROOF / WOMEN IN CLOUD',
+      avatar: '/src/assets/chaitra.jpeg',
+      fallbackAvatar: '/chaitra.jpeg',
       logo: '/src/assets/womenincloud.webp',
       fallbackLogo: '/womenincloud.webp',
       name: 'Chaitra Vedullapalli',
@@ -5587,6 +5599,7 @@ initBookingCalendar();
   ];
 
   const notes = [...stack.querySelectorAll('.au-sticky-note')];
+  const avatarEl = document.getElementById('auProofAvatar');
   const logoImg = document.getElementById('auProofLogo');
   const nameEl = document.getElementById('auProofName');
   const roleEl = document.getElementById('auProofRole');
@@ -5606,24 +5619,45 @@ initBookingCalendar();
     const data = TESTIMONIALS[current];
     if (!data) return;
 
-    if (logoImg) {
-      logoImg.style.opacity = '0';
-      if (nameEl) nameEl.style.opacity = '0';
-      if (roleEl) roleEl.style.opacity = '0';
+    if (avatarEl) {
+      avatarEl.style.opacity = '0';
+      avatarEl.style.transform = 'scale(0.92)';
+    }
+    if (logoImg) logoImg.style.opacity = '0';
+    if (nameEl) nameEl.style.opacity = '0';
+    if (roleEl) roleEl.style.opacity = '0';
 
-      setTimeout(() => {
+    setTimeout(() => {
+      if (avatarEl) {
+        if (data.avatar) {
+          avatarEl.innerHTML = `<img src="${data.avatar}" alt="${data.name}" class="au-proof-avatar-img" onerror="this.src='${data.fallbackAvatar}'" />`;
+          avatarEl.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+        } else {
+          avatarEl.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+          avatarEl.style.borderColor = '#CBD5E1';
+        }
+        avatarEl.style.opacity = '1';
+        avatarEl.style.transform = 'scale(1)';
+      }
+
+      if (logoImg) {
         logoImg.src = data.logo;
         logoImg.onerror = () => { logoImg.src = data.fallbackLogo; };
-
-        if (nameEl) nameEl.textContent = data.name;
-        if (roleEl) roleEl.textContent = data.role;
-        if (verifiedText) verifiedText.textContent = data.verified;
-
         logoImg.style.opacity = '1';
-        if (nameEl) nameEl.style.opacity = '1';
-        if (roleEl) roleEl.style.opacity = '1';
-      }, 150);
-    }
+      }
+
+      if (nameEl) {
+        nameEl.textContent = data.name;
+        nameEl.style.opacity = '1';
+      }
+      if (roleEl) {
+        roleEl.textContent = data.role;
+        roleEl.style.opacity = '1';
+      }
+      if (verifiedText) {
+        verifiedText.textContent = data.verified;
+      }
+    }, 150);
   }
 
   function peelNext() {
