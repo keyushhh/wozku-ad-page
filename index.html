@@ -607,6 +607,14 @@
     position:relative;
     padding:92px 0 116px;
     background:#FFFFFF;
+    /* The band below is wider than the page on purpose, and on phones it is
+       256% wide, which made the whole document scroll sideways by ~510px.
+       `clip` not `hidden`: hidden on one axis forces the other into a scroll
+       container, which would cut the band off vertically and reintroduce the
+       exact seam the geometry below exists to avoid. `clip` bounds x only and
+       leaves y genuinely visible. The gradient is already at zero alpha well
+       before the cut, so nothing visible is lost. */
+    overflow-x:clip;
     /* Scaled as a pair so the band keeps its 2.6:1 proportion and its angle. */
     --ask-glow-w:170%;
     --ask-glow-h:92%;
@@ -4102,6 +4110,11 @@
   }
   .hero-wf-ask{margin-top:30px;}
   .hero-wf-ask .au-form-hero{margin:0; max-width:520px;}
+  /* Hero only. The shared bar carries a drop shadow that made sense floating on
+     the old centred hero; on the ruled wireframe it just muddies the hairlines.
+     The focus ring stays, minus the shadow half. */
+  .hero-wf-ask .au-form-bar{box-shadow:none;}
+  .hero-wf-ask .au-form-bar:focus-within{box-shadow:0 0 0 4px rgba(16,185,129,0.14);}
 
   /* The ruled grid. Verticals are absolute so they can run past the last row. */
   /* One selector only: an `.is-wf ~ .hero-wf-lower ...` variant here outranked
@@ -4118,6 +4131,11 @@
     position:absolute; top:0; bottom:26px; width:1px;
     background:rgba(15,23,42,0.12); pointer-events:none;
   }
+  /* Column positions live here rather than inline so the phone layout below can
+     move them when the grid drops from three columns to two. */
+  .wf-vrule--1{left:0;}
+  .wf-vrule--2{left:33.3333%;}
+  .wf-vrule--3{left:66.6666%;}
   .hero-wf-lower .au-chain-node{
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     text-align:center; padding:26px 16px 28px; min-height:118px;
@@ -4166,7 +4184,7 @@
        last row's labels: it absorbs the grid's overhang plus the cell padding
        and centring slack under that text. */
     .hero-wf-left{
-      padding-top:26px; padding-bottom:51px;
+      padding-top:26px; padding-bottom:88px;
       display:flex; flex-direction:column;
     }
     /* Pushes the ask to the bottom of the column, as in the wireframe. */
@@ -4180,6 +4198,28 @@
   @media (max-width:999px){
     /* Stacked: copy, ask, then the grid full width with its own top rule. */
     .hero-wf-lower .au-hero-chain{border-top:1px solid rgba(15,23,42,0.12); margin-top:40px;}
+  }
+  /* On a phone a third of the screen is about 110px, which wrapped "posts to
+     LinkedIn", "clicks to your page" and even "200-250" onto two lines each and
+     left the row squeezed and centre-aligned against copy that is not. On a
+     phone the five figures read as a list instead: one per row, left aligned,
+     each label on a single line, divided by a hairline. The vertical rules and
+     the sixth empty cell only exist to square off a grid, so both go. */
+  @media (max-width:599px){
+    .hero-wf-lower .au-hero-chain{grid-template-columns:1fr; padding-bottom:0;}
+    .wf-vrule{display:none;}
+    .hero-wf-lower .au-chain-node{
+      align-items:flex-start; justify-content:flex-start; text-align:left;
+      padding:18px 0; min-height:0;
+    }
+    .hero-wf-lower .au-chain-node.is-empty{display:none;}
+    /* Divider between rows, not under the last one. */
+    .hero-wf-lower .au-chain-node:nth-of-type(-n+3){border-bottom:0;}
+    .hero-wf-lower .au-chain-node + .au-chain-node{
+      border-top:1px solid rgba(15,23,42,0.12);
+    }
+    .hero-wf-lower .au-chain-node b{font-size:30px;}
+    .hero-wf-lower .au-chain-node span{margin-top:4px; font-size:14px; white-space:nowrap;}
   }
   /* ================= /EXPERIMENT ============================================ */
 
@@ -4430,6 +4470,14 @@
   /* statement, and matches the asymmetry .au-math already uses. */
   .au-outperform, .au-leadsource{padding:84px 0;}
   .au-commercials{padding:72px 0;}
+  /* These sections were built desktop-first with no phone override, so two of
+     them meeting put 168px of empty page between one paragraph and the next.
+     Measured at 390px, the gaps are now roughly 96px, which is the same rhythm
+     the older .au-section blocks already keep. */
+  @media (max-width:768px){
+    .au-outperform, .au-leadsource{padding:48px 0;}
+    .au-commercials{padding:44px 0;}
+  }
 
   .au-editorial{
     display:grid; grid-template-columns:1fr; gap:34px; align-items:start;
@@ -4493,6 +4541,15 @@
   /* This quote sits on the white .au-pb-frame, not on the dark plate, so it */
   /* keeps the dark emerald. */
   .au-interstitial .au-pb-quote{margin:30px auto 0;}
+  /* Swapped with the form lead below: the funnel figures are restated here as
+     plain fact, and the serif-italic emerald voice moves down to the ask, which
+     is the line that should stand out on this frame. */
+  .au-interstitial .au-pb-quote{
+    font-family:var(--font-body), system-ui, sans-serif;
+    font-style:normal; font-weight:400;
+    font-size:clamp(18px, 1.9vw, 21px); line-height:1.5; letter-spacing:0;
+    color:var(--ink); max-width:640px;
+  }
 
   /* Red Hat funnel: four rows stepping down to the registrations figure. */
   /* Replaced a ring-badge stack that could not hold a six-digit number. */
@@ -4540,6 +4597,7 @@
   /* the left column, the questions stack on the right as hairline-divided rows */
   /* rather than nine separate boxes. */
   .au-faq{padding:80px 0;}
+  @media (max-width:768px){ .au-faq{padding:48px 0;} }
   .au-faq-grid .au-faq-list{display:flex; flex-direction:column; max-width:none;}
   .au-faq-sub{margin-top:16px; font-size:16.5px; line-height:1.6; max-width:36ch;}
   .au-faq-item{
@@ -4584,6 +4642,13 @@
     color:var(--ink); margin-bottom:14px; text-align:center;
   }
   .au-interstitial .au-form-note{color:var(--ink-dim); text-align:center;}
+  /* The other half of the swap described at .au-pb-quote above. */
+  .au-interstitial .au-form-lead{
+    font-family:"Instrument Serif", Georgia, serif;
+    font-size:clamp(22px, 2.6vw, 30px); font-weight:400; font-style:italic;
+    line-height:1.32; letter-spacing:-0.01em;
+    color:var(--brand-emerald-deep); margin-bottom:18px;
+  }
 
   /* ---- content-v3: dedicated simulation band ---- */
   .au-simband{padding:16px 0 72px;}
@@ -4787,9 +4852,9 @@
       <!-- Three across, two down. The sixth cell is deliberately empty, and the
            vertical rules run past the last row rather than closing the box. -->
       <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
-        <span class="wf-vrule" style="left:0"></span>
-        <span class="wf-vrule" style="left:33.3333%"></span>
-        <span class="wf-vrule" style="left:66.6666%"></span>
+        <span class="wf-vrule wf-vrule--1"></span>
+        <span class="wf-vrule wf-vrule--2"></span>
+        <span class="wf-vrule wf-vrule--3"></span>
 
         <div class="au-chain-node">
           <b>400</b>
