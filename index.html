@@ -605,7 +605,7 @@
      touching, and the mobile override below only re-points those. */
   .au-ask{
     position:relative;
-    padding:92px 0 116px;
+    padding:52px 0 116px;
     background:#FFFFFF;
     /* The band below is wider than the page on purpose, and on phones it is
        256% wide, which made the whole document scroll sideways by ~510px.
@@ -661,6 +661,9 @@
   .au-ask > .wrap{position:relative; z-index:1;}
   @media (max-width:768px){
     .au-ask{--ask-glow-x:94%; --ask-glow-w:256%; --ask-glow-h:70%; --ask-glow-tilt:-7deg;}
+    /* Was inheriting the 64px desktop top padding, which stacked with the
+       Commercials banner below it into a gap the banner does not earn. */
+    .au-ask{padding:44px 0 72px;}
   }
   .au-cta{padding:64px 0 104px;}
 
@@ -4480,14 +4483,14 @@
   /* setting the argument beside it turns each one back into a designed */
   /* statement, and matches the asymmetry .au-math already uses. */
   .au-outperform, .au-leadsource{padding:84px 0;}
-  .au-commercials{padding:72px 0;}
+  .au-commercials{padding:40px 0;}
   /* These sections were built desktop-first with no phone override, so two of
      them meeting put 168px of empty page between one paragraph and the next.
      Measured at 390px, the gaps are now roughly 96px, which is the same rhythm
      the older .au-section blocks already keep. */
   @media (max-width:768px){
     .au-outperform, .au-leadsource{padding:48px 0;}
-    .au-commercials{padding:44px 0;}
+    .au-commercials{padding:28px 0;}
   }
 
   .au-editorial{
@@ -4700,7 +4703,7 @@
   }
 
   /* ---- content-v3: dedicated simulation band ---- */
-  .au-simband{padding:16px 0 72px;}
+  .au-simband{padding:16px 0 44px;}
   .au-simband-plate{
     position:relative; isolation:isolate; overflow:hidden;
     border-radius:var(--radius-lg); padding:44px 40px;
