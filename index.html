@@ -4155,19 +4155,27 @@
       font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
       color:var(--ink-dim); white-space:nowrap;
     }
-    /* The open step is not on the shelf: it is the card below the divider.
-       Collapsed rather than display:none so the others slide across to close
-       the gap instead of jumping. */
+    /* The open step stays on the shelf and is marked, rather than leaving a
+       gap. It reads as "you are here" against the four still closed. */
     .au-shelf-item.is-open{
-      flex-basis:0; opacity:0; transform:translateY(-10px);
-      margin-left:-10px; pointer-events:none; overflow:hidden;
+      flex-basis:64px;
+      background:var(--brand-emerald);
+      border-color:var(--brand-emerald);
+      box-shadow:0 16px 34px -16px rgba(6,78,59,0.6);
+      transform:translateY(-6px);
     }
+    .au-shelf-item.is-open .au-shelf-n{color:#FFFFFF;}
+    .au-shelf-item.is-open .au-shelf-word{color:rgba(255,255,255,0.9);}
+    .au-shelf-item.is-open:hover .au-shelf-word{color:#FFFFFF;}
 
     /* Same hinge as the playbook book at the foot of the page: left-edge
        transform-origin, 1.05s, cubic-bezier(.55, 0, .18, 1). The card drops from
        the shelf and swings open on its spine. */
+    /* Top aligned to the copy on the left. .hero-wf-left carries 26px of top
+       padding, so this matches it rather than centring in the row. */
     .au-step-cards{
-      display:block; position:relative; align-self:center;
+      display:block; position:relative;
+      align-self:start; margin-top:26px;
       perspective:1700px;
     }
     .au-step-card{
