@@ -4119,59 +4119,67 @@
   .hero-wf-ask .au-form-bar{box-shadow:none;}
   .hero-wf-ask .au-form-bar:focus-within{box-shadow:0 0 0 4px rgba(16,185,129,0.14);}
 
-  /* The ruled grid. Verticals are absolute so they can run past the last row. */
-  /* One selector only: an `.is-wf ~ .hero-wf-lower ...` variant here outranked
-     the desktop rule below and pinned a 36px top margin under the divider. */
+  /* The journey rail. One step per row, numbered 01 to 05, hung off a single
+     vertical line so the sequence is unmistakable. Replaced a three-across grid
+     that wrapped after the third figure, so it never read as a 1-to-5 order,
+     and where a two-line caption in one cell pushed its neighbours off the
+     shared baseline. Every row owns its own baseline now, so that cannot recur. */
   .hero-wf-lower .au-hero-chain{
     position:relative;
-    display:grid; grid-template-columns:repeat(3, 1fr);
-    max-width:none; width:100%; margin:36px 0 0; padding:0 0 40px;
+    display:block; list-style:none;
+    max-width:none; width:100%; margin:36px 0 0; padding:0 0 8px;
   }
   .hero-wf-lower .au-hero-chain::before{display:none;}
-  /* Stop short of the grid's bottom so the rules trail just past the last row
-     rather than running the full height of the box. */
-  .wf-vrule{
-    position:absolute; top:0; bottom:26px; width:1px;
-    background:rgba(15,23,42,0.12); pointer-events:none;
+  .au-step{
+    position:relative;
+    display:grid; grid-template-columns:auto minmax(0, 1fr);
+    column-gap:20px; align-items:start;
+    padding:0 0 22px;
   }
-  /* Column positions live here rather than inline so the phone layout below can
-     move them when the grid drops from three columns to two. */
-  .wf-vrule--1{left:0;}
-  .wf-vrule--2{left:33.3333%;}
-  .wf-vrule--3{left:66.6666%;}
-  .hero-wf-lower .au-chain-node{
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding:26px 16px 28px; min-height:118px;
+  .au-step:last-child{padding-bottom:0;}
+  /* The rail. Drawn from each number down to the next one rather than as one
+     element behind the list, so it stops cleanly at the last step whatever the
+     rows measure. */
+  .au-step:not(:last-child)::before{
+    content:""; position:absolute; left:15px; top:34px; bottom:0; width:1px;
+    background:rgba(15,23,42,0.14);
   }
-  .hero-wf-lower .au-chain-node + .au-chain-node::before{display:none;}
-  /* Row rule under the first three cells only, so the grid stays open below.
-     Counted with nth-of-type because the vertical rules are earlier children. */
-  .hero-wf-lower .au-chain-node:nth-of-type(-n+3){
-    border-bottom:1px solid rgba(15,23,42,0.12);
+  .au-step-n{
+    position:relative; z-index:1;
+    display:flex; align-items:center; justify-content:center;
+    width:31px; height:31px; border-radius:50%; box-sizing:border-box;
+    border:1px solid rgba(15,23,42,0.16); background:#FFFFFF;
+    font-family:var(--font-mono), monospace;
+    font-size:11px; letter-spacing:0.02em; color:var(--ink-dim);
+    font-variant-numeric:tabular-nums;
   }
-  /* Neutralise the stacked layout's chain rules, which still span the last
-     cell across every column and draw their own dividers. */
-  .hero-wf-lower .au-chain-node.is-final{grid-column:auto;}
-  .hero-wf-lower .au-chain-node::before,
-  .hero-wf-lower .au-chain-node:nth-child(even)::before{display:none;}
-  .hero-wf-lower .au-chain-node.is-empty{min-height:0; padding:0; border-bottom:0;}
-  .hero-wf-lower .au-chain-node b{
-    font-family:var(--font-display); font-size:clamp(24px, 2.4vw, 34px);
-    font-weight:700; letter-spacing:-0.035em; line-height:1;
+  /* The outcome is the only step that earns colour, same rule the old row had. */
+  .au-step.is-final .au-step-n{
+    border-color:var(--brand-emerald);
+    background:var(--brand-emerald); color:#FFFFFF;
+  }
+  /* .hero-editorial centres its text, so this has to say so explicitly or the
+     figures drift to the middle of the column and away from the rail. */
+  .au-step-body{padding-top:1px; text-align:left;}
+  .au-step-body b{
+    display:block;
+    font-family:var(--font-display); font-size:clamp(24px, 2.4vw, 32px);
+    font-weight:700; letter-spacing:-0.035em; line-height:1.05;
     color:var(--ink); font-variant-numeric:tabular-nums;
   }
-  .hero-wf-lower .au-chain-node span{
-    margin-top:8px; font-size:13px; line-height:1.35; color:var(--ink-dim);
+  .au-step-body span{
+    display:block; margin-top:2px;
+    font-size:13.5px; font-weight:500; line-height:1.35; color:var(--ink-dim);
   }
-  .hero-wf-lower .au-chain-node.is-final b{color:var(--brand-emerald-deep);}
-  .hero-wf-lower .au-chain-node.is-final span{color:var(--ink);}
-  /* Third line of each cell: the doc's sourcing caption. A <small>, not another
-     <span>, so it does not inherit the label rule above. Deliberately quiet: it
-     qualifies the figure, it does not compete with it. */
+  .au-step.is-final .au-step-body b{color:var(--brand-emerald-deep);}
+  .au-step.is-final .au-step-body span{color:var(--ink);}
+  /* The doc's sourcing caption. A <small>, not another <span>, so it does not
+     inherit the label rule above. Quiet: it qualifies the figure, it does not
+     compete with it. */
   .hero-wf-lower .au-chain-note{
-    display:block; margin-top:6px;
+    display:block; margin-top:4px;
     font-size:11.5px; line-height:1.4; letter-spacing:0;
-    color:var(--ink-dim); opacity:0.78; max-width:22ch;
+    color:var(--ink-dim); opacity:0.78; max-width:42ch;
   }
 
   @media (min-width:1000px){
@@ -4195,7 +4203,7 @@
        last row's labels: it absorbs the grid's overhang plus the cell padding
        and centring slack under that text. */
     .hero-wf-left{
-      padding-top:26px; padding-bottom:116px;
+      padding-top:26px; padding-bottom:6px;
       display:flex; flex-direction:column;
     }
     /* Pushes the ask to the bottom of the column, as in the wireframe. */
@@ -4204,36 +4212,21 @@
       margin:0; padding-bottom:20px;
       align-self:stretch;
     }
-    .hero-wf-lower .au-chain-node{min-height:150px;}
   }
   @media (max-width:999px){
-    /* Stacked: copy, ask, then the grid full width with its own top rule. */
-    .hero-wf-lower .au-hero-chain{border-top:1px solid rgba(15,23,42,0.12); margin-top:40px;}
-  }
-  /* On a phone a third of the screen is about 110px, which wrapped "posts to
-     LinkedIn", "clicks to your page" and even "200-250" onto two lines each and
-     left the row squeezed and centre-aligned against copy that is not. On a
-     phone the five figures read as a list instead: one per row, left aligned,
-     each label on a single line, divided by a hairline. The vertical rules and
-     the sixth empty cell only exist to square off a grid, so both go. */
-  @media (max-width:599px){
-    .hero-wf-lower .au-hero-chain{grid-template-columns:1fr; padding-bottom:0;}
-    .wf-vrule{display:none;}
-    .hero-wf-lower .au-chain-node{
-      align-items:flex-start; justify-content:flex-start; text-align:left;
-      padding:18px 0; min-height:0;
-    }
-    .hero-wf-lower .au-chain-node.is-empty{display:none;}
-    /* Divider between rows, not under the last one. */
-    .hero-wf-lower .au-chain-node:nth-of-type(-n+3){border-bottom:0;}
-    .hero-wf-lower .au-chain-node + .au-chain-node{
+    /* Stacked: copy, ask, then the rail full width with its own top rule. */
+    .hero-wf-lower .au-hero-chain{
       border-top:1px solid rgba(15,23,42,0.12);
+      margin-top:40px; padding-top:32px;
     }
-    .hero-wf-lower .au-chain-node b{font-size:30px;}
-    .hero-wf-lower .au-chain-node span{margin-top:4px; font-size:14px; white-space:nowrap;}
-    /* Full row width on a phone, so the longer captions take two lines rather
-       than the four a 22ch cap would force. */
-    .hero-wf-lower .au-chain-note{max-width:none; margin-top:5px;}
+  }
+  @media (max-width:599px){
+    .au-step{column-gap:16px; padding-bottom:20px;}
+    .au-step-n{width:28px; height:28px; font-size:10.5px;}
+    .au-step:not(:last-child)::before{left:13.5px; top:31px;}
+    .au-step-body b{font-size:28px;}
+    .au-step-body span{font-size:14px;}
+    .hero-wf-lower .au-chain-note{max-width:none;}
   }
   /* ================= /EXPERIMENT ============================================ */
 
@@ -4331,6 +4324,9 @@
     color:var(--ink);
     margin:0 0 12px;
   }
+  /* Roy on the call: black and unbolded. The italic accent stays, since he
+     approved the type mix, but the weight comes off the rest of the line. */
+  .au-video-head-title.is-plain{font-weight:400; letter-spacing:-0.015em;}
   .au-video-head-title em{
     font-family:"Instrument Serif", Georgia, serif;
     font-weight:400;
@@ -4402,12 +4398,28 @@
     font-size:15px; font-weight:500; line-height:1.5;
     color:rgba(255,255,255,0.86); white-space:normal;
   }
-  /* Marker dot so the five outcomes read as a list, not a wrapped paragraph. */
+  /* Checkmarks, not dots. Roy's point on the call: each line is something you
+     get, so the marker should say "yes, this too", not just separate the rows. */
   .au-mfeatures-simple .au-mfeat::before{
-    content:""; flex:none; width:5px; height:5px; margin-top:8px; border-radius:50%;
-    background:#34D399;
+    content:""; flex:none; width:15px; height:15px; margin-top:4px;
+    background-color:#34D399;
+    -webkit-mask:var(--tick) center / contain no-repeat;
+    mask:var(--tick) center / contain no-repeat;
+    --tick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' d='M4 10.5l4 4 8-9'/%3E%3C/svg%3E");
   }
-  .au-mcard.is-old .au-mfeatures-simple .au-mfeat::before{background:rgba(255,255,255,0.32);}
+  .au-mcard.is-old .au-mfeatures-simple .au-mfeat::before{background-color:rgba(255,255,255,0.32);}
+  /* Biradhwaj on the call: "the highlight would be this net new leads." It is
+     the only outcome the buyer did not already have, so it carries the card. */
+  .au-mfeatures-simple .au-mfeat.is-hero{
+    margin-top:4px; padding-top:14px;
+    border-top:1px solid rgba(110,231,183,0.26);
+  }
+  .au-mfeatures-simple .au-mfeat.is-hero .au-mfeat-t{
+    font-size:17px; font-weight:700; color:#FFFFFF;
+  }
+  .au-mfeatures-simple .au-mfeat.is-hero::before{
+    background-color:#6EE7B7; width:17px; height:17px; margin-top:5px;
+  }
   .au-mcard.is-old .au-mfeatures-simple .au-mfeat-t{color:rgba(255,255,255,0.75);}
   /* The CTA belongs under the pair, not crowded against the last outcome. */
   .au-math-cta{display:flex; justify-content:center; margin-top:30px;}
@@ -4678,6 +4690,12 @@
     .au-pb-funnel li{flex-direction:column; gap:2px;}
     .au-pb-funnel li b{min-width:0;}
   }
+
+  /* The Sify figures reuse the Red Hat funnel component. Its rows were sized
+     for the wider plate, so they tighten a little inside the story card. */
+  .au-story-funnel{margin-bottom:22px;}
+  .au-story-funnel li{padding:12px 16px;}
+  .au-story-funnel li b{min-width:92px; font-size:clamp(19px, 2vw, 24px);}
 
   .au-callout{
     max-width:560px; margin:44px auto 0; padding:20px 26px;
@@ -4982,40 +5000,52 @@
         </div>
       </div>
 
-      <!-- Three across, two down. The sixth cell is deliberately empty, and the
-           vertical rules run past the last row rather than closing the box. -->
-      <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
-        <span class="wf-vrule wf-vrule--1"></span>
-        <span class="wf-vrule wf-vrule--2"></span>
-        <span class="wf-vrule wf-vrule--3"></span>
-
-        <div class="au-chain-node">
-          <b>400</b>
-          <span>booth visitors</span>
-          <small class="au-chain-note">the ones you already paid to meet</small>
-        </div>
-        <div class="au-chain-node">
-          <b>200</b>
-          <span>posts to LinkedIn</span>
-          <small class="au-chain-note">one scan, one tap, no app</small>
-        </div>
-        <div class="au-chain-node">
-          <b>240,000</b>
-          <span>potential reach</span>
-          <small class="au-chain-note">1,200 per sharer, observed across multiple campaigns</small>
-        </div>
-        <div class="au-chain-node">
-          <b>500</b>
-          <span>clicks to your page</span>
-          <small class="au-chain-note">observed across multiple campaigns</small>
-        </div>
-        <div class="au-chain-node is-final">
-          <b>200-250</b>
-          <span>net-new leads</span>
-          <small class="au-chain-note">people who were never at your event</small>
-        </div>
-        <div class="au-chain-node is-empty" aria-hidden="true"></div>
-      </div>
+      <!-- The chain as a numbered journey: one step per row down a single
+           rail, so it reads 01 to 05 rather than as a table. Each row owns
+           its own baseline, which is what fixes the caption lines pushing
+           their neighbours down in the old grid. -->
+      <ol class="au-hero-chain au-hero-steps" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
+        <li class="au-step">
+          <span class="au-step-n" aria-hidden="true">01</span>
+          <div class="au-step-body">
+            <b>400</b>
+            <span>booth visitors</span>
+            <small class="au-chain-note">the ones you already paid to meet</small>
+          </div>
+        </li>
+        <li class="au-step">
+          <span class="au-step-n" aria-hidden="true">02</span>
+          <div class="au-step-body">
+            <b>200</b>
+            <span>posts to LinkedIn</span>
+            <small class="au-chain-note">one scan, one tap, no app</small>
+          </div>
+        </li>
+        <li class="au-step">
+          <span class="au-step-n" aria-hidden="true">03</span>
+          <div class="au-step-body">
+            <b>240,000</b>
+            <span>potential reach</span>
+            <small class="au-chain-note">1,200 per sharer, observed across multiple campaigns</small>
+          </div>
+        </li>
+        <li class="au-step">
+          <span class="au-step-n" aria-hidden="true">04</span>
+          <div class="au-step-body">
+            <b>500</b>
+            <span>clicks to your page</span>
+            <small class="au-chain-note">observed across multiple campaigns</small>
+          </div>
+        </li>
+        <li class="au-step is-final">
+          <span class="au-step-n" aria-hidden="true">05</span>
+          <div class="au-step-body">
+            <b>200-250</b>
+            <span>net-new leads</span>
+            <small class="au-chain-note">people who were never at your event</small>
+          </div>
+        </li>
+      </ol>
     </div>
 
     <div class="hero-content-wrap">
@@ -5025,7 +5055,7 @@
           <span class="au-live-dot"></span>
           Live Event Footage
         </span>
-        <h2 class="au-video-head-title">See what happens at a <em>live event</em>.</h2>
+        <h2 class="au-video-head-title is-plain">See what happens at a <em>live event</em>.</h2>
         <p class="au-video-head-sub">Attendees scan, tap once, and share pre-written posts from their own LinkedIn. Watch real footage recorded on the exhibition floor.</p>
       </div>
 
@@ -5254,7 +5284,7 @@
         <!-- Before. One line of outcome, set as the headline figure so the card -->
         <!-- carries weight against the five-line card beside it. -->
         <article class="au-mcard is-old">
-          <span class="au-mkicker">Before</span>
+          <span class="au-mkicker">Without Wozku</span>
           <p class="au-mprice">
             <b data-mcount="400">400</b>
             <span class="au-mprice-unit"><b>badge scans</b>and that is the end of it</span>
@@ -5264,13 +5294,13 @@
 
         <!-- After -->
         <article class="au-mcard is-new">
-          <span class="au-mkicker">After</span>
+          <span class="au-mkicker">With Wozku</span>
           <ul class="au-mfeatures au-mfeatures-simple">
             <li class="au-mfeat"><span class="au-mfeat-t">400 badge scans into the CRM. Unchanged.</span></li>
             <li class="au-mfeat"><span class="au-mfeat-t">200 of those visitors post about your product from their own profile</span></li>
             <li class="au-mfeat"><span class="au-mfeat-t">300,000 potential reach across their networks, all in your industry</span></li>
             <li class="au-mfeat"><span class="au-mfeat-t">600 to 800 clicks back to your page</span></li>
-            <li class="au-mfeat"><span class="au-mfeat-t">200 to 250 net-new leads who were never at the event</span></li>
+            <li class="au-mfeat is-hero"><span class="au-mfeat-t">200 to 250 net-new leads who were never at the event</span></li>
           </ul>
         </article>
       </div>
@@ -5408,7 +5438,6 @@
         </div>
 
       </div><!-- /.au-norma-grid -->
-      <p class="au-how-body">Participation stays optional throughout. Nobody is enrolled, nobody is chased, and people who skip it are never tracked.</p>
     </div><!-- /.wrap -->
   </section>
 
@@ -5438,12 +5467,15 @@
       <!-- "Who posted" is a caption on these figures, so it lives inside the -->
       <!-- same plate rather than floating underneath it as a loose line. -->
       <div class="au-story-result reveal">
-        <div class="au-story-stat-block">
-          <div class="au-story-stat"><b>98</b><span>shares</span></div>
-          <div class="au-story-stat"><b>141,034</b><span>potential reach</span></div>
-          <div class="au-story-stat"><b>1,697</b><span>likes</span></div>
-          <div class="au-story-stat"><b>18.3x</b><span>return on earned media value</span></div>
-        </div>
+        <!-- Roy asked on the call for Sify's numbers to be pulled out and set
+             the same way as the Red Hat funnel, so the two proof sections read
+             as one format rather than two. Same component. -->
+        <ol class="au-pb-funnel au-story-funnel">
+          <li><b>98</b><span>shares</span></li>
+          <li><b>141,034</b><span>potential reach</span></li>
+          <li><b>1,697</b><span>likes</span></li>
+          <li class="is-final"><b>18.3x</b><span>return on earned media value</span></li>
+        </ol>
         <p class="au-story-who"><strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.</p>
       </div>
 
@@ -5674,10 +5706,6 @@
         <form class="au-form au-form-sim" id="auSimForm" novalidate>
           <div class="au-sim-grid">
             <div class="au-sim-field">
-              <label for="auSimName">Name</label>
-              <input type="text" id="auSimName" name="name" class="au-form-input" placeholder="Jane Okafor" required>
-            </div>
-            <div class="au-sim-field">
               <label for="auSimEmail">Work email</label>
               <input type="email" id="auSimEmail" name="email" class="au-form-input" placeholder="jane@company.com" required autocomplete="email" spellcheck="false">
             </div>
@@ -5704,7 +5732,7 @@
   <section class="au-section au-commercials" id="auCommercials">
     <div class="wrap">
       <div class="au-comm-banner reveal">
-        <h2 class="au-comm-h">You pay for shares. Nothing else.</h2>
+        <h2 class="au-comm-h">You pay for shares.<br>Nothing else.</h2>
         <p class="au-comm-p">No per-seat fees. No per-campaign fees. No platform minimum before you can run your first event. You pay for the LinkedIn shares your attendees actually make.</p>
       </div>
     </div>
@@ -6724,25 +6752,21 @@ wireCaptureForm('auRedhatForm', 'auRedhatEmail', 'auRedhatErr');
 // Calculator "dedicated simulation" form: name + email required, phone/event optional.
 (function wireSimForm() {
   const form = document.getElementById('auSimForm');
-  const name = document.getElementById('auSimName');
+  // The name field was dropped on Roy's call: email, phone, and the event box
+  // only. Email is the one required field left.
   const email = document.getElementById('auSimEmail');
   const err = document.getElementById('auSimErr');
-  if (!form || !name || !email) return;
-  [name, email].forEach((el) => el.addEventListener('input', () => { if (err) err.textContent = ''; }));
+  if (!form || !email) return;
+  email.addEventListener('input', () => { if (err) err.textContent = ''; });
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (!name.value.trim()) {
-      if (err) err.textContent = 'Enter your name.';
-      name.focus();
-      return;
-    }
     if (!EMAIL_RE.test(email.value.trim())) {
       if (err) err.textContent = 'Enter a valid email.';
       email.focus();
       return;
     }
     if (err) err.textContent = '';
-    // TODO(backend): POST { name, email, phone, event } -> Slack notification. Ghost for now.
+    // TODO(backend): POST { email, phone, event } -> Slack notification. Ghost for now.
     showThankYou();
   });
 })();
