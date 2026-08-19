@@ -112,7 +112,26 @@ Calendly script, or keep the custom UI and back it with a real availability
 endpoint plus a create-booking endpoint. The second keeps the design; it is more
 work.
 
-### 5. ROI calculator
+### 5. Red Hat campaign photos (placeholders, needs real images)
+
+The Red Hat section carries three placeholder frames labelled "Add image 1" to
+"Add image 3", markup id `auRhFan`. On a desktop they sit as a pile and fan into
+a row on hover or keyboard focus. On phones they are a plain vertical stack with
+no animation.
+
+To swap one in, replace the `<span class="au-rh-ph">` inside the figure with an
+image and drop the file in `public/`:
+
+```html
+<figure class="au-rh-shot au-rh-shot--1">
+  <img src="/rh-1.jpg" alt="Delegates at the Red Hat booth">
+</figure>
+```
+
+The card crops to a 3:2 box, so supply roughly 800x533 or larger. Nothing else
+needs to change.
+
+### 6. ROI calculator
 
 Pure client-side arithmetic in the inline script. No backend needed unless you
 want to log what people modelled.
