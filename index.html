@@ -3150,25 +3150,36 @@
 
      ORDER:  desktop 2 | phone 1 | DESKTOP MAIN | phone 2 | desktop 3
 
-     ONE measurement drives the row. --deskw is set; the shared frame height
-     comes off it at 16:9, and the phone width comes off that height at 9:19.5.
-     So the whole composition scales from a single clamp and no two numbers can
-     drift out of step. Mobile overrides exactly two of those variables.
+     The frames are the real mockups from src/assets: browser.svg and
+     iphone.svg, placed as ordinary <img>s so each one keeps its exact
+     proportions, and the video is positioned into the screen cutout over the
+     top. ONE measurement drives the row, --winw, and every other number is read
+     off those two files.
 
-     Frames are bottom aligned rather than centred. A desktop frame carries a
-     title bar and a phone does not, so aligning their screens on a common
-     baseline is what makes the row read as objects standing on a surface.
+     Frames are bottom aligned rather than centred. The browser carries a title
+     bar and the phone does not, so aligning them on a common baseline is what
+     makes the row read as objects standing on a surface.
      ==================================================================== */
   .vc{
-    /* The desktop frame's width. Everything else is derived from it. The vw
-       term is tuned so the three-frame row below always fits the page gutter:
-       required width is 1.52 x --deskw + 4 x --vc-gap, and the wrap gives us
-       100vw - 48px, so --deskw has to stay under about 0.62vw. */
-    --deskw:clamp(260px, calc(62vw - 112px), 620px);
-    --frameh:calc(var(--deskw) * 9 / 16);
-    /* Phones share the desktop screen's height by default. */
-    --phoneh:var(--frameh);
-    --phonew:calc(var(--phoneh) * 0.4615);
+    /* The browser window's width. Everything else is derived from it.
+
+       The two frames are the real mockups from src/assets, so every ratio here
+       is read off those files rather than chosen:
+         browser.svg  1280 x 784 window, screen inset 0/53/1280/731
+         iphone.svg    345 x 701 body,   screen inset 12.47/9.97/320.02/680.76
+
+       --phonew is set so the phone's height matches the browser's SCREEN
+       height, which puts the phone exactly one title bar shorter than the
+       window. That is the relationship in the figma, and it is what makes the
+       row read as objects standing on a shared surface.
+         phone height = 2.0319 x --phonew, browser screen height = 0.5711 x --winw
+         so --phonew = 0.5711 / 2.0319 x --winw = 0.2811 x --winw
+
+       The vw term is tuned so the three-frame row always fits the page gutter:
+       the row needs 1.5622 x --winw + 4 x --vc-gap and the wrap gives us
+       100vw - 48px. */
+    --winw:clamp(260px, calc(63vw - 110px), 620px);
+    --phonew:calc(var(--winw) * 0.2811);
     --vc-gap:30px;
 
     position:relative;
@@ -3180,7 +3191,7 @@
        exactly on the viewport edge. So three frames are on screen at full
        strength, the other two are genuinely outside it, and anything crossing
        the boundary mid-transition dissolves instead of being cut. */
-    width:calc(var(--deskw) + 2 * var(--phonew) + 4 * var(--vc-gap));
+    width:calc(var(--winw) + 2 * var(--phonew) + 4 * var(--vc-gap));
     max-width:100%;
     /* Belt and braces against the shrink-to-fit problem noted on
        .hero-content-wrap: this must never report an intrinsic width. */
@@ -3269,62 +3280,50 @@
   }
   .vc-track.is-dragging{transition:none;}
   .vc-slide{flex:0 0 auto;}
-  .vc-slide--desk{width:var(--deskw);}
+  .vc-slide--desk{width:var(--winw);}
   .vc-slide--phone{width:var(--phonew);}
 
   /* ---- The frame ---- */
-  .vframe{
-    position:relative;
-    overflow:hidden;
-    background:linear-gradient(168deg, #2C3240 0%, #14171F 46%, #0A0C11 100%);
-    /* No outer drop shadow. The viewport clips the row on all four sides, so a
-       cast shadow was being sliced off square along the bottom edge and read as
-       a hard line rather than as depth. The inset hairlines carry the edge. */
-    box-shadow:
-      inset 0 0 0 1px rgba(255, 255, 255, 0.10),
-      inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  }
-  .vc-slide--desk .vframe{border-radius:14px;}
-  /* A phone has no title bar, so its own corner radius is the whole tell. */
-  .vc-slide--phone .vframe{border-radius:26px;}
-
-  /* Window chrome, desktop frames only. Three dots and a blank address pill:
-     enough to read as an application window without pretending to be a
-     specific browser. */
-  .vframe-bar{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    height:34px;
-    padding:0 14px;
-    background:rgba(255, 255, 255, 0.045);
-    box-shadow:inset 0 -1px 0 rgba(255, 255, 255, 0.07);
-  }
-  .vframe-dot{
-    width:9px; height:9px;
-    border-radius:100px;
-    background:rgba(255, 255, 255, 0.22);
-    flex:none;
-  }
-  .vframe-pill{
-    flex:1 1 auto;
-    height:14px;
-    margin-left:8px;
-    border-radius:100px;
-    background:rgba(255, 255, 255, 0.06);
+  /* The frame is the mockup artwork itself. The <img> is a normal in-flow
+     image, so it is what gives .vframe its height and every frame keeps its
+     asset's exact proportions at any size, with no ratio restated in CSS. */
+  .vframe{position:relative;}
+  .vframe-shell{
+    display:block;
+    width:100%;
+    height:auto;
+    /* Chrome, not content: the clicks belong to the video underneath it. */
+    pointer-events:none;
+    -webkit-user-select:none;
+    user-select:none;
   }
 
-  /* The screen well. Height is set rather than an aspect ratio, because the
-     width already comes from the slide and the two must agree exactly: a
-     desktop screen is --deskw by --frameh (16:9) and a phone screen is
-     --phonew by --phoneh (9:19.5). */
+  /* The screen cutout, placed over the mockup's own blank screen. The four
+     numbers are the screen's inset within the artwork, as percentages of the
+     artwork box, so the video lands exactly in the glass. */
   .vframe-screen{
-    position:relative;
-    height:var(--frameh);
-    background:#05100C;
+    position:absolute;
     overflow:hidden;
+    background:#05100C;
   }
-  .vc-slide--phone .vframe-screen{height:var(--phoneh);}
+  /* browser.svg: screen is 0 / 53 / 1280 / 731 inside a 1280 x 784 window. */
+  .vc-slide--desk .vframe-screen{
+    left:0;
+    top:6.7602%;
+    width:100%;
+    height:93.2398%;
+    /* The window is drawn with a 10px corner radius, so the foot of the screen
+       has to be rounded to match or the video squares off the corners. */
+    border-radius:0 0 calc(var(--winw) * 10 / 1280) calc(var(--winw) * 10 / 1280);
+  }
+  /* iphone.svg: screen is 12.47 / 9.97 / 320.02 / 680.76 inside 345 x 701. */
+  .vc-slide--phone .vframe-screen{
+    left:3.61414%;
+    top:1.42284%;
+    width:92.75855%;
+    height:97.11298%;
+    border-radius:calc(var(--phonew) * 43.223 / 345);
+  }
   .vframe-video{
     position:absolute; inset:0;
     display:block;
@@ -3346,7 +3345,7 @@
   .vframe-idle span{
     font-family:var(--font-display);
     /* Tracks the frame, so the plate does not shout inside a small phone. */
-    font-size:clamp(9px, calc(var(--frameh) * 0.045), 15px);
+    font-size:clamp(9px, calc(var(--winw) * 0.024), 15px);
     font-weight:700;
     letter-spacing:0.34em;
     text-transform:uppercase;
@@ -3476,16 +3475,17 @@
        own: the desktop across the viewport, the phone against the viewport
        height. Everything else derives exactly as it does above. */
     .vc{
-      --deskw:min(84vw, 430px);
-      --phoneh:min(52svh, 420px);
+      --winw:min(84vw, 430px);
+      /* Off the viewport height rather than the window width here: at this size
+         the phone is a frame you look at on its own, not one flanking a window,
+         so it is sized to be worth looking at. 345/701 is the asset's ratio. */
+      --phonew:calc(min(52svh, 420px) * 345 / 701);
       --vc-gap:16px;
       margin-top:30px;
     }
     /* Redundant next to swipe, and they cover the footage at this size. */
     .vc-arrow{display:none;}
     .vc-dots{margin-top:16px;}
-    .vframe-bar{height:28px; padding:0 11px; gap:6px;}
-    .vframe-dot{width:7px; height:7px;}
     /* The carousel is a complete object here and needs its own breathing room,
        but not the desktop 110px. */
     .hero-editorial{padding-bottom:56px;}
@@ -4119,10 +4119,7 @@
           <div class="vc-track" id="auVcTrack">
             <div class="vc-slide vc-slide--desk" role="group" aria-roledescription="slide" aria-label="Frame 1 of 5">
               <div class="vframe">
-                <div class="vframe-bar" aria-hidden="true">
-                  <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
-                  <span class="vframe-pill"></span>
-                </div>
+                <img class="vframe-shell" src="/frames/browser.svg" alt="" aria-hidden="true" draggable="false">
                 <div class="vframe-screen">
                   <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
                   <video class="vframe-video" loop muted playsinline preload="none"
@@ -4152,6 +4149,7 @@
             </div>
             <div class="vc-slide vc-slide--phone" role="group" aria-roledescription="slide" aria-label="Frame 2 of 5">
               <div class="vframe">
+                <img class="vframe-shell" src="/frames/iphone.svg" alt="" aria-hidden="true" draggable="false">
                 <div class="vframe-screen">
                   <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
                   <video class="vframe-video" loop muted playsinline preload="none"
@@ -4181,10 +4179,7 @@
             </div>
             <div class="vc-slide vc-slide--desk" role="group" aria-roledescription="slide" aria-label="Frame 3 of 5">
               <div class="vframe">
-                <div class="vframe-bar" aria-hidden="true">
-                  <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
-                  <span class="vframe-pill"></span>
-                </div>
+                <img class="vframe-shell" src="/frames/browser.svg" alt="" aria-hidden="true" draggable="false">
                 <div class="vframe-screen">
                   <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
                   <video class="vframe-video" loop muted playsinline preload="none"
@@ -4214,6 +4209,7 @@
             </div>
             <div class="vc-slide vc-slide--phone" role="group" aria-roledescription="slide" aria-label="Frame 4 of 5">
               <div class="vframe">
+                <img class="vframe-shell" src="/frames/iphone.svg" alt="" aria-hidden="true" draggable="false">
                 <div class="vframe-screen">
                   <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
                   <video class="vframe-video" loop muted playsinline preload="none"
@@ -4243,10 +4239,7 @@
             </div>
             <div class="vc-slide vc-slide--desk" role="group" aria-roledescription="slide" aria-label="Frame 5 of 5">
               <div class="vframe">
-                <div class="vframe-bar" aria-hidden="true">
-                  <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
-                  <span class="vframe-pill"></span>
-                </div>
+                <img class="vframe-shell" src="/frames/browser.svg" alt="" aria-hidden="true" draggable="false">
                 <div class="vframe-screen">
                   <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
                   <video class="vframe-video" loop muted playsinline preload="none"
