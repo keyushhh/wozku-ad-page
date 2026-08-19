@@ -538,11 +538,25 @@
     background:rgba(255, 255, 255, 0.22);
     border-color:rgba(255, 255, 255, 0.5);
   }
-  /* Hide header & footer completely on Thank-You view */
-  body.au-ty-open header,
+  /* Footer still hides on the thank-you view; the header now stays and
+     swaps its logo and CTA for a back-facing pair instead. */
   body.au-ty-open footer{
     display:none !important;
   }
+  .logo-check{
+    display:none;
+    width:30px; height:30px; flex:none;
+    border-radius:50%;
+    background:linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(5,150,105,0.28) 100%);
+    border:1.5px solid rgba(16,185,129,0.4);
+    color:var(--brand-emerald-deep);
+  }
+  .logo-check svg{ width:16px; height:16px; }
+  .nav-back-btn{ display:none; }
+  body.au-ty-open .logo-img{ display:none; }
+  body.au-ty-open .logo-check{ display:inline-flex; align-items:center; justify-content:center; }
+  body.au-ty-open .nav-cta > a{ display:none; }
+  body.au-ty-open .nav-back-btn{ display:inline-flex; }
   /* Screen reader utility */
   .sr-only{
     position:absolute; width:1px; height:1px; padding:0; margin:-1px;
@@ -2788,9 +2802,9 @@
   }
   .au-ty-back:hover svg{transform:translateX(-2px);}
   
-  .au-ty-hero{max-width:680px; margin:0 0 46px;}
+  .au-ty-hero{max-width:640px; margin:0 auto 46px; text-align:center;}
   .au-ty-check{
-    display:grid; place-items:center; width:54px; height:54px; margin-bottom:20px;
+    display:grid; place-items:center; width:54px; height:54px; margin:0 auto 20px;
     border-radius:50%;
     background:linear-gradient(135deg, rgba(16,185,129,0.18) 0%, rgba(5,150,105,0.28) 100%);
     border:1.5px solid rgba(16,185,129,0.4);
@@ -4110,11 +4124,19 @@
   <nav>
     <a href="#top" class="logo" aria-label="Wozku Home">
       <img src="/src/assets/wozku_logo-black.svg" alt="Wozku" class="logo-img" onerror="this.src='/wozku_logo-black.svg'">
+      <!-- Swapped in for the logo only on the thank-you view: a browsing mark -->
+      <!-- reads oddly next to a confirmation message, a status mark does not. -->
+      <span class="logo-check" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 16.5 4.5 4.5L23 11"/></svg>
+      </span>
     </a>
     <!-- Nav links intentionally empty for now. Drop <a> tags back in here and the -->
     <div class="nav-links"></div>
     <div class="nav-cta">
       <a href="#roi" class="btn btn-primary btn-small">Calculate ROI</a>
+      <!-- 'Get playbook' makes no sense once it has already been sent, so the -->
+      <!-- thank-you view shows this instead and hides the anchor above. -->
+      <button type="button" class="btn btn-primary btn-small nav-back-btn" id="navBackBtn">Go back</button>
     </div>
     <button class="nav-toggle" aria-label="Menu">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -4977,11 +4999,6 @@ Based on this, is Wozku a good fit for us? What would make it a strong fit, what
   <!-- Thank You View -->
   <section id="auThankYou" class="au-ty" style="display:none;" aria-hidden="true">
     <div class="wrap">
-      <button type="button" class="au-ty-back" id="auTyBack">
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10H5M9 6 5 10l4 4"/></svg>
-        Back to Wozku
-      </button>
-
       <div class="au-ty-hero">
         <span class="au-ty-check" aria-hidden="true">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 16.5 4.5 4.5L23 11"/></svg>
@@ -5978,9 +5995,9 @@ function wireCaptureForm(formId, inputId, errId) {
 wireCaptureForm('auHeroForm', 'auHeroEmail', 'auHeroErr');
 wireCaptureForm('auCtaForm', 'auCtaEmail', 'auCtaErr');
 
-const auTyBack = document.getElementById('auTyBack');
-if (auTyBack) {
-  auTyBack.addEventListener('click', hideThankYou);
+const navBackBtn = document.getElementById('navBackBtn');
+if (navBackBtn) {
+  navBackBtn.addEventListener('click', hideThankYou);
 }
 
 // Ensure clicking header logo while on thank-you view returns to main landing page
@@ -7980,7 +7997,7 @@ function fireConfetti() {
   // Query obstacles in view (buttons, cards, badges)
   function getObstacles() {
     const selectors = [
-      '#auTyBack',
+      '#navBackBtn',
       '.au-ty-check',
       '.au-cal',
       '#auCalConfirm',
