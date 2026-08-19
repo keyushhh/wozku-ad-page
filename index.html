@@ -4162,6 +4162,14 @@
   }
   .hero-wf-lower .au-chain-node.is-final b{color:var(--brand-emerald-deep);}
   .hero-wf-lower .au-chain-node.is-final span{color:var(--ink);}
+  /* Third line of each cell: the doc's sourcing caption. A <small>, not another
+     <span>, so it does not inherit the label rule above. Deliberately quiet: it
+     qualifies the figure, it does not compete with it. */
+  .hero-wf-lower .au-chain-note{
+    display:block; margin-top:6px;
+    font-size:11.5px; line-height:1.4; letter-spacing:0;
+    color:var(--ink-dim); opacity:0.78; max-width:22ch;
+  }
 
   @media (min-width:1000px){
     .hero-content-wrap.is-wf{max-width:var(--container);}
@@ -4184,7 +4192,7 @@
        last row's labels: it absorbs the grid's overhang plus the cell padding
        and centring slack under that text. */
     .hero-wf-left{
-      padding-top:26px; padding-bottom:88px;
+      padding-top:26px; padding-bottom:116px;
       display:flex; flex-direction:column;
     }
     /* Pushes the ask to the bottom of the column, as in the wireframe. */
@@ -4220,6 +4228,9 @@
     }
     .hero-wf-lower .au-chain-node b{font-size:30px;}
     .hero-wf-lower .au-chain-node span{margin-top:4px; font-size:14px; white-space:nowrap;}
+    /* Full row width on a phone, so the longer captions take two lines rather
+       than the four a 22ch cap would force. */
+    .hero-wf-lower .au-chain-note{max-width:none; margin-top:5px;}
   }
   /* ================= /EXPERIMENT ============================================ */
 
@@ -4859,22 +4870,27 @@
         <div class="au-chain-node">
           <b>400</b>
           <span>booth visitors</span>
+          <small class="au-chain-note">the ones you already paid to meet</small>
         </div>
         <div class="au-chain-node">
           <b>200</b>
           <span>posts to LinkedIn</span>
+          <small class="au-chain-note">one scan, one tap, no app</small>
         </div>
         <div class="au-chain-node">
           <b>240,000</b>
           <span>potential reach</span>
+          <small class="au-chain-note">1,200 per sharer, observed across multiple campaigns</small>
         </div>
         <div class="au-chain-node">
           <b>500</b>
           <span>clicks to your page</span>
+          <small class="au-chain-note">observed across multiple campaigns</small>
         </div>
         <div class="au-chain-node is-final">
           <b>200-250</b>
           <span>net-new leads</span>
+          <small class="au-chain-note">people who were never at your event</small>
         </div>
         <div class="au-chain-node is-empty" aria-hidden="true"></div>
       </div>
@@ -5156,7 +5172,6 @@
 
     <div class="wrap">
       <div class="au-head reveal">
-        <span class="au-tag">Real-world execution</span>
         <h2 class="au-h2">One tap at the booth. That is the entire ask.</h2>
         <p class="au-sub">Under 15 minutes to set up. Three steps to run.</p>
         <p class="au-how-kicker">Whatever your next event is, you are not too late to put this on it. Building the contest takes one person under 15 minutes. No code, no IT ticket, no procurement cycle, nothing new for your team to learn before the show.</p>
@@ -5278,7 +5293,6 @@
   <section class="au-section au-problem" id="auProblem">
     <div class="wrap">
       <div class="au-head reveal">
-        <span class="au-tag">Proof that attendees do it</span>
         <h2 class="au-h2">They play.</h2>
         <p class="au-sub">Two example events where attendees went looking for the QR codes instead of walking past them.</p>
       </div>
@@ -5403,7 +5417,6 @@
     <div class="wrap">
       <div class="au-editorial reveal">
         <div class="au-editorial-head">
-          <span class="au-tag">Why it travels</span>
           <h2 class="au-h2">The same message, from a person instead of a page.</h2>
         </div>
         <div class="au-editorial-body">
@@ -5421,7 +5434,6 @@
     <div class="wrap">
       <div class="au-editorial reveal">
         <div class="au-editorial-head">
-          <span class="au-tag">Attribution</span>
           <h2 class="au-h2">Posts are not the outcome. Leads are.</h2>
         </div>
         <div class="au-editorial-body">
@@ -5437,7 +5449,6 @@
   <section class="au-section au-roi" id="auRoi">
     <div class="wrap">
       <div class="au-head reveal">
-        <span class="au-tag">Your numbers</span>
         <h2 class="au-h2">Run it on your own event.</h2>
         <p class="au-sub">Start with your attendee count and your own benchmarks. Every number on this page is yours to change.</p>
       </div>
@@ -5513,7 +5524,6 @@
     <div class="wrap">
       <div class="au-simband-plate reveal">
         <div class="au-simband-copy">
-          <span class="au-tag">Built for your event</span>
           <h2 class="au-simband-h">Need a dedicated simulation for your upcoming event?</h2>
           <p class="au-simband-sub">Share the details - Name, email Phone, Event Link or details - submit</p>
           <ul class="au-simband-list">
@@ -5556,7 +5566,6 @@
   <section class="au-section au-commercials" id="auCommercials">
     <div class="wrap">
       <div class="au-head reveal">
-        <span class="au-tag">Commercials</span>
         <h2 class="au-h2">You pay for shares. Nothing else.</h2>
       </div>
       <div class="au-story-body reveal">
@@ -5602,7 +5611,6 @@
     <div class="wrap">
       <div class="au-editorial au-faq-grid reveal">
         <div class="au-editorial-head">
-          <span class="au-tag">Before you run one</span>
           <h2 class="au-h2">The questions we get asked first.</h2>
           <p class="au-sub au-faq-sub">Everything worth knowing before you put this on an event.</p>
         </div>
