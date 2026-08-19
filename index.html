@@ -4075,6 +4075,167 @@
     margin-top:34px;
   }
 
+  /* ================= EXPERIMENT: wireframe hero ==============================
+     Headline band, a full-bleed hairline under it, then two columns: copy and
+     the ask on the left, the five figures as a 3x2 ruled grid running flush to
+     the right edge of the page. Self-contained: delete this block and the
+     hero-wf-* wrappers in the markup to go back.
+     ------------------------------------------------------------------------ */
+  /* Aligns the lower band's left edge to the same inset as .hero-content-wrap
+     (max-width 1200, 24px gutter) while letting the grid bleed off the right. */
+  .hero-wf-rule, .hero-wf-lower{
+    --wf-inset:max(24px, calc((100% - 1200px) / 2 + 24px));
+    position:relative; z-index:2;
+  }
+  .hero-wf-rule{
+    height:1px; width:100%; margin-top:44px;
+    background:rgba(15,23,42,0.12);
+  }
+  /* .hero-editorial is a centred flex column, so without width:100% this
+     shrink-to-fits and the grid never reaches the right edge. */
+  /* Same track as the nav: header nav is max-width var(--container) with 24px
+     padding, so matching it lands the copy on the logo and the grid's right
+     edge on the CTA. */
+  .hero-wf-lower{
+    width:100%; box-sizing:border-box;
+    max-width:var(--container); margin:0 auto;
+    display:grid; grid-template-columns:1fr;
+    padding:0 24px;
+  }
+  .hero-wf-left{padding-top:36px;}
+  .hero-wf-left .hero-editorial-sub{
+    text-align:left; margin-left:0; margin-right:0;
+    max-width:46ch; font-size:16px; line-height:1.6; color:var(--ink-dim);
+    margin-bottom:14px;
+    /* The base rule carries a shadow for white type on the emerald. This copy
+       is dark on white, where it just reads as blur. */
+    text-shadow:none;
+  }
+  .hero-wf-ask{margin-top:30px;}
+  .hero-wf-ask .au-form-hero{margin:0; max-width:520px;}
+  /* Hero only. The shared bar carries a drop shadow that made sense floating on
+     the old centred hero; on the ruled wireframe it just muddies the hairlines.
+     The focus ring stays, minus the shadow half. */
+  .hero-wf-ask .au-form-bar{box-shadow:none;}
+  .hero-wf-ask .au-form-bar:focus-within{box-shadow:0 0 0 4px rgba(16,185,129,0.14);}
+
+  /* The ruled grid. Verticals are absolute so they can run past the last row. */
+  /* One selector only: an `.is-wf ~ .hero-wf-lower ...` variant here outranked
+     the desktop rule below and pinned a 36px top margin under the divider. */
+  .hero-wf-lower .au-hero-chain{
+    position:relative;
+    display:grid; grid-template-columns:repeat(3, 1fr);
+    max-width:none; width:100%; margin:36px 0 0; padding:0 0 40px;
+  }
+  .hero-wf-lower .au-hero-chain::before{display:none;}
+  /* Stop short of the grid's bottom so the rules trail just past the last row
+     rather than running the full height of the box. */
+  .wf-vrule{
+    position:absolute; top:0; bottom:26px; width:1px;
+    background:rgba(15,23,42,0.12); pointer-events:none;
+  }
+  /* Column positions live here rather than inline so the phone layout below can
+     move them when the grid drops from three columns to two. */
+  .wf-vrule--1{left:0;}
+  .wf-vrule--2{left:33.3333%;}
+  .wf-vrule--3{left:66.6666%;}
+  .hero-wf-lower .au-chain-node{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:26px 16px 28px; min-height:118px;
+  }
+  .hero-wf-lower .au-chain-node + .au-chain-node::before{display:none;}
+  /* Row rule under the first three cells only, so the grid stays open below.
+     Counted with nth-of-type because the vertical rules are earlier children. */
+  .hero-wf-lower .au-chain-node:nth-of-type(-n+3){
+    border-bottom:1px solid rgba(15,23,42,0.12);
+  }
+  /* Neutralise the stacked layout's chain rules, which still span the last
+     cell across every column and draw their own dividers. */
+  .hero-wf-lower .au-chain-node.is-final{grid-column:auto;}
+  .hero-wf-lower .au-chain-node::before,
+  .hero-wf-lower .au-chain-node:nth-child(even)::before{display:none;}
+  .hero-wf-lower .au-chain-node.is-empty{min-height:0; padding:0; border-bottom:0;}
+  .hero-wf-lower .au-chain-node b{
+    font-family:var(--font-display); font-size:clamp(24px, 2.4vw, 34px);
+    font-weight:700; letter-spacing:-0.035em; line-height:1;
+    color:var(--ink); font-variant-numeric:tabular-nums;
+  }
+  .hero-wf-lower .au-chain-node span{
+    margin-top:8px; font-size:13px; line-height:1.35; color:var(--ink-dim);
+  }
+  .hero-wf-lower .au-chain-node.is-final b{color:var(--brand-emerald-deep);}
+  .hero-wf-lower .au-chain-node.is-final span{color:var(--ink);}
+  /* Third line of each cell: the doc's sourcing caption. A <small>, not another
+     <span>, so it does not inherit the label rule above. Deliberately quiet: it
+     qualifies the figure, it does not compete with it. */
+  .hero-wf-lower .au-chain-note{
+    display:block; margin-top:6px;
+    font-size:11.5px; line-height:1.4; letter-spacing:0;
+    color:var(--ink-dim); opacity:0.78; max-width:22ch;
+  }
+
+  @media (min-width:1000px){
+    .hero-content-wrap.is-wf{max-width:var(--container);}
+    .is-wf .hero-wf-head{text-align:left; max-width:66%;}
+    .is-wf .au-hero-lockup{align-items:flex-start; margin-bottom:24px;}
+    .is-wf .au-eyebrow{text-align:left;}
+    .is-wf h1.hero-editorial-title{
+      text-align:left; margin-left:0; margin-right:0;
+      font-size:clamp(40px, 4.4vw, 62px); line-height:1.05;
+    }
+
+    .hero-wf-rule{margin-top:64px;}
+    /* Left column sits on the container inset; the grid runs to the page edge. */
+    .hero-wf-lower{
+      grid-template-columns:minmax(0, 44fr) minmax(0, 52fr);
+      column-gap:4%;
+      padding:0 24px;
+    }
+    /* The bottom padding is what lands the form's baseline on the bottom of the
+       last row's labels: it absorbs the grid's overhang plus the cell padding
+       and centring slack under that text. */
+    .hero-wf-left{
+      padding-top:26px; padding-bottom:116px;
+      display:flex; flex-direction:column;
+    }
+    /* Pushes the ask to the bottom of the column, as in the wireframe. */
+    .hero-wf-ask{margin-top:auto; padding-top:44px;}
+    .hero-wf-lower .au-hero-chain{
+      margin:0; padding-bottom:20px;
+      align-self:stretch;
+    }
+    .hero-wf-lower .au-chain-node{min-height:150px;}
+  }
+  @media (max-width:999px){
+    /* Stacked: copy, ask, then the grid full width with its own top rule. */
+    .hero-wf-lower .au-hero-chain{border-top:1px solid rgba(15,23,42,0.12); margin-top:40px;}
+  }
+  /* On a phone a third of the screen is about 110px, which wrapped "posts to
+     LinkedIn", "clicks to your page" and even "200-250" onto two lines each and
+     left the row squeezed and centre-aligned against copy that is not. On a
+     phone the five figures read as a list instead: one per row, left aligned,
+     each label on a single line, divided by a hairline. The vertical rules and
+     the sixth empty cell only exist to square off a grid, so both go. */
+  @media (max-width:599px){
+    .hero-wf-lower .au-hero-chain{grid-template-columns:1fr; padding-bottom:0;}
+    .wf-vrule{display:none;}
+    .hero-wf-lower .au-chain-node{
+      align-items:flex-start; justify-content:flex-start; text-align:left;
+      padding:18px 0; min-height:0;
+    }
+    .hero-wf-lower .au-chain-node.is-empty{display:none;}
+    /* Divider between rows, not under the last one. */
+    .hero-wf-lower .au-chain-node:nth-of-type(-n+3){border-bottom:0;}
+    .hero-wf-lower .au-chain-node + .au-chain-node{
+      border-top:1px solid rgba(15,23,42,0.12);
+    }
+    .hero-wf-lower .au-chain-node b{font-size:30px;}
+    .hero-wf-lower .au-chain-node span{margin-top:4px; font-size:14px; white-space:nowrap;}
+    /* Full row width on a phone, so the longer captions take two lines rather
+       than the four a 22ch cap would force. */
+    .hero-wf-lower .au-chain-note{max-width:none; margin-top:5px;}
+  }
+  /* ================= /EXPERIMENT ============================================ */
 
   /* ---- Hero funnel figures ---- */
   /* Five numbers on one baseline, divided by hairlines. Deliberately no card, */
@@ -4122,14 +4283,6 @@
     margin-top:10px;
     font-size:13.5px; font-weight:500; line-height:1.35;
     letter-spacing:-0.01em; color:var(--ink-dim);
-  }
-  /* Third line: the doc's sourcing caption under each figure. Quiet enough to
-     qualify the number without competing with it, and a <small> rather than a
-     second <span> so it does not inherit the label rule above. */
-  .au-chain-note{
-    display:block; margin-top:7px;
-    font-size:11.5px; font-weight:400; line-height:1.4; letter-spacing:0;
-    color:var(--ink-dim); opacity:0.72;
   }
   /* The outcome is the only figure that earns colour. */
   .au-chain-node.is-final b{color:var(--brand-emerald-deep);}
@@ -4794,22 +4947,48 @@
     <!-- Wireframe layout: headline band, a full-bleed hairline, then two columns
          under it. The copy and the ask hold the left, and the figures run as a
          3x2 ruled grid flush to the right edge of the page. -->
-    <div class="hero-content-wrap">
-      <!-- One typographic lockup, not two stacked chips. The glass pill and its -->
-      <div class="au-hero-lockup">
-        <div class="au-eyebrow" id="auHeroEyebrow">B2B Field Marketers Running Own &amp; Third Party Events</div>
+    <div class="hero-content-wrap is-wf">
+      <div class="hero-wf-head">
+        <div class="au-hero-lockup">
+          <div class="au-eyebrow" id="auHeroEyebrow">B2B Field Marketers Running Own &amp; Third Party Events</div>
+        </div>
+        <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events you are already running.</h1>
+      </div>
+    </div>
+
+    <!-- Edge-to-edge rule. Sits where the emerald has finished dissolving. -->
+    <div class="hero-wf-rule" id="auHeroRule" aria-hidden="true"></div>
+
+    <div class="hero-wf-lower">
+      <div class="hero-wf-left">
+        <p class="hero-editorial-sub" id="auHeroSub">You already gamify the booth. Spin the wheel - scan the badge - take the swag. It ends with a set of data in a spreadsheet.</p>
+        <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn. One scan, one tap, and a post you already wrote goes out on LinkedIn. Your Product messaging reaches their network from their profile.</p>
+
+        <div class="hero-wf-ask">
+          <form class="au-form au-form-hero" id="auHeroForm" novalidate>
+            <label for="auHeroEmail" class="sr-only">Work email</label>
+            <div class="au-form-bar">
+              <span class="au-form-ico" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="15" height="11" rx="2"/><path d="m3 6 7 5 7-5"/></svg>
+              </span>
+              <input type="email" id="auHeroEmail" name="email" class="au-form-input" placeholder="Enter work email" required autocomplete="email" spellcheck="false">
+              <button type="submit" class="au-form-btn" id="auHeroSubmit">
+                <span>Get playbook</span>
+                <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>
+              </button>
+            </div>
+            <div class="au-form-err" id="auHeroErr" role="alert" aria-live="polite"></div>
+          </form>
+        </div>
       </div>
 
-      <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events you are already running.</h1>
-      <p class="hero-editorial-sub" id="auHeroSub">You already gamify the booth. Spin the wheel - scan the badge - take the swag. It ends with a set of data in a spreadsheet.</p>
-      <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn. One scan, one tap, and a post you already wrote goes out on LinkedIn. Your Product messaging reaches their network from their profile.</p>
-
-      <!-- What 400 paid-for booth visitors turn into. Five figures on one -->
-      <!-- baseline, separated by hairlines. No cards, no step chips, no arrows: -->
-      <!-- the reading order is left to right already, so anything else is noise. -->
-      <!-- The wrapper holds the break that separates this from the paragraph. -->
-      <div class="au-hero-chain-wrap">
+      <!-- Three across, two down. The sixth cell is deliberately empty, and the
+           vertical rules run past the last row rather than closing the box. -->
       <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
+        <span class="wf-vrule wf-vrule--1"></span>
+        <span class="wf-vrule wf-vrule--2"></span>
+        <span class="wf-vrule wf-vrule--3"></span>
+
         <div class="au-chain-node">
           <b>400</b>
           <span>booth visitors</span>
@@ -4835,10 +5014,11 @@
           <span>net-new leads</span>
           <small class="au-chain-note">people who were never at your event</small>
         </div>
+        <div class="au-chain-node is-empty" aria-hidden="true"></div>
       </div>
-      <p class="au-hero-chain-note">Same booth. Same swag budget. Zero ad spend.</p>
-      </div><!-- /.au-hero-chain-wrap -->
+    </div>
 
+    <div class="hero-content-wrap">
       <!-- Video Showcase Header Section (introduces the live event video carousel) -->
       <div class="au-hero-video-header" id="auHeroVideoHeader">
         <span class="au-tag">
@@ -7516,22 +7696,38 @@ initBookingCalendar();
     const hr = hero.getBoundingClientRect();
     if (!hr.height) return;                 // still inside a display:none view
 
-    const tailRect = tail && tail.getBoundingClientRect();
+    let tailRect = tail && tail.getBoundingClientRect();
+
+    // In the wireframe layout the emerald belongs to the headline band only:
+    // it has to be spent by the time the rule arrives, because everything under
+    // the rule is dark type on white.
+    const rule = hero.querySelector('.hero-wf-rule');
+    const split = !!rule;
+    if (rule) {
+      const rr = rule.getBoundingClientRect();
+      if (rr.height || rr.top) tailRect = { bottom: rr.top, height: 1 };
+    }
 
     let band, fadeTop;
     if (tailRect && tailRect.height) {
       const tailBottom = tailRect.bottom - hr.top;
-      // Dissolve opens just past the paragraph and runs long enough to read as
-      // a gradient rather than the hard edge a 50px fade produced. Shorter on
+      // Dissolve opens just past the content and runs long enough to read as a
+      // gradient rather than the hard edge a 50px fade produced. Shorter on
       // small screens, where 200px of fade is most of a viewport.
-      const fadeLen = window.innerWidth < 820 ? 150 : 200;
-      fadeTop = Math.max(0, tailBottom + 28);
-      band = fadeTop + fadeLen;
-
-      // Push the figures clear of the dissolve. Derived from the band rather
-      // than hardcoded per breakpoint, so they can never end up sitting on a
-      // half-faded green with dark type on top.
-      hero.style.setProperty('--hero-chain-gap', Math.round(band - tailBottom + 28) + 'px');
+      if (split) {
+        // The emerald has to be spent by the time the rule arrives: everything
+        // below it is dark type on white. So the band closes at the rule and
+        // the dissolve runs backwards from there.
+        const fadeLen = window.innerWidth < 820 ? 170 : 240;
+        band = tailBottom + 8;
+        fadeTop = Math.max(0, band - fadeLen);
+      } else {
+        const fadeLen = window.innerWidth < 820 ? 150 : 200;
+        fadeTop = Math.max(0, tailBottom + 28);
+        band = fadeTop + fadeLen;
+        // Only the stacked layout needs the figures pushed clear of the fade.
+        hero.style.setProperty('--hero-chain-gap', Math.round(band - tailBottom + 28) + 'px');
+      }
     } else {
       band = Math.round(window.innerHeight * 0.72);
       fadeTop = band * 0.45;
