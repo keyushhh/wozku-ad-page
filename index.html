@@ -4020,8 +4020,18 @@
   .au-hero-chain{
     position:relative; z-index:2;
     display:grid; grid-template-columns:repeat(5, 1fr);
-    width:100%; max-width:940px; margin:46px auto 0;
+    width:100%; max-width:940px; margin:0 auto;
+    padding-top:52px;
   }
+  /* A short centred rule, well clear of the sub-headline, so the figures read */
+  /* as a separate band of evidence rather than the tail of the paragraph. */
+  .au-hero-chain::before{
+    content:""; position:absolute; top:0; left:50%; transform:translateX(-50%);
+    width:56px; height:1px;
+    background:rgba(255,255,255,0.28);
+  }
+  /* Owns the gap above the rule, so the break is one number, not two margins. */
+  .au-hero-chain-wrap{margin-top:64px;}
   .au-chain-node{
     position:relative;
     display:flex; flex-direction:column; align-items:center; text-align:center;
@@ -4141,11 +4151,24 @@
   }
 
   /* ---- content-v3: how-it-works kicker + closing body line ---- */
+  /* .au-norma-how .au-head is left-aligned, so these must not centre */
+  /* themselves with `margin:0 auto` or they drift off the headline's edge. */
   .au-how-kicker{
-    max-width:640px; margin:14px auto 0; font-size:15px; line-height:1.6; color:var(--ink-dim);
+    max-width:620px; margin:18px 0 0; font-size:15.5px; line-height:1.65; color:var(--ink-dim);
   }
+  /* A lone sentence floating under the three cards read as leftover text, so */
+  /* it now sits in a contained strip that spans the grid it belongs to. */
   .au-how-body{
-    max-width:640px; margin:36px auto 0; text-align:center; font-size:15px; line-height:1.6; color:var(--ink-dim);
+    position:relative; margin:34px 0 0; padding:20px 24px 20px 44px;
+    border:1px solid var(--line); border-radius:var(--radius-md);
+    background:var(--bg-subtle);
+    font-size:15px; line-height:1.6; color:var(--ink-dim); text-align:left;
+  }
+  .au-how-body::before{
+    content:""; position:absolute; left:20px; top:23px;
+    width:12px; height:7px;
+    border-left:2px solid var(--brand-emerald); border-bottom:2px solid var(--brand-emerald);
+    transform:rotate(-45deg);
   }
 
   /* ---- content-v3: before/after kicker line above H2 ---- */
@@ -4185,11 +4208,14 @@
   .au-story-co{font-family:var(--font-display); font-size:22px; font-weight:700; letter-spacing:-0.02em; margin-bottom:12px;}
   .au-story-txt{font-size:15px; line-height:1.65; color:var(--ink-dim);}
 
-  /* Sify result row: four figures, dividers between, label under each. */
+  /* Sify result: four figures over one caption, as a single plate. */
+  .au-story-result{
+    margin:28px 0 0; border-radius:var(--radius-lg); overflow:hidden;
+    background:var(--dark-pill); color:#FFFFFF;
+  }
   .au-story-stat-block{
     display:grid; grid-template-columns:repeat(2, 1fr); gap:24px 0;
-    margin:28px 0 0; padding:30px 24px; border-radius:var(--radius-lg);
-    background:var(--dark-pill); color:#FFFFFF;
+    padding:32px 24px 28px;
   }
   @media (min-width:820px){ .au-story-stat-block{grid-template-columns:repeat(4, 1fr);} }
   .au-story-stat{display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 14px; position:relative;}
@@ -4209,12 +4235,13 @@
     letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.58); line-height:1.4;
   }
 
-  /* "Who posted" reads as a caption on the stat row, not a stray paragraph. */
+  /* Caption row inside the plate, divided from the figures by a hairline. */
   .au-story-who{
-    max-width:640px; margin:20px auto 0; text-align:center;
-    font-size:14.5px; line-height:1.6; color:var(--ink-dim);
+    margin:0; padding:18px 24px 20px; text-align:center;
+    border-top:1px solid rgba(255,255,255,0.12);
+    font-size:14px; line-height:1.6; color:rgba(255,255,255,0.62);
   }
-  .au-story-who strong{color:var(--ink); font-weight:600;}
+  .au-story-who strong{color:#FFFFFF; font-weight:600;}
 
   /* ---- content-v3: shared prose column ---- */
   /* Centred by default so it sits with the centred heading, quote and callout */
@@ -4343,28 +4370,40 @@
     color:var(--brand-emerald-deep);
   }
 
-  /* ---- content-v3: FAQ accordion ---- */
-  .au-faq-list{max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:10px;}
+  /* ---- content-v3: FAQ ---- */
+  /* Same two-column editorial frame as the prose sections: the heading holds */
+  /* the left column, the questions stack on the right as hairline-divided rows */
+  /* rather than nine separate boxes. */
+  .au-faq{padding:96px 0;}
+  .au-faq-grid .au-faq-list{display:flex; flex-direction:column; max-width:none;}
   .au-faq-item{
-    border:1px solid var(--line); border-radius:var(--radius-md); padding:20px 24px;
-    background:var(--bg-card); transition:border-color .2s ease, box-shadow .2s ease;
+    border-top:1px solid var(--line);
+    padding:0; background:none; border-radius:0;
   }
-  .au-faq-item:hover{border-color:rgba(15,23,42,0.16);}
-  .au-faq-item[open]{border-color:rgba(16,185,129,0.3); box-shadow:var(--shadow);}
+  .au-faq-item:last-child{border-bottom:1px solid var(--line);}
   .au-faq-item summary{
-    cursor:pointer; font-family:var(--font-display); font-size:16.5px; font-weight:600;
-    letter-spacing:-0.015em; color:var(--ink); list-style:none;
-    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    cursor:pointer; list-style:none; padding:22px 44px 22px 0; position:relative;
+    font-family:var(--font-display); font-size:17px; font-weight:600;
+    letter-spacing:-0.02em; line-height:1.4; color:var(--ink);
+    transition:color .18s ease;
   }
+  .au-faq-item summary:hover{color:var(--brand-emerald-deep);}
   .au-faq-item summary::-webkit-details-marker{display:none;}
+  /* Plus that becomes a minus: one rule rotates, the other stays put. */
+  .au-faq-item summary::before,
   .au-faq-item summary::after{
-    content:""; flex:none; width:11px; height:11px;
-    border-right:2px solid var(--ink-dim); border-bottom:2px solid var(--ink-dim);
-    transform:rotate(45deg); margin-top:-4px; transition:transform .2s ease;
+    content:""; position:absolute; right:6px; top:50%;
+    width:13px; height:2px; border-radius:1px; background:var(--ink-dim);
+    transition:transform .25s cubic-bezier(.4,0,.2,1), background .18s ease;
   }
-  .au-faq-item[open] summary::after{transform:rotate(225deg); margin-top:2px;}
-  .au-faq-a{margin-top:14px;}
-  .au-faq-a p{font-size:15px; line-height:1.7; color:var(--ink-dim); margin:0; max-width:64ch;}
+  .au-faq-item summary::before{transform:translateY(-50%);}
+  .au-faq-item summary::after{transform:translateY(-50%) rotate(90deg);}
+  .au-faq-item[open] summary{color:var(--ink);}
+  .au-faq-item[open] summary::after{transform:translateY(-50%) rotate(0deg);}
+  .au-faq-item[open] summary::before,
+  .au-faq-item[open] summary::after{background:var(--brand-emerald);}
+  .au-faq-a{padding:0 44px 24px 0; margin-top:-4px;}
+  .au-faq-a p{font-size:15.5px; line-height:1.7; color:var(--ink-dim); margin:0; max-width:62ch;}
 
   /* ---- content-v3: commercials ---- */
   .au-commercials .au-story-body{text-align:center; max-width:56ch;}
@@ -4380,34 +4419,71 @@
   }
   .au-interstitial .au-form-note{color:var(--ink-dim); text-align:center;}
 
-  /* ---- content-v3: calculator "dedicated simulation" form ---- */
-  .au-form-sim{
-    margin:44px auto 0; max-width:600px; padding:32px 30px;
-    border-radius:var(--radius-lg); background:var(--bg-subtle); border:1px solid var(--line);
+  /* ---- content-v3: dedicated simulation band ---- */
+  .au-simband{padding:24px 0 96px;}
+  .au-simband-plate{
+    position:relative; isolation:isolate; overflow:hidden;
+    border-radius:var(--radius-lg); padding:44px 40px;
+    display:grid; grid-template-columns:1fr; gap:36px; align-items:center;
+    background:
+      linear-gradient(180deg, #0FA972 0%, #077A55 12%, #064530 32%, #04241B 58%, #02100C 82%, #010806 100%);
+    box-shadow:0 30px 70px -46px rgba(4, 60, 44, 0.55);
   }
-  .au-form-sim .au-form-lead{
-    color:var(--ink); font-size:19px; margin-bottom:6px;
+  .au-simband-plate::after{
+    content:""; position:absolute; inset:0; border-radius:var(--radius-lg);
+    pointer-events:none; border:1px solid rgba(255,255,255,0.12);
   }
-  .au-sim-note{
-    text-align:center; font-size:14.5px; line-height:1.55; color:var(--ink-dim); margin-bottom:22px;
+  @media (min-width:900px){
+    .au-simband-plate{
+      grid-template-columns:minmax(0,0.9fr) minmax(0,1fr); gap:64px;
+      padding:52px 52px;
+    }
   }
-  .au-sim-grid{display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:16px;}
-  @media (min-width:600px){ .au-sim-grid{grid-template-columns:1fr 1fr;} }
+  .au-simband-copy .au-tag{color:#6EE7B7; margin-bottom:14px;}
+  .au-simband-h{
+    font-family:var(--font-display); font-size:clamp(25px, 2.7vw, 34px);
+    font-weight:700; letter-spacing:-0.03em; line-height:1.14; color:#FFFFFF; margin:0 0 14px;
+  }
+  .au-simband-sub{
+    font-size:15px; line-height:1.6; color:rgba(255,255,255,0.62); margin:0 0 22px;
+  }
+  .au-simband-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px;}
+  .au-simband-list li{
+    position:relative; padding-left:26px;
+    font-size:14.5px; line-height:1.5; color:rgba(255,255,255,0.82);
+  }
+  .au-simband-list li::before{
+    content:""; position:absolute; left:0; top:6px;
+    width:14px; height:8px; border-left:2px solid #34D399; border-bottom:2px solid #34D399;
+    transform:rotate(-45deg);
+  }
+
+  .au-form-sim{margin:0;}
+  .au-sim-grid{display:grid; grid-template-columns:1fr; gap:16px; margin-bottom:22px;}
+  @media (min-width:620px){ .au-sim-grid{grid-template-columns:1fr 1fr;} }
+  .au-sim-field{display:flex; flex-direction:column; gap:7px; min-width:0;}
+  .au-sim-field label{
+    font-family:var(--font-mono); font-size:10.5px; font-weight:500;
+    letter-spacing:0.09em; text-transform:uppercase; color:rgba(255,255,255,0.5);
+  }
   /* .au-form-input is borderless by design (it lives inside .au-form-bar), so */
-  /* the standalone fields here get their own box. */
-  .au-sim-grid .au-form-input{
-    border:1px solid var(--line); border-radius:12px; background:#FFFFFF;
-    padding:13px 15px; font-size:15px; width:100%;
-    transition:border-color .2s ease, box-shadow .2s ease;
+  /* the standalone fields here get their own box, inverted for the dark plate. */
+  .au-sim-field .au-form-input{
+    width:100%; padding:13px 15px; font-size:15px; color:#FFFFFF;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.14); border-radius:12px;
+    transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
   }
-  .au-sim-grid .au-form-input:focus{
-    border-color:var(--brand-emerald);
-    box-shadow:0 0 0 3px rgba(16,185,129,0.14);
+  .au-sim-field .au-form-input::placeholder{color:rgba(255,255,255,0.34);}
+  .au-sim-field .au-form-input:focus{
+    outline:0; background:rgba(255,255,255,0.1);
+    border-color:rgba(52,211,153,0.65);
+    box-shadow:0 0 0 3px rgba(16,185,129,0.18);
   }
   /* .au-form-btn is inline-flex, so it needs to become a block-level flex box */
-  /* before `margin:0 auto` will actually centre it. */
-  .au-sim-submit{display:flex; width:auto; min-width:210px; margin:0 auto; justify-content:center;}
-  .au-form-sim .au-form-err{text-align:center; margin-top:10px;}
+  /* before it will stretch to the form width. */
+  .au-sim-submit{display:flex; width:100%; justify-content:center; padding:15px 24px; font-size:15px;}
+  .au-form-sim .au-form-err{text-align:left;}
 
   .au-cta-closing{margin-top:12px;}
 </style>
@@ -4517,6 +4593,8 @@
       <!-- What 400 paid-for booth visitors turn into. Five figures on one -->
       <!-- baseline, separated by hairlines. No cards, no step chips, no arrows: -->
       <!-- the reading order is left to right already, so anything else is noise. -->
+      <!-- The wrapper holds the break that separates this from the paragraph. -->
+      <div class="au-hero-chain-wrap">
       <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
         <div class="au-chain-node">
           <b>400</b>
@@ -4540,6 +4618,7 @@
         </div>
       </div>
       <p class="au-hero-chain-note">Same booth. Same swag budget. Zero ad spend.</p>
+      </div><!-- /.au-hero-chain-wrap -->
 
       <!-- Video Showcase Header Section (introduces the live event video carousel) -->
       <div class="au-hero-video-header" id="auHeroVideoHeader">
@@ -4964,14 +5043,17 @@
 
       </div>
 
-      <div class="au-story-stat-block reveal">
-        <div class="au-story-stat"><b>98</b><span>shares</span></div>
-        <div class="au-story-stat"><b>141,034</b><span>potential reach</span></div>
-        <div class="au-story-stat"><b>1,697</b><span>likes</span></div>
-        <div class="au-story-stat"><b>18.3x</b><span>return on earned media value</span></div>
+      <!-- "Who posted" is a caption on these figures, so it lives inside the -->
+      <!-- same plate rather than floating underneath it as a loose line. -->
+      <div class="au-story-result reveal">
+        <div class="au-story-stat-block">
+          <div class="au-story-stat"><b>98</b><span>shares</span></div>
+          <div class="au-story-stat"><b>141,034</b><span>potential reach</span></div>
+          <div class="au-story-stat"><b>1,697</b><span>likes</span></div>
+          <div class="au-story-stat"><b>18.3x</b><span>return on earned media value</span></div>
+        </div>
+        <p class="au-story-who"><strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.</p>
       </div>
-
-      <p class="au-story-who reveal"><strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.</p>
 
       <div class="au-editorial is-tail reveal">
         <div class="au-editorial-head">
@@ -5165,18 +5247,44 @@
           </div>
         </details>
 
+    </div>
+  </section>
+
+  <!-- DEDICATED SIMULATION. A grey box under the calculator read as an -->
+  <!-- afterthought, so this is its own dark band: the offer stated on the left, -->
+  <!-- the fields on the right, styled like the rest of the proof plates. -->
+  <section class="au-section au-simband" id="auSimBand">
+    <div class="wrap">
+      <div class="au-simband-plate reveal">
+        <div class="au-simband-copy">
+          <span class="au-tag">Built for your event</span>
+          <h2 class="au-simband-h">Need a dedicated simulation for your upcoming event?</h2>
+          <p class="au-simband-sub">Share the details - Name, email Phone, Event Link or details - submit</p>
+          <ul class="au-simband-list">
+            <li>Your own event, modelled on its real attendee count</li>
+            <li>Benchmarks from campaigns we have already run</li>
+            <li>Sent back as a written breakdown, no call required</li>
+          </ul>
+        </div>
+
         <form class="au-form au-form-sim" id="auSimForm" novalidate>
-          <p class="au-form-lead">Need a dedicated simulation for your upcoming event?</p>
-          <p class="au-sim-note">Share the details - Name, email Phone, Event Link or details - submit</p>
           <div class="au-sim-grid">
-            <label for="auSimName" class="sr-only">Name</label>
-            <input type="text" id="auSimName" name="name" class="au-form-input" placeholder="Name" required>
-            <label for="auSimEmail" class="sr-only">Email</label>
-            <input type="email" id="auSimEmail" name="email" class="au-form-input" placeholder="Email" required autocomplete="email" spellcheck="false">
-            <label for="auSimPhone" class="sr-only">Phone</label>
-            <input type="tel" id="auSimPhone" name="phone" class="au-form-input" placeholder="Phone">
-            <label for="auSimEvent" class="sr-only">Event Link or details</label>
-            <input type="text" id="auSimEvent" name="event" class="au-form-input" placeholder="Event Link or details">
+            <div class="au-sim-field">
+              <label for="auSimName">Name</label>
+              <input type="text" id="auSimName" name="name" class="au-form-input" placeholder="Jane Okafor" required>
+            </div>
+            <div class="au-sim-field">
+              <label for="auSimEmail">Work email</label>
+              <input type="email" id="auSimEmail" name="email" class="au-form-input" placeholder="jane@company.com" required autocomplete="email" spellcheck="false">
+            </div>
+            <div class="au-sim-field">
+              <label for="auSimPhone">Phone</label>
+              <input type="tel" id="auSimPhone" name="phone" class="au-form-input" placeholder="Optional">
+            </div>
+            <div class="au-sim-field">
+              <label for="auSimEvent">Event link or details</label>
+              <input type="text" id="auSimEvent" name="event" class="au-form-input" placeholder="Where and when is it?">
+            </div>
           </div>
           <button type="submit" class="au-form-btn au-sim-submit" id="auSimSubmit">
             <span>Submit</span>
@@ -5184,17 +5292,19 @@
           </button>
           <div class="au-form-err" id="auSimErr" role="alert" aria-live="polite"></div>
         </form>
+      </div>
     </div>
   </section>
 
   <!-- FAQ: merged from the doc's two FAQ blocks (Section 8 + Section 12) -->
   <section class="au-section au-faq" id="auFaq">
     <div class="wrap">
-      <div class="au-head reveal">
-        <span class="au-tag">Questions</span>
-        <h2 class="au-h2">The common questions:</h2>
-      </div>
-      <div class="au-faq-list reveal">
+      <div class="au-editorial au-faq-grid reveal">
+        <div class="au-editorial-head">
+          <span class="au-tag">Questions</span>
+          <h2 class="au-h2">The common questions:</h2>
+        </div>
+        <div class="au-faq-list">
         <details class="au-faq-item">
           <summary>Will attendees actually post?</summary>
           <div class="au-faq-a"><p>Some will not, and that is fine. Nobody is required to take part and non-participants are never tracked or contacted. With a live leaderboard and a prize on the table, participation runs 40 to 70 percent of an event, and higher among the people who reach your booth.</p></div>
@@ -5231,6 +5341,7 @@
           <summary>How do we know which leads came from this?</summary>
           <div class="au-faq-a"><p>Every share carries a tracked link, and every click, form fill and registration is attributed to the attendee who generated it.</p></div>
         </details>
+        </div>
       </div>
     </div>
   </section>
@@ -7334,17 +7445,20 @@ initBookingCalendar();
 
     const tailRect = tail && tail.getBoundingClientRect();
 
+    // Close the band just under the note. Trailing further down dragged the
+    // emerald deep into the white page for no reason.
     let band;
     if (tailRect && tailRect.height) {
-      band = tailRect.bottom - hr.top + 96;
+      band = tailRect.bottom - hr.top + 40;
     } else {
       band = Math.round(window.innerHeight * 0.85);
     }
 
-    // Dissolve begins just past the note, so the type never sits on the seam.
+    // Dissolve starts right at the note's baseline so the fade is short and the
+    // seam lands in empty space rather than under the figures.
     let fadeTop;
     if (tailRect && tailRect.height) {
-      fadeTop = Math.max(0, tailRect.bottom - hr.top + 16);
+      fadeTop = Math.max(0, tailRect.bottom - hr.top - 4);
     } else {
       fadeTop = band * 0.65;
     }
