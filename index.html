@@ -1631,11 +1631,12 @@
     width:100%; max-width:1120px; margin:0 auto; position:relative;
   }
   .au-compare-container{
-    position:relative; width:100%; border-radius:28px; overflow:hidden;
+    position:relative; width:100%; border-radius:24px; overflow:hidden;
     background:#02140F; border:1px solid rgba(255, 255, 255, 0.12);
-    box-shadow:0 24px 60px -20px rgba(0, 0, 0, 0.5);
+    box-shadow:0 20px 50px -20px rgba(0, 0, 0, 0.5);
     user-select:none; -webkit-user-select:none;
     touch-action:pan-y;
+    height:370px;
   }
 
   .au-compare-layer{
@@ -1660,20 +1661,32 @@
 
   .au-compare-grid{
     display:grid; grid-template-columns:1fr 1fr;
-    gap:36px; padding:38px 36px; min-height:480px; box-sizing:border-box;
-    align-items:stretch;
+    gap:36px; padding:28px 32px; box-sizing:border-box;
+    align-items:stretch; height:100%;
   }
   .au-c-col{
     display:flex; flex-direction:column; justify-content:space-between;
-    align-items:stretch; box-sizing:border-box;
+    align-items:stretch; box-sizing:border-box; height:100%;
+  }
+  .au-c-col.is-after-main{
+    justify-content:flex-start; gap:16px;
+  }
+  .au-c-col.is-after-main > .au-stage-wrap{
+    flex:1; min-height:0;
+  }
+  .au-c-col.is-after-context{
+    padding:0 12px 0 24px; justify-content:flex-end; overflow:hidden;
+  }
+  .au-c-col.is-before-context{
+    padding:0 24px 0 12px; justify-content:flex-end; overflow:hidden;
   }
 
   /* Status Badges - No Glow */
   .au-mkicker{
     display:inline-flex; align-items:center;
-    padding:5px 13px; border-radius:100px;
-    font-family:var(--font-mono); font-size:11px; font-weight:700;
-    letter-spacing:0.07em; text-transform:uppercase; margin-bottom:20px;
+    padding:4px 12px; border-radius:100px;
+    font-family:var(--font-mono); font-size:10.5px; font-weight:700;
+    letter-spacing:0.07em; text-transform:uppercase; margin-bottom:0;
     width:fit-content;
   }
   .au-mkicker.is-without{
@@ -1687,15 +1700,15 @@
     color:#34D399;
   }
 
-  /* Left Core Without Wozku Content */
+  /* Top headers */
   .au-mcard-top{
-    display:flex; flex-direction:column; align-items:flex-start;
+    display:flex; flex-direction:column; align-items:flex-start; gap:10px;
   }
   .au-mprice{
-    display:flex; align-items:center; gap:14px; margin:0 0 12px;
+    display:flex; align-items:center; gap:12px; margin:0;
   }
   .au-mprice b{
-    font-family:var(--font-display); font-size:clamp(36px, 3.8vw, 48px);
+    font-family:var(--font-display); font-size:clamp(32px, 3.4vw, 42px);
     font-weight:700; letter-spacing:-0.04em; line-height:1;
     font-variant-numeric:tabular-nums; color:#FDA4AF;
   }
@@ -1703,165 +1716,273 @@
     display:flex; flex-direction:column; gap:2px;
   }
   .au-mprice-label{
-    font-family:var(--font-display); font-size:16px; font-weight:700;
+    font-family:var(--font-display); font-size:15px; font-weight:700;
     color:#FFFFFF; letter-spacing:-0.01em; line-height:1.2;
   }
   .au-mprice-sub{
-    font-size:13px; color:rgba(255, 255, 255, 0.52); line-height:1.3;
+    font-size:12.5px; color:rgba(255, 255, 255, 0.52); line-height:1.3;
   }
+
+  /* Stage Wrap: Cross-fading Checklist vs Stats Box */
+  .au-stage-wrap{
+    position:relative; width:100%;
+    display:grid; grid-template-columns:1fr; align-items:end;
+  }
+  .au-stage-list,
+  .au-stage-deadend{
+    grid-area:1 / 1;
+    opacity:1; transform:translateY(0);
+    transition:opacity .35s cubic-bezier(0.16, 1, 0.3, 1), transform .35s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events:auto; width:100%;
+  }
+  .au-stage-stats{
+    grid-area:1 / 1;
+    opacity:0; transform:translateY(12px) scale(0.98);
+    transition:opacity .35s cubic-bezier(0.16, 1, 0.3, 1), transform .35s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events:none; width:100%;
+  }
+
+  /* Extreme left: Reveal With Wozku & Stats */
+  .au-compare-container.is-revealing-with .au-stage-list{
+    opacity:0; transform:translateY(-10px) scale(0.98); pointer-events:none;
+  }
+  .au-compare-container.is-revealing-with .au-wozku-stats-card{
+    opacity:1; transform:translateY(0) scale(1); pointer-events:auto;
+  }
+
+  /* Extreme right: Reveal Without Wozku & Stats */
+  .au-compare-container.is-revealing-without .au-stage-deadend{
+    opacity:0; transform:translateY(-10px) scale(0.98); pointer-events:none;
+  }
+  .au-compare-container.is-revealing-without .au-old-stats-card{
+    opacity:1; transform:translateY(0) scale(1); pointer-events:auto;
+  }
+
+  /* Raffle dead-end box - exact alignment with payoff hero box */
   .au-mcard-deadend{
-    display:flex; align-items:flex-start; gap:14px;
+    display:flex; align-items:center; gap:12px;
     background:rgba(255, 255, 255, 0.04); border:1px solid rgba(255, 255, 255, 0.08);
-    border-radius:18px; padding:20px 22px; margin-top:32px;
-    width:100%; box-sizing:border-box;
+    border-radius:15px; padding:14px 16px; margin:0;
+    width:100%; box-sizing:border-box; min-height:48px;
   }
   .au-deadend-icon{
-    flex:none; width:20px; height:20px; color:rgba(255, 255, 255, 0.4);
-    margin-top:2px; display:flex; align-items:center; justify-content:center;
+    flex:none; width:16px; height:16px; color:rgba(255, 255, 255, 0.4);
+    display:flex; align-items:center; justify-content:center;
   }
-  .au-deadend-icon svg{width:18px; height:18px; display:block;}
+  .au-deadend-icon svg{width:15px; height:15px; display:block;}
   .au-mqual{
-    margin:0; flex:1; font-size:14.5px; line-height:1.6;
+    margin:0; flex:1; font-size:13.5px; line-height:1.45;
     color:rgba(255, 255, 255, 0.78);
   }
 
-  /* Right Core With Wozku Content - No Glow */
+  /* Right Core Checklist - No Glow */
   .au-mfeatures-simple{
     list-style:none; margin:0; padding:0;
-    display:flex; flex-direction:column; gap:15px; width:100%;
+    display:flex; flex-direction:column; gap:10px; width:100%;
+    height:100%; box-sizing:border-box;
   }
   .au-mfeat{
-    display:flex; align-items:flex-start; gap:13px;
+    display:flex; align-items:center; gap:10px;
   }
   .au-mfeat-check{
-    flex:none; width:18px; height:18px; border-radius:50%;
+    flex:none; width:16px; height:16px; border-radius:50%;
     background:rgba(16, 185, 129, 0.15); border:1px solid rgba(16, 185, 129, 0.35);
     color:#34D399; display:flex; align-items:center; justify-content:center;
-    margin-top:2.5px;
   }
-  .au-mfeat-check svg{width:11px; height:11px; display:block;}
+  .au-mfeat-check svg{width:9.5px; height:9.5px; display:block;}
   .au-mfeat-t{
-    flex:1; font-size:15px; font-weight:500; line-height:1.55;
+    flex:1; font-size:14px; font-weight:500; line-height:1.35;
     color:rgba(255, 255, 255, 0.92);
   }
 
-  /* Final Highlight Payoff Box - No Glow */
+  /* Final Highlight Payoff Box - Aligned with raffle dead-end */
   .au-mfeat.is-hero{
-    margin-top:6px;
+    margin-top:auto;
   }
   .au-mfeat-hero-inner{
-    display:flex; align-items:center; gap:13px; width:100%;
+    display:flex; align-items:center; gap:12px; width:100%;
     background:rgba(16, 185, 129, 0.12); border:1.5px solid rgba(52, 211, 153, 0.4);
-    border-radius:18px; padding:14px 18px; box-sizing:border-box;
+    border-radius:15px; padding:12px 16px; box-sizing:border-box; min-height:48px;
   }
   .au-mfeat-check.is-hero{
     background:#10B981; border-color:#10B981; color:#03241B;
   }
   .au-mfeat.is-hero .au-mfeat-t{
-    font-size:16px; font-weight:700; color:#FFFFFF; line-height:1.4;
+    font-size:14px; font-weight:700; color:#FFFFFF; line-height:1.35;
   }
 
-  /* Revealed Stats Boxes */
-  .au-c-col.is-after-extra{
-    display:flex; flex-direction:column; justify-content:center; align-items:flex-end;
-    padding:30px 16px 30px 80px;
+  /* Transitioned Stats Card Grid */
+  .au-stage-stats{
+    background:rgba(255, 255, 255, 0.04);
+    border:1px solid rgba(255, 255, 255, 0.1);
+    border-radius:16px; padding:16px 16px; box-sizing:border-box;
+    height:206px; display:flex; flex-direction:column; justify-content:space-between;
   }
-  .au-c-col.is-after-extra .au-extra-stats-box{
-    width:100%; max-width:380px;
+  .au-wozku-stats-card{
+    background:linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.05) 100%);
+    border-color:rgba(52, 211, 153, 0.35);
   }
-
-  .au-c-col.is-before-extra{
-    display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
-    padding:30px 80px 30px 16px;
+  .au-old-stats-card{
+    background:linear-gradient(145deg, rgba(244, 63, 94, 0.08) 0%, rgba(244, 63, 94, 0.02) 100%);
+    border-color:rgba(244, 63, 94, 0.2);
   }
-  .au-c-col.is-before-extra .au-extra-stats-box{
-    width:100%; max-width:380px;
+  .au-stats-card-head{
+    margin-bottom:8px; display:flex; align-items:center; justify-content:space-between;
   }
-
-  .au-extra-stats-box{
-    display:flex; flex-direction:column; justify-content:center;
-    background:rgba(255, 255, 255, 0.05); border:1px solid rgba(255, 255, 255, 0.1);
-    border-radius:22px; padding:28px 26px; height:auto; box-sizing:border-box;
-    gap:20px;
+  .au-stats-badge{
+    font-family:var(--font-mono); font-size:9.5px; font-weight:700;
+    letter-spacing:0.09em; text-transform:uppercase; color:#34D399;
   }
-  .au-extra-stats-box.is-dead-box{
-    background:rgba(244, 63, 94, 0.05); border-color:rgba(244, 63, 94, 0.18);
+  .au-stats-badge.is-dead{color:#FDA4AF;}
+  .au-stats-card-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:8px; flex:1;
   }
-  .au-extra-kicker{
-    font-family:var(--font-mono); font-size:11px; font-weight:700;
-    letter-spacing:0.1em; text-transform:uppercase; color:#34D399;
+  .au-sc-item{
+    background:rgba(255, 255, 255, 0.03); border:1px solid rgba(255, 255, 255, 0.06);
+    border-radius:11px; padding:8px 12px; display:flex; flex-direction:column; justify-content:center; gap:2px;
   }
-  .au-extra-kicker.is-dead-kicker{
-    color:#FDA4AF;
+  .au-sc-item.is-highlight{
+    background:rgba(16, 185, 129, 0.12); border-color:rgba(52, 211, 153, 0.4);
   }
-  .au-extra-stat-row{
-    display:flex; flex-direction:column; gap:16px;
+  .au-sc-item.is-dead{
+    background:rgba(255, 255, 255, 0.02); border-color:rgba(255, 255, 255, 0.05);
   }
-  .au-ex-stat{
-    display:flex; flex-direction:column; gap:3px; text-align:left;
+  .au-sc-item.is-dead.is-highlight{
+    background:rgba(244, 63, 94, 0.08); border-color:rgba(244, 63, 94, 0.25);
   }
-  .au-ex-num{
-    font-family:var(--font-display); font-size:30px; font-weight:700;
+  .au-sc-num{
+    font-family:var(--font-display); font-size:20px; font-weight:700;
     color:#34D399; letter-spacing:-0.03em; line-height:1.1;
   }
-  .au-ex-stat.is-dead .au-ex-num{
-    color:#FDA4AF;
+  .au-sc-item.is-dead .au-sc-num{color:#FDA4AF;}
+  .au-sc-lbl{
+    font-size:11px; color:rgba(255, 255, 255, 0.75); line-height:1.25;
   }
-  .au-ex-lbl{
-    font-size:13.5px; color:rgba(255, 255, 255, 0.8); line-height:1.35;
+
+  /* Context Cards - Sized and aligned with stats cards */
+  .au-context-card{
+    display:flex; flex-direction:column; justify-content:center;
+    background:rgba(255, 255, 255, 0.04); border:1px solid rgba(255, 255, 255, 0.08);
+    border-radius:16px; padding:20px 22px; box-sizing:border-box;
+    gap:10px; width:100%; height:206px;
+  }
+  .au-context-card.is-dead-context{
+    background:rgba(244, 63, 94, 0.03); border-color:rgba(244, 63, 94, 0.14);
+  }
+  .au-context-title{
+    font-family:var(--font-display); font-size:18px; font-weight:700;
+    letter-spacing:-0.02em; line-height:1.3; color:#FFFFFF; margin:0;
+  }
+  .au-context-desc{
+    font-size:13px; line-height:1.5; color:rgba(255, 255, 255, 0.75); margin:0;
   }
 
   /* Divider line and handle button */
   .au-compare-handle-line{
     position:absolute; top:0; bottom:0; left:var(--split, 50%);
-    width:3px; background:#FFFFFF;
+    width:2px; background:linear-gradient(to bottom, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0.2) 100%);
     z-index:10; pointer-events:none;
     transform:translateX(-50%);
   }
   .au-compare-handle-btn{
     position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
-    width:46px; height:46px; border-radius:50%; background:#FFFFFF;
-    box-shadow:0 4px 20px rgba(0, 0, 0, 0.45);
+    width:42px; height:42px; border-radius:50%;
+    padding:0; border:none; background:transparent;
     display:flex; align-items:center; justify-content:center;
     pointer-events:auto; cursor:ew-resize; touch-action:none;
-    transition:transform .15s ease, box-shadow .15s ease;
+    transition:transform .15s ease, filter .15s ease;
   }
   .au-compare-handle-btn:hover,
   .au-compare-container.is-dragging .au-compare-handle-btn{
-    transform:translate(-50%, -50%) scale(1.1);
-    box-shadow:0 6px 24px rgba(0, 0, 0, 0.6);
+    transform:translate(-50%, -50%) scale(1.08);
   }
-  .au-handle-svg{
-    width:22px; height:22px; color:#0A0E27; display:block;
+  .slider-metal-mount{
+    width:42px; height:42px; display:flex; align-items:center; justify-content:center;
+  }
+  .slider-metal-circle{
+    width:40px; height:40px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:#FFFFFF;
+    box-shadow:0 4px 18px rgba(0, 0, 0, 0.45);
+    cursor:ew-resize;
+  }
+  .slider-handle-svg{
+    width:16px; height:16px; color:#0A0E27; display:block;
   }
 
+  /* ── MOBILE: Vertical stack, no slider ── */
   @media (max-width:900px){
-    .au-compare-container{min-height:500px; border-radius:24px;}
+    .au-compare-container{
+      height:auto; min-height:auto; border-radius:0;
+      overflow:visible; border:none; box-shadow:none;
+      background:transparent;
+    }
+    .au-compare-layer.is-before{
+      position:relative; clip-path:none; -webkit-clip-path:none;
+      inset:auto;
+    }
+    .au-compare-layer.is-after{
+      background:
+        radial-gradient(120% 90% at 85% 0%, rgba(16, 185, 129, 0.14) 0%, rgba(16, 185, 129, 0) 70%),
+        linear-gradient(168deg, #063428 0%, #03241B 45%, #021611 100%);
+      border-radius:20px;
+      overflow:hidden;
+      margin-bottom:20px;
+    }
+    .au-compare-layer.is-before{
+      background:
+        radial-gradient(120% 80% at 20% 0%, rgba(244, 63, 94, 0.08) 0%, rgba(244, 63, 94, 0) 65%),
+        linear-gradient(168deg, #151A2C 0%, #0D1220 50%, #080C16 100%);
+      border-radius:20px;
+      overflow:hidden;
+      margin-bottom:16px;
+    }
     .au-compare-grid{
-      display:block; width:100%;
-      padding:28px 18px 24px; box-sizing:border-box;
+      display:flex; flex-direction:column; width:100%; height:auto;
+      padding:22px 18px 22px; box-sizing:border-box; gap:0;
     }
     .au-c-col.is-after-main,
     .au-c-col.is-before-main{
-      width:100%; box-sizing:border-box;
+      width:100%; height:auto; box-sizing:border-box;
     }
     .au-c-col.is-after-main{
-      padding-left:24px;
+      justify-content:flex-start; gap:10px;
+    }
+    .au-mfeatures-simple{
+      height:auto; gap:8px;
     }
     .au-mfeatures-simple .au-mfeat{
-      gap:10px;
+      gap:8px;
+    }
+    .au-mfeat.is-hero{
+      margin-top:8px;
     }
     .au-mfeatures-simple .au-mfeat-t{
-      font-size:14px;
+      font-size:13px; line-height:1.4;
+    }
+    .au-mcard-deadend .au-mqual{
+      font-size:12.5px; line-height:1.4;
     }
     .au-mfeat-hero-inner{
-      padding:12px 14px;
+      padding:10px 14px; min-height:auto;
     }
     .au-mfeat-hero-inner .au-mfeat-t{
-      font-size:14.5px;
+      font-size:13px; line-height:1.4;
     }
-    .au-c-col.is-after-extra,
-    .au-c-col.is-before-extra{display:none;}
+    .au-mcard-deadend{
+      padding:10px 14px; min-height:auto; margin-top:10px;
+    }
+    .au-mcard-top{ margin-bottom:6px; }
+    /* Hide context columns, slider, and stage-stats on mobile */
+    .au-c-col.is-after-context,
+    .au-c-col.is-before-context{display:none !important;}
+    .au-compare-handle-line{display:none !important;}
+    /* Always show default views, hide stats cards on mobile */
+    .au-stage-stats{display:none !important;}
+    .au-stage-list,
+    .au-stage-deadend{
+      opacity:1 !important; transform:none !important; pointer-events:auto !important;
+    }
   }
 
   /* HOW IT WORKS (NORMA STYLE 3-CARDS) */
@@ -5717,71 +5838,92 @@
       </div>
 
       <div class="au-compare-wrapper reveal" id="auCompareWrapper">
-        <div class="au-compare-container" id="auCompareContainer" style="--split: 50%;">
+        <div class="au-compare-container is-centered" id="auCompareContainer" style="--split: 50%;">
           
           <!-- AFTER LAYER (With Wozku) - Full Background -->
           <div class="au-compare-layer is-after">
             <div class="au-compare-grid">
-              <!-- Left Column of After Layer: Highlight Stats (revealed when dragged left) -->
-              <div class="au-c-col is-after-extra">
-                <div class="au-extra-stats-box">
-                  <span class="au-extra-kicker">Live Campaign Proof</span>
-                  <div class="au-extra-stat-row">
-                    <div class="au-ex-stat">
-                      <b class="au-ex-num">817,850</b>
-                      <span class="au-ex-lbl">potential attendee reach</span>
-                    </div>
-                    <div class="au-ex-stat">
-                      <b class="au-ex-num">18.3x</b>
-                      <span class="au-ex-lbl">earned media value return</span>
-                    </div>
-                    <div class="au-ex-stat">
-                      <b class="au-ex-num">319</b>
-                      <span class="au-ex-lbl">clicks from attendee networks</span>
-                    </div>
+              
+              <!-- Left Context Column (Revealed when slider moves left) -->
+              <div class="au-c-col is-after-context">
+                <div class="au-stage-wrap">
+                  <div class="au-context-card">
+                    <h3 class="au-context-title">Turn booth traffic into your highest ROI pipeline channel</h3>
+                    <p class="au-context-desc">Every visitor becomes an advocate sharing your brand directly with their qualified industry network.</p>
                   </div>
                 </div>
               </div>
 
-              <!-- Right Column of After Layer: Primary With Wozku Card -->
+              <!-- Right Main Column (With Wozku: Checklist transitioning to Stats Box) -->
               <div class="au-c-col is-after-main">
                 <div class="au-mcard-top">
                   <span class="au-mkicker is-with">With Wozku</span>
                 </div>
-                <ul class="au-mfeatures au-mfeatures-simple">
-                  <li class="au-mfeat">
-                    <span class="au-mfeat-check" aria-hidden="true">
-                      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
-                    </span>
-                    <span class="au-mfeat-t">400 badge scans into the CRM. Unchanged.</span>
-                  </li>
-                  <li class="au-mfeat">
-                    <span class="au-mfeat-check" aria-hidden="true">
-                      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
-                    </span>
-                    <span class="au-mfeat-t">200 of those visitors post about your product from their own profile</span>
-                  </li>
-                  <li class="au-mfeat">
-                    <span class="au-mfeat-check" aria-hidden="true">
-                      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
-                    </span>
-                    <span class="au-mfeat-t">300,000 potential reach across their networks, all in your industry</span>
-                  </li>
-                  <li class="au-mfeat">
-                    <span class="au-mfeat-check" aria-hidden="true">
-                      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
-                    </span>
-                    <span class="au-mfeat-t">600 to 800 clicks back to your page</span>
-                  </li>
-                  <li class="au-mfeat is-hero">
-                    <div class="au-mfeat-hero-inner">
-                      <span class="au-mfeat-check is-hero" aria-hidden="true">
-                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+
+                <!-- Dynamic Content Stage: Checklist OR Stats Box -->
+                <div class="au-stage-wrap">
+                  <!-- View A: Checklist (Default 50% state) -->
+                  <ul class="au-mfeatures au-mfeatures-simple au-stage-list">
+                    <li class="au-mfeat">
+                      <span class="au-mfeat-check" aria-hidden="true">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
                       </span>
-                      <span class="au-mfeat-t">200 to 250 net-new leads who were never at the event</span>
+                      <span class="au-mfeat-t">400 badge scans into the CRM. Unchanged.</span>
+                    </li>
+                    <li class="au-mfeat">
+                      <span class="au-mfeat-check" aria-hidden="true">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+                      </span>
+                      <span class="au-mfeat-t">200 of those visitors post about your product from their own profile</span>
+                    </li>
+                    <li class="au-mfeat">
+                      <span class="au-mfeat-check" aria-hidden="true">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+                      </span>
+                      <span class="au-mfeat-t">300,000 potential reach across their networks, all in your industry</span>
+                    </li>
+                    <li class="au-mfeat">
+                      <span class="au-mfeat-check" aria-hidden="true">
+                        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+                      </span>
+                      <span class="au-mfeat-t">600 to 800 clicks back to your page</span>
+                    </li>
+                    <li class="au-mfeat is-hero">
+                      <div class="au-mfeat-hero-inner">
+                        <span class="au-mfeat-check is-hero" aria-hidden="true">
+                          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+                        </span>
+                        <span class="au-mfeat-t">200 to 250 net-new leads who were never at the event</span>
+                      </div>
+                    </li>
+                  </ul>
+
+                  <!-- View B: Stats Box (Transitions in when slider is on extreme left) -->
+                  <div class="au-stage-stats au-wozku-stats-card">
+                    <div class="au-stats-card-head">
+                      <span class="au-stats-badge">Live Campaign Outcomes</span>
                     </div>
-                  </li>
-                </ul>
+                    <div class="au-stats-card-grid">
+                      <div class="au-sc-item">
+                        <b class="au-sc-num">817,850+</b>
+                        <span class="au-sc-lbl">Potential attendee network reach</span>
+                      </div>
+                      <div class="au-sc-item">
+                        <b class="au-sc-num">18.3x</b>
+                        <span class="au-sc-lbl">Earned media value return</span>
+                      </div>
+                      <div class="au-sc-item is-highlight">
+                        <b class="au-sc-num">200–250</b>
+                        <span class="au-sc-lbl">Net-new leads who never attended</span>
+                      </div>
+                      <div class="au-sc-item">
+                        <b class="au-sc-num">319</b>
+                        <span class="au-sc-lbl">Direct clicks from attendee posts</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -5789,7 +5931,8 @@
           <!-- BEFORE LAYER (Without Wozku) - Clipped Overlay -->
           <div class="au-compare-layer is-before">
             <div class="au-compare-grid">
-              <!-- Left Column of Before Layer: Primary Without Wozku Card -->
+              
+              <!-- Left Main Column (Without Wozku: Raffle transitioning to Dead-end stats) -->
               <div class="au-c-col is-before-main">
                 <div class="au-mcard-top">
                   <span class="au-mkicker is-without">Without Wozku</span>
@@ -5801,44 +5944,63 @@
                     </div>
                   </div>
                 </div>
-                <div class="au-mcard-deadend">
-                  <div class="au-deadend-icon" aria-hidden="true">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M7 10h6"/></svg>
+
+                <!-- Dynamic Content Stage: Raffle Deadend OR Reality Stats Box -->
+                <div class="au-stage-wrap">
+                  <!-- View A: Raffle dead-end (Default 50% state) -->
+                  <div class="au-mcard-deadend au-stage-deadend">
+                    <div class="au-deadend-icon" aria-hidden="true">
+                      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M7 10h6"/></svg>
+                    </div>
+                    <p class="au-mqual">Your sales team calls the raffle winner. The raffle winner doesn't remember entering.</p>
                   </div>
-                  <p class="au-mqual">Your sales team calls the raffle winner. The raffle winner doesn't remember entering.</p>
+
+                  <!-- View B: Reality Stats Box (Transitions in when slider is on extreme right) -->
+                  <div class="au-stage-stats au-old-stats-card">
+                    <div class="au-stats-card-head">
+                      <span class="au-stats-badge is-dead">The Old Reality</span>
+                    </div>
+                    <div class="au-stats-card-grid">
+                      <div class="au-sc-item is-dead">
+                        <b class="au-sc-num">0</b>
+                        <span class="au-sc-lbl">Organic social shares generated</span>
+                      </div>
+                      <div class="au-sc-item is-dead">
+                        <b class="au-sc-num">0</b>
+                        <span class="au-sc-lbl">Pipeline from attendee networks</span>
+                      </div>
+                      <div class="au-sc-item is-dead is-highlight">
+                        <b class="au-sc-num">100%</b>
+                        <span class="au-sc-lbl">Lost in a cold spreadsheet</span>
+                      </div>
+                      <div class="au-sc-item is-dead">
+                        <b class="au-sc-num">1</b>
+                        <span class="au-sc-lbl">Raffle winner who forgot entering</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Right Context Column (Revealed when slider moves right) -->
+              <div class="au-c-col is-before-context">
+                <div class="au-stage-wrap">
+                  <div class="au-context-card is-dead-context">
+                    <h3 class="au-context-title">Expensive badges that go nowhere</h3>
+                    <p class="au-context-desc">You scan badges for 3 days straight, export a CSV, and hand cold leads to SDRs who struggle to get responses.</p>
+                  </div>
                 </div>
               </div>
 
-              <!-- Right Column of Before Layer: Dead End Stats (revealed when dragged right) -->
-              <div class="au-c-col is-before-extra">
-                <div class="au-extra-stats-box is-dead-box">
-                  <span class="au-extra-kicker is-dead-kicker">The Old Reality</span>
-                  <div class="au-extra-stat-row">
-                    <div class="au-ex-stat is-dead">
-                      <b class="au-ex-num">0</b>
-                      <span class="au-ex-lbl">organic shares generated</span>
-                    </div>
-                    <div class="au-ex-stat is-dead">
-                      <b class="au-ex-num">0</b>
-                      <span class="au-ex-lbl">pipeline from attendee networks</span>
-                    </div>
-                    <div class="au-ex-stat is-dead">
-                      <b class="au-ex-num">100%</b>
-                      <span class="au-ex-lbl">lost in a cold spreadsheet</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
           <!-- DRAGGABLE DIVIDER HANDLE -->
           <div class="au-compare-handle-line" id="auCompareHandleLine">
-            <div class="au-compare-handle-btn" id="auCompareHandleBtn" aria-label="Drag slider to compare Before and After" title="Drag to compare">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="au-handle-svg" aria-hidden="true">
-                <path d="M7 12h10M7 12l3-3M7 12l3 3M17 12l-3-3M17 12l-3 3"/>
-              </svg>
-            </div>
+            <button type="button" class="au-compare-handle-btn" id="auCompareHandleBtn" aria-label="Drag slider to compare Before and After" title="Drag to compare">
+              <div id="auCompareHandleMount" class="slider-metal-mount"></div>
+            </button>
           </div>
 
         </div>
@@ -6540,7 +6702,7 @@
 
 <script type="module">
 import Lenis from 'lenis';
-import { initNavAiButton } from '/src/nav-ai.jsx';
+import { initNavAiButton, initSliderMetalHandle } from '/src/nav-ai.jsx';
 
 // 1. LENIS LUXURY SMOOTH SCROLLING
 const lenis = new Lenis({
@@ -6558,35 +6720,77 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
-// Initialize MetalFx Chromatic AI button in navbar
+// Initialize MetalFx Chromatic AI button in navbar & slider handle
 initNavAiButton();
+initSliderMetalHandle();
 
-// Initialize Before/After Comparison Split Slider
+// Initialize Before/After Comparison Split Slider with Snapping Engine
 (function initCompareSlider() {
   const container = document.getElementById('auCompareContainer');
   const handleBtn = document.getElementById('auCompareHandleBtn');
   if (!container || !handleBtn) return;
 
   let isDragging = false;
+  let currentPct = 50;
+  let animId = null;
 
-  const updateSplit = (clientX) => {
+    const setSplit = (pct) => {
+      currentPct = Math.max(0, Math.min(100, pct));
+      container.style.setProperty('--split', `${currentPct}%`);
+
+      if (currentPct <= 40) {
+        container.classList.add('is-revealing-with');
+        container.classList.remove('is-revealing-without', 'is-centered');
+      } else if (currentPct >= 60) {
+        container.classList.add('is-revealing-without');
+        container.classList.remove('is-revealing-with', 'is-centered');
+      } else {
+        container.classList.add('is-centered');
+        container.classList.remove('is-revealing-with', 'is-revealing-without');
+      }
+  };
+
+  const animateTo = (targetPct, duration = 380) => {
+    if (animId) cancelAnimationFrame(animId);
+    const startPct = currentPct;
+    const startTime = performance.now();
+
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+    const step = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      const val = startPct + (targetPct - startPct) * easeOut(progress);
+      setSplit(val);
+
+      if (progress < 1) {
+        animId = requestAnimationFrame(step);
+      } else {
+        animId = null;
+        setSplit(targetPct);
+      }
+    };
+    animId = requestAnimationFrame(step);
+  };
+
+  const updateFromClientX = (clientX) => {
     const rect = container.getBoundingClientRect();
     const x = clientX - rect.left;
-    let pct = (x / rect.width) * 100;
-    pct = Math.max(6, Math.min(94, pct));
-    container.style.setProperty('--split', `${pct}%`);
+    const pct = (x / rect.width) * 100;
+    setSplit(pct);
   };
 
   const onPointerDown = (e) => {
+    if (animId) cancelAnimationFrame(animId);
     isDragging = true;
     container.classList.add('is-dragging');
     handleBtn.setPointerCapture(e.pointerId);
-    updateSplit(e.clientX);
+    updateFromClientX(e.clientX);
   };
 
   const onPointerMove = (e) => {
     if (!isDragging) return;
-    updateSplit(e.clientX);
+    updateFromClientX(e.clientX);
   };
 
   const onPointerUp = (e) => {
@@ -6594,6 +6798,18 @@ initNavAiButton();
     isDragging = false;
     container.classList.remove('is-dragging');
     try { handleBtn.releasePointerCapture(e.pointerId); } catch (_) {}
+
+    // Snapping physics:
+    // If dragged < 40%, snap to 0% (extreme left - reveal With Wozku & its stats)
+    // If dragged > 60%, snap to 100% (extreme right - reveal Without Wozku & its reality stats)
+    // If within 40% - 60%, snap back to 50% (center)
+    if (currentPct < 40) {
+      animateTo(0, 380);
+    } else if (currentPct > 60) {
+      animateTo(100, 380);
+    } else {
+      animateTo(50, 320);
+    }
   };
 
   handleBtn.addEventListener('pointerdown', onPointerDown);
@@ -6601,7 +6817,7 @@ initNavAiButton();
   handleBtn.addEventListener('pointerup', onPointerUp);
   handleBtn.addEventListener('pointercancel', onPointerUp);
 
-  // Clicking anywhere along container track jumps and starts drag
+  // Clicking anywhere along container track jumps/snaps
   container.addEventListener('pointerdown', (e) => {
     if (e.target !== handleBtn && !handleBtn.contains(e.target)) {
       onPointerDown(e);
@@ -6611,17 +6827,20 @@ initNavAiButton();
   // Keyboard arrow keys accessibility
   handleBtn.setAttribute('tabindex', '0');
   handleBtn.addEventListener('keydown', (e) => {
-    let current = parseFloat(getComputedStyle(container).getPropertyValue('--split')) || 50;
     if (e.key === 'ArrowLeft') {
-      current = Math.max(6, current - 6);
-      container.style.setProperty('--split', `${current}%`);
+      animateTo(currentPct <= 40 ? 0 : (currentPct <= 60 ? 0 : 50));
       e.preventDefault();
     } else if (e.key === 'ArrowRight') {
-      current = Math.min(94, current + 6);
-      container.style.setProperty('--split', `${current}%`);
+      animateTo(currentPct >= 60 ? 100 : (currentPct >= 40 ? 100 : 50));
+      e.preventDefault();
+    } else if (e.key === 'Home' || e.key === 'Escape') {
+      animateTo(50);
       e.preventDefault();
     }
   });
+
+  // Initial set to center
+  setSplit(50);
 })();
 
 // Smooth anchor scrolling

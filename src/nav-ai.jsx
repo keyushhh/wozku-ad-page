@@ -49,3 +49,24 @@ export function initNavAiButton() {
   const root = createRoot(container);
   root.render(<NavAiStarButton />);
 }
+
+export function initSliderMetalHandle() {
+  const container = document.getElementById('auCompareHandleMount');
+  if (!container) return;
+
+  function SliderMetalCircle() {
+    return (
+      <MetalFx preset="chromatic" variant="circle" strength={1} theme="light">
+        <div className="slider-metal-circle" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="slider-handle-svg">
+            <path d="M8 12h8M8 12l3-3M8 12l3 3M16 12l-3-3M16 12l-3 3" />
+          </svg>
+        </div>
+      </MetalFx>
+    );
+  }
+
+  const root = createRoot(container);
+  root.render(<SliderMetalCircle />);
+}
+
