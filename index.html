@@ -3898,9 +3898,10 @@
   @media (max-width:700px){
     .ph-wrap{
       display:block;
-      /* Breaks out of the 24px page gutter to 10px, so the device - and therefore
-         the video inside it - is as large as the screen allows. */
-      margin:26px -14px 0;
+      /* Used to break out of the page gutter to 10px to make the device as
+         large as possible, but that meant it sat closer to the screen edge
+         than everything else in the hero. Respects the standard margin now. */
+      margin:26px 0 0;
       width:auto;
       /* the device is cropped, so the frame's own bottom edge is the cut line */
       filter:drop-shadow(0 26px 44px rgba(4, 26, 20, 0.30));
