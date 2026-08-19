@@ -1428,7 +1428,7 @@
   .au-pb-link:hover svg{transform:translateX(3px);}
 
   /* ---- right: the shingled fact stack ---- */
-  .au-pb-stack{position:relative; height:196px;}
+  .au-pb-stack{position:relative; height:262px;}
   .au-pb-card{
     position:absolute; display:flex; align-items:center; gap:13px;
     padding:13px 14px; border-radius:15px;
@@ -1443,8 +1443,9 @@
   .au-pb-card{left:50%; transform:translateX(-50%);}
   .au-pb-card.is-1{top:0;    width:85%; opacity:0.72;}
   .au-pb-card.is-2{top:56px; width:93%; opacity:0.88;}
-  .au-pb-card.is-3{
-    top:112px; width:100%;
+  .au-pb-card.is-3{top:112px; width:97%; opacity:0.94;}
+  .au-pb-card.is-4{
+    top:168px; width:100%;
     background:
       linear-gradient(160deg, rgba(255,255,255,0.13) 0%, rgba(255,255,255,0.05) 100%),
       rgba(5, 30, 23, 0.96);
@@ -4009,6 +4010,112 @@
     justify-content:center;
     margin-top:34px;
   }
+
+  /* ---- content-v3: hero funnel chain ---- */
+  .au-hero-chain{
+    display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:center;
+    gap:10px; margin:28px 0 10px; max-width:920px;
+  }
+  .au-chain-node{
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    min-width:110px; max-width:150px;
+  }
+  .au-chain-node b{
+    font-family:var(--font-display); font-size:22px; font-weight:700;
+    letter-spacing:-0.02em; color:var(--ink); line-height:1.1;
+  }
+  .au-chain-node.is-final b{color:var(--brand-emerald-deep);}
+  .au-chain-node span{font-size:13px; font-weight:600; color:var(--ink); margin-top:2px;}
+  .au-chain-node small{font-size:11px; line-height:1.35; color:var(--ink-dim); margin-top:3px;}
+  .au-chain-arrow{width:16px; height:16px; flex:none; color:var(--ink-dim); margin-top:8px;}
+  .au-hero-chain-note{font-size:14px; font-weight:600; color:var(--ink-dim); text-align:center; margin:0 0 22px;}
+  .au-hero-cta{display:inline-flex; align-items:center; gap:9px;}
+  @media (max-width:760px){
+    .au-hero-chain{gap:8px 6px;}
+    .au-chain-node{min-width:84px;}
+    .au-chain-arrow{display:none;}
+  }
+
+  /* ---- content-v3: how-it-works kicker + closing body line ---- */
+  .au-how-kicker{
+    max-width:640px; margin:14px auto 0; font-size:15px; line-height:1.6; color:var(--ink-dim);
+  }
+  .au-how-body{
+    max-width:640px; margin:36px auto 0; text-align:center; font-size:15px; line-height:1.6; color:var(--ink-dim);
+  }
+
+  /* ---- content-v3: before/after kicker line above H2 ---- */
+  .au-before-after-kicker{
+    max-width:640px; margin:0 auto 14px; font-size:15px; line-height:1.6; color:var(--ink-dim);
+  }
+  .au-mfeatures-simple .au-mfeat-t{font-size:14px; font-weight:500; color:rgba(255,255,255,0.82); white-space:normal;}
+  .au-mcard.is-old .au-mfeatures-simple .au-mfeat-t{color:rgba(255,255,255,0.72);}
+
+  /* ---- content-v3: "they play" attendee-proof story cards ---- */
+  .au-story-grid{display:grid; grid-template-columns:1fr; gap:20px; margin-bottom:28px;}
+  @media (min-width:760px){ .au-story-grid{grid-template-columns:1fr 1fr;} }
+  .au-story-card{
+    padding:26px 24px; border-radius:var(--radius-lg); background:var(--bg-subtle);
+    border:1px solid var(--line);
+  }
+  .au-story-kicker{
+    font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--brand-emerald-deep); margin-bottom:8px;
+  }
+  .au-story-co{font-family:var(--font-display); font-size:20px; font-weight:700; margin-bottom:10px;}
+  .au-story-txt{font-size:15px; line-height:1.6; color:var(--ink-dim);}
+  .au-story-stat-block{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:12px 28px;
+    margin:0 0 24px; padding:20px 16px; border-radius:var(--radius-md);
+    background:var(--dark-pill); color:#FFFFFF;
+    font-family:var(--font-display); font-size:15px; font-weight:700; text-align:center;
+  }
+  .au-story-who{max-width:680px; margin:0 auto 24px; text-align:center; font-size:15px; line-height:1.6; color:var(--ink-dim);}
+  .au-story-body{max-width:680px; margin:0 auto; display:flex; flex-direction:column; gap:14px;}
+  .au-story-body p{font-size:15px; line-height:1.65; color:var(--ink-dim); margin:0;}
+
+  /* ---- content-v3: outperform / lead-source sections ---- */
+  .au-outperform .au-head, .au-leadsource .au-head{margin-bottom:30px;}
+  .au-pb-quote{
+    max-width:720px; margin:0 auto 26px; padding:0 12px; text-align:center;
+    font-family:var(--font-display); font-size:20px; font-weight:600; line-height:1.4;
+    color:var(--ink); border-left:none;
+  }
+  .au-pb-quote.is-large{font-size:clamp(24px, 3.2vw, 32px); margin-bottom:32px;}
+  .au-callout{
+    max-width:640px; margin:26px auto 0; text-align:center; font-size:15px; font-weight:600;
+    color:var(--brand-emerald-deep);
+  }
+
+  /* ---- content-v3: FAQ accordion ---- */
+  .au-faq-list{max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:10px;}
+  .au-faq-item{
+    border:1px solid var(--line); border-radius:var(--radius-sm); padding:16px 20px;
+    background:var(--bg-card);
+  }
+  .au-faq-item summary{
+    cursor:pointer; font-family:var(--font-display); font-size:16px; font-weight:600;
+    color:var(--ink); list-style:none; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .au-faq-item summary::-webkit-details-marker{display:none;}
+  .au-faq-item summary::after{
+    content:"+"; font-size:20px; font-weight:400; color:var(--ink-dim); flex:none; transition:transform .2s ease;
+  }
+  .au-faq-item[open] summary::after{transform:rotate(45deg);}
+  .au-faq-a{margin-top:10px;}
+  .au-faq-a p{font-size:14.5px; line-height:1.6; color:var(--ink-dim); margin:0;}
+
+  /* ---- content-v3: commercials ---- */
+  .au-commercials .au-story-body{text-align:center;}
+
+  /* ---- content-v3: Red Hat CTA form + simulation form ---- */
+  .au-form-pb{margin-top:26px; max-width:420px;}
+  .au-form-lead{font-size:15px; font-weight:600; color:#FFFFFF; margin-bottom:10px;}
+  .au-form-sim{margin-top:22px; max-width:520px; margin-left:auto; margin-right:auto; text-align:center;}
+  .au-sim-grid{display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:12px;}
+  @media (min-width:600px){ .au-sim-grid{grid-template-columns:1fr 1fr;} }
+  .au-sim-submit{width:100%; justify-content:center;}
+  .au-cta-closing{margin-top:10px;}
 </style>
 </head>
 <body>
@@ -4106,28 +4213,51 @@
     <div class="hero-content-wrap">
       <!-- One typographic lockup, not two stacked chips. The glass pill and its -->
       <div class="au-hero-lockup">
-        <div class="au-eyebrow" id="auHeroEyebrow">For B2B field marketers &amp; event managers</div>
+        <div class="au-eyebrow" id="auHeroEyebrow">B2B Field Marketers Running Own &amp; Third Party Events</div>
       </div>
 
-      <h1 class="hero-editorial-title" id="auHeroTitle">Get more leads from the events <br class="hero-br">you&rsquo;re <em>already</em> paying for.</h1>
-      <p class="hero-editorial-sub" id="auHeroSub">At your booth, attendees scan a QR code and tap once. A ready-made post goes out to their LinkedIn, and they earn points toward swag.</p>
+      <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events you are already running.</h1>
+      <p class="hero-editorial-sub" id="auHeroSub">You already gamify the booth. Spin the wheel - scan the badge - take the swag. It ends with a set of data in a spreadsheet.</p>
+      <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn. One scan, one tap, and a post you already wrote goes out on LinkedIn. Your Product messaging reaches their network from their profile.</p>
 
-      <!-- Single-field playbook capture (primary conversion on the page) -->
-      <form class="au-form au-form-hero" id="auHeroForm" novalidate>
-        <label for="auHeroEmail" class="sr-only">Work email</label>
-        <div class="au-form-bar">
-          <span class="au-form-ico" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="15" height="11" rx="2"/><path d="m3 6 7 5 7-5"/></svg>
-          </span>
-          <input type="email" id="auHeroEmail" name="email" class="au-form-input" placeholder="Enter work email" required autocomplete="email" spellcheck="false">
-          <button type="submit" class="au-form-btn" id="auHeroSubmit">
-            <span>Send me the playbook</span>
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>
-          </button>
+      <!-- Funnel chain: what 400 paid-for booth visitors turn into. Numbers -->
+      <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
+        <div class="au-chain-node">
+          <b>400</b>
+          <span>booth visitors</span>
+          <small>the ones you already paid to meet</small>
         </div>
-        <div class="au-form-err" id="auHeroErr" role="alert" aria-live="polite"></div>
-        <div class="au-form-note" id="auHeroPill"><strong>Free playbook</strong> &middot; 4 chapters </div>
-      </form>
+        <svg class="au-chain-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        <div class="au-chain-node">
+          <b>200</b>
+          <span>posts to LinkedIn</span>
+          <small>one scan, one tap, no app</small>
+        </div>
+        <svg class="au-chain-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        <div class="au-chain-node">
+          <b>240,000</b>
+          <span>potential reach</span>
+          <small>1,200 per sharer, observed across multiple campaigns</small>
+        </div>
+        <svg class="au-chain-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        <div class="au-chain-node">
+          <b>500</b>
+          <span>clicks to your page</span>
+          <small>observed across multiple campaigns</small>
+        </div>
+        <svg class="au-chain-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        <div class="au-chain-node is-final">
+          <b>200-250</b>
+          <span>net-new leads</span>
+          <small>people who were never at your event</small>
+        </div>
+      </div>
+      <p class="au-hero-chain-note">Same booth. Same swag budget. Zero ad spend.</p>
+
+      <a href="#auProofBanner" class="btn btn-primary btn-lg au-hero-cta">
+        See what it did at a real event
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>
+      </a>
 
       <!-- HERO VIDEO CAROUSEL. Five frames in one row, centred on the middle one.
            Three are visible at rest and the outer two are clipped by the
@@ -4340,6 +4470,45 @@
   </section>
 
   <!-- THE REALITY CHECK (agitation) -->
+  <!-- BEFORE / AFTER (repurposed from the old "viral calculus" math section: -->
+  <!-- same old-way/new-way card pattern, now carrying the doc's before/after -->
+  <!-- argument instead of the ROI-ceiling framing it used to make.) -->
+  <section class="au-section au-math" id="auMath">
+    <div class="wrap">
+      <div class="au-head reveal">
+        <p class="au-before-after-kicker">You built a claw machine, a photo booth and a prize wheel this year. None of them followed anyone home.</p>
+        <h2 class="au-h2">Same 400 people. Two very different outcomes.</h2>
+      </div>
+
+      <div class="au-math-grid reveal">
+        <!-- Before -->
+        <article class="au-mcard is-old">
+          <span class="au-mkicker">Before</span>
+          <ul class="au-mfeatures au-mfeatures-simple">
+            <li class="au-mfeat"><span class="au-mfeat-t">400 badge scans</span></li>
+          </ul>
+          <p class="au-mqual">Your sales team calls the raffle winner. The raffle winner doesn't remember entering.</p>
+        </article>
+
+        <!-- After -->
+        <article class="au-mcard is-new">
+          <span class="au-mkicker">After</span>
+          <ul class="au-mfeatures au-mfeatures-simple">
+            <li class="au-mfeat"><span class="au-mfeat-t">400 badge scans into the CRM. Unchanged.</span></li>
+            <li class="au-mfeat"><span class="au-mfeat-t">200 of those visitors post about your product from their own profile</span></li>
+            <li class="au-mfeat"><span class="au-mfeat-t">300,000 potential reach across their networks, all in your industry</span></li>
+            <li class="au-mfeat"><span class="au-mfeat-t">600 to 800 clicks back to your page</span></li>
+            <li class="au-mfeat"><span class="au-mfeat-t">200 to 250 net-new leads who were never at the event</span></li>
+          </ul>
+          <a class="au-mpill is-live" href="#auRoi">
+            Run your own numbers
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <section class="au-section au-norma-how" id="auHow">
     <!-- Ambient Luminous Green Beam Flare (backgrounds.supply style) -->
     <div class="au-how-beam-glow" aria-hidden="true">
@@ -4351,18 +4520,19 @@
     <div class="wrap">
       <div class="au-head reveal">
         <span class="au-tag">Real-world execution</span>
-        <h2 class="au-h2">How it works.</h2>
-        <p class="au-sub">Three steps to turn the people already at your event into your best source of leads.</p>
+        <h2 class="au-h2">One tap at the booth. That is the entire ask.</h2>
+        <p class="au-sub">Under 15 minutes to set up. Three steps to run.</p>
+        <p class="au-how-kicker">Whatever your next event is, you are not too late to put this on it. Building the contest takes one person under 15 minutes. No code, no IT ticket, no procurement cycle, nothing new for your team to learn before the show.</p>
       </div>
 
       <div class="au-norma-grid reveal">
-        
+
         <!-- Card 1: Scan & Activate -->
         <div class="au-norma-card">
           <div class="au-norma-card-head">
             <span class="au-norma-num">1</span>
             <h3 class="au-norma-title">They scan</h3>
-            <p class="au-norma-desc">Attendees scan a QR code at your booth. No app to download, it opens straight in the browser.</p>
+            <p class="au-norma-desc">A QR code on your booth screen. It opens in the browser. Nothing to download, no account to create.</p>
           </div>
           <div class="au-norma-card-visual">
             <div class="au-norma-ui-card au-norma-qr-card">
@@ -4402,7 +4572,7 @@
           <div class="au-norma-card-head">
             <span class="au-norma-num">2</span>
             <h3 class="au-norma-title">They tap once</h3>
-            <p class="au-norma-desc">They see a post you already wrote and branded, and tap once to send it to their LinkedIn.</p>
+            <p class="au-norma-desc">The post is already written and branded by you with specific CTA links that you want to push. One tap sends it to their LinkedIn.</p>
           </div>
           <div class="au-norma-card-visual">
             <div class="au-norma-ui-card">
@@ -4430,8 +4600,8 @@
         <div class="au-norma-card">
           <div class="au-norma-card-head">
             <span class="au-norma-num">3</span>
-            <h3 class="au-norma-title">They win something</h3>
-            <p class="au-norma-desc">Points land instantly. They claim swag, and their name goes up on the live mainstage leaderboard.</p>
+            <h3 class="au-norma-title">They play for something</h3>
+            <p class="au-norma-desc">Points land instantly. Their name goes up on the leaderboard. Top scorers walk away with the prize.</p>
           </div>
           <div class="au-norma-card-visual">
             <div class="au-norma-mockup-combo">
@@ -4464,164 +4634,58 @@
         </div>
 
       </div><!-- /.au-norma-grid -->
+      <p class="au-how-body">Participation stays optional throughout. Nobody is enrolled, nobody is chased, and people who skip it are never tracked.</p>
     </div><!-- /.wrap -->
   </section>
 
   <section class="au-section au-problem" id="auProblem">
     <div class="wrap">
       <div class="au-head reveal">
-        <span class="au-tag au-tag-warn">The reality check</span>
-        <h2 class="au-h2">The traditional B2B event playbook is broken.</h2>
-        <p class="au-sub">You pay for the room, the booth and the flights. Then the reach stops the moment everyone flies home.</p>
+        <h2 class="au-h2">They play.</h2>
+        <p class="au-sub">Two example events where attendees went looking for the QR codes instead of walking past them.</p>
       </div>
 
-      <!-- Bento, modelled on backgrounds.supply's usecases grid: a 5-column -->
-      <div class="au-prob-grid">
+      <div class="au-story-grid">
 
-        <!-- 01 - wide. Spend marquee: two rows drifting opposite ways, running -->
-        <article class="au-prob-card au-prob-tall">
-          <div class="au-prob-body">
-            <div class="au-prob-header">
-              <span class="au-prob-num">01 / BOTTLENECK</span>
-              <div class="au-prob-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
-                  <line x1="9" y1="13" x2="15" y2="13"/>
-                </svg>
-              </div>
-            </div>
-            <h3 class="au-prob-title">Ignored promo kits</h3>
-            <p class="au-prob-txt">You build the Drive folder and the PDF guide. Almost nobody opens it. Downloading files and copy-pasting is too much work.</p>
-          </div>
-
-          <div class="au-prob-well au-well-tall" aria-hidden="true">
-            <div class="au-well-cap">Shared by speakers &amp; reps</div>
-            <div class="au-vq" data-vq-speed="14">
-              <div class="au-vq-track">
-                <div class="au-file"><img class="au-file-ico" src="/file-icons/pdf-icon.svg" alt="" width="16" height="16"><span class="au-file-n">speaker-kit-v4.pdf</span></div>
-                <div class="au-file"><img class="au-file-ico" src="/file-icons/zip.svg" alt="" width="16" height="16"><span class="au-file-n">banners-1200x628.zip</span></div>
-                <div class="au-file"><img class="au-file-ico" src="/file-icons/docx-icon.svg" alt="" width="16" height="16"><span class="au-file-n">suggested-posts.docx</span></div>
-                <div class="au-file"><img class="au-file-ico" src="/file-icons/zip.svg" alt="" width="16" height="16"><span class="au-file-n">logo-pack-final.zip</span></div>
-                </div>
-            </div>
-            <span class="au-well-fade is-vertical"></span>
-          </div>
-
-          <div class="au-prob-meta-line">
-            <span class="au-prob-dot"></span>
-            <span>Most promo kits are never opened</span>
-          </div>
+        <article class="au-story-card">
+          <div class="au-story-kicker">Treasure Hunt, Singapore</div>
+          <h3 class="au-story-co">Elastic</h3>
+          <p class="au-story-txt">Elastic hid QR codes across the venue, each one tied to the booth or demo it sat beside. Attendees went hunting for them, then started telling each other where to find them. Sponsor booths that normally get walked past had people searching for them.</p>
         </article>
 
-        <!-- 02 - tall. The promo kit as an endless folder: rows scroll slowly and -->
-        <article class="au-prob-card au-prob-wide">
-          <div class="au-prob-body">
-            <div class="au-prob-header">
-              <span class="au-prob-num">02 / BOTTLENECK</span>
-              <div class="au-prob-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="3"/>
-                  <path d="m9 9 6 6m0-6-6 6"/>
-                </svg>
-              </div>
-            </div>
-            <h3 class="au-prob-title">The $50k ghost town</h3>
-            <p class="au-prob-txt">A booth buys you one room for three days. The doors close, the buzz is gone within a day, and reaching those same people starts over. This time you pay per click.</p>
-          </div>
-
-          <div class="au-prob-well" aria-hidden="true">
-            <div class="au-well-cap">What the budget bought</div>
-            <div class="au-mq" data-mq-speed="26">
-              <div class="au-mq-track">
-                <span class="au-chip">Booth build</span>
-                <span class="au-chip">Flights</span>
-                <span class="au-chip">Hotels</span>
-                <span class="au-chip">Regional dinner</span>
-                <span class="au-chip">AV rental</span>
-              </div>
-            </div>
-            <div class="au-well-cap">What reaching them again costs</div>
-            <div class="au-mq" data-mq-speed="-18">
-              <div class="au-mq-track">
-                <span class="au-chip is-paid">Paid clicks</span>
-                <span class="au-chip is-paid">Retargeting</span>
-                <span class="au-chip is-paid">Sponsored posts</span>
-                <span class="au-chip is-paid">Lead-gen forms</span>
-              </div>
-            </div>
-            <span class="au-well-fade"></span>
-          </div>
-
-          <div class="au-prob-meta-line">
-            <span class="au-prob-dot"></span>
-            <span>Zero post-event secondary reach</span>
-          </div>
+        <article class="au-story-card">
+          <div class="au-story-kicker">Mission Game, Gartner IT Symposium</div>
+          <h3 class="au-story-co">Sify</h3>
+          <p class="au-story-txt">Attendees were handed a card: scan five QR codes across the venue, share as you go, score 100 points, top three win. They walked the floor completing it, checking the leaderboard at the booth to see if they were still in the top three.</p>
         </article>
 
-        <!-- 03 - wide. Buzz spikes on the day and decays to nothing; the loop is -->
+      </div>
 
-</div>
+      <div class="au-story-stat-block">
+        <span>98 shares</span>
+        <span>141,034 potential reach</span>
+        <span>1,697 likes</span>
+        <span>18.3x return on earned media value</span>
+      </div>
+
+      <p class="au-story-who"><strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.</p>
+
+      <div class="au-story-body">
+        <p>It is worth sitting with that for a second.</p>
+        <p>Think about what it normally takes to get a CISO to say your product name in public. Not a reply to an email. Not a meeting. A post on their own profile, under their own name, where their board and their peers can see it.</p>
+        <p>There is no ad unit you can buy that produces that. There is no sequence that produces it. It is usually the output of a customer relationship measured in years, and you cannot manufacture it on a normal Tuesday for any amount of money.</p>
+        <p>Here it happened in an afternoon, at a booth, because it was gamified.</p>
+        <p>And the reach that follows is not generic reach. A CIO's network is mostly other CIOs. Those 141,034 potential impressions landed in front of the exact titles Sify sells to, which is the audience their paid campaigns spend the most to reach and never get an endorsement from.</p>
+      </div>
     </div>
   </section>
 
   <!-- PROOF SPOTLIGHT (Multi-Testimonial Sticky Pad) -->
   
 
-  <!-- THE VIRAL CALCULUS (the math) -->
-  <section class="au-section au-math" id="auMath">
-    <div class="wrap">
-      <div class="au-head reveal">
-        <span class="au-tag">The math</span>
-        <h2 class="au-h2">The math is simple.<br>Break past the invisible ceiling of your event ROI.</h2>
-        <p class="au-sub">Event marketing stops at the badge scan. Wozku keeps going, turning each scan into reach you did not pay for.</p>
-      </div>
-
-      <div class="au-math-grid reveal">
-        <!-- The old way -->
-        <article class="au-mcard is-old">
-          <span class="au-mkicker">A typical booth, today</span>
-          <p class="au-mprice">
-            <b data-mcount="50">50</b>
-            <span class="au-mprice-unit"><b>leads</b>is your ceiling</span>
-          </p>
-          <p class="au-mqual">You sponsor an event. 50 people scan their badges at your booth. The momentum stops there.</p>
-          <div class="au-mspec">
-            <span class="au-mspec-label">What the booth returns</span>
-            <ul class="au-mfeatures">
-              <li class="au-mfeat"><span class="au-mfeat-ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></svg></span><span class="au-mfeat-t">Badge scans captured</span><span class="au-mfeat-v">50</span></li>
-              <li class="au-mfeat"><span class="au-mfeat-ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></svg></span><span class="au-mfeat-t">Network distribution</span><span class="au-mfeat-v">0 views</span></li>
-              <li class="au-mfeat"><span class="au-mfeat-ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></svg></span><span class="au-mfeat-t">Secondary inbound traffic</span><span class="au-mfeat-v">0 clicks</span></li>
-              <li class="au-mfeat"><span class="au-mfeat-ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m4.5 4.5 7 7M11.5 4.5l-7 7"/></svg></span><span class="au-mfeat-t">Post-event advocacy</span><span class="au-mfeat-v">none</span></li>
-            </ul>
-          </div>
-        </article>
-
-        <!-- The Wozku way -->
-        <article class="au-mcard is-new">
-          <span class="au-mkicker">The same booth, with Wozku</span>
-          <p class="au-mprice">
-            <b data-mcount="125">125</b>
-            <span class="au-mprice-unit"><b>leads</b>same booth, same spend</span>
-          </p>
-          <p class="au-mqual">Those 50 people scan a Wozku QR code to win a prize, triggering a 1-click LinkedIn post with a CTA to your gated content.</p>
-          <a class="au-mpill is-live" href="#auRoi">
-            Run your own numbers
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-          </a>
-          <div class="au-mspec">
-            <span class="au-mspec-label">What the same booth returns</span>
-            <ul class="au-mfeatures">
-              <li class="au-mfeat"><span class="au-mfeat-ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 8.5 3.6 3.6L13 4.8"/></svg></span><span class="au-mfeat-t">Advocate shares</span><span class="au-mfeat-v">50</span></li>
-              <li class="au-mfeat"><span class="au-mfeat-ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 8.5 3.6 3.6L13 4.8"/></svg></span><span class="au-mfeat-t">Potential reach</span><span class="au-mfeat-v">125,000</span></li>
-              <li class="au-mfeat"><span class="au-mfeat-ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 8.5 3.6 3.6L13 4.8"/></svg></span><span class="au-mfeat-t">Target account clicks</span><span class="au-mfeat-v">250</span></li>
-              <li class="au-mfeat"><span class="au-mfeat-ico"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 8.5 3.6 3.6L13 4.8"/></svg></span><span class="au-mfeat-t">Net-new form fills</span><span class="au-mfeat-v">75</span></li>
-            </ul>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
+  <!-- BEFORE / AFTER (repurposed from the old "viral calculus" math section: -->
+  <!-- same old-way/new-way card pattern, now carrying the doc's before/after -->
+  <!-- argument instead of the ROI-ceiling framing it used to make.) -->
   <!-- PROOF INTERSTITIAL 2 (Red Hat) -->
   <section class="au-section au-interstitial" id="auProofBanner">
     <div class="wrap">
@@ -4632,11 +4696,11 @@
           <div class="au-pb-left">
             <div class="au-pb-brand">
               <img src="/redhat-logo.svg" alt="Red Hat" width="613" height="145">
-              <span class="au-pb-meta">Verified result<br>Summit &amp; Global Open Source Days</span>
+              <span class="au-pb-meta"><em>Ansible Automates, livestream registration drive. Agency: Shobiz.</em></span>
             </div>
 
-            <h3 class="au-pb-h"><em>987</em> net-new registrations,<br>$0 paid media.</h3>
-            <p class="au-pb-p">Red Hat put leaderboards on the event floor and let attendees do the sharing. Nobody had to chase a single rep.</p>
+            <h3 class="au-pb-h">And the leads are real.</h3>
+            <p class="au-pb-p">Red Hat wanted delegates at a full-day conference to pull their own networks into the livestream. No ad budget behind it. A Social Champ contest and a live leaderboard did the rest.</p>
 
             <a href="#auProof" class="au-pb-link">
               View all case studies
@@ -4646,39 +4710,83 @@
 
           <div class="au-pb-stack">
             <div class="au-pb-card is-1">
-              <span class="au-pb-ring" style="--p:0"><b>$0</b></span>
-              <span class="au-pb-ctext"><b>Paid media spend</b></span>
-              <span class="au-pb-tag">Zero</span>
+              <span class="au-pb-ring" style="--p:0"><b>499</b></span>
+              <span class="au-pb-ctext"><b>LinkedIn shares</b></span>
             </div>
             <div class="au-pb-card is-2">
-              <span class="au-pb-ring" style="--p:100"><b>100</b></span>
-              <span class="au-pb-ctext"><b>Reach earned through peers</b></span>
-              <span class="au-pb-tag">Organic</span>
+              <span class="au-pb-ring" style="--p:100"><b>556,756</b></span>
+              <span class="au-pb-ctext"><b>potential reach</b></span>
             </div>
             <div class="au-pb-card is-3">
+              <span class="au-pb-ring" style="--p:100"><b>1,160</b></span>
+              <span class="au-pb-ctext"><b>clicks from delegates' networks</b></span>
+            </div>
+            <div class="au-pb-card is-4">
               <span class="au-pb-ring" style="--p:100"><b>987</b></span>
-              <span class="au-pb-ctext">
-                <b>Net-new registrations</b>
-                <span>Generated organically from live event attendees.</span>
-              </span>
-              <span class="au-pb-tag">Verified</span>
+              <span class="au-pb-ctext"><b>net-new registrations to the livestream</b></span>
             </div>
           </div>
 
         </article>
+
+        <blockquote class="au-pb-quote reveal">1,160 clicks from delegates' extended LinkedIn networks turned into 987 net-new livestream registrations. Zero dollars of paid media.</blockquote>
+
+        <form class="au-form au-form-pb" id="auRedhatForm" novalidate>
+          <p class="au-form-lead">Want the full Red Hat breakdown, plus the playbook behind it?</p>
+          <label for="auRedhatEmail" class="sr-only">Work email</label>
+          <div class="au-form-bar">
+            <span class="au-form-ico" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="15" height="11" rx="2"/><path d="m3 6 7 5 7-5"/></svg>
+            </span>
+            <input type="email" id="auRedhatEmail" name="email" class="au-form-input" placeholder="Work email" required autocomplete="email" spellcheck="false">
+            <button type="submit" class="au-form-btn" id="auRedhatSubmit">
+              <span>Send it to me</span>
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>
+            </button>
+          </div>
+          <div class="au-form-err" id="auRedhatErr" role="alert" aria-live="polite"></div>
+          <div class="au-form-note">The complete campaign teardown and the playbook. No call required.</div>
+        </form>
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS (NORMA STYLE 3-CARDS) -->
-  
+  <!-- WHY THE ATTENDEE POST OUTPERFORMS YOURS -->
+  <section class="au-section au-outperform" id="auOutperform">
+    <div class="wrap">
+      <div class="au-head reveal">
+        <h2 class="au-h2">The same message, from a person instead of a page.</h2>
+      </div>
+      <blockquote class="au-pb-quote is-large reveal">Your CEO's keynote deserves better than 40 likes from people who already report to her.</blockquote>
+      <div class="au-story-body reveal">
+        <p>Your company page reaches the people who already follow you. Most of them are colleagues, existing customers and competitors. And perhaps, you have already noticed, it is not working anymore.</p>
+        <p>An attendee's post reaches a network of peers who share their job title, and it arrives from someone they already trust. The same message travels 3 to 10 times further from a person than from a brand page.</p>
+      </div>
+      <p class="au-callout reveal">This is why the promo kit never worked. It was the right content, sent through the wrong account.</p>
+    </div>
+  </section>
+
+  <!-- WHERE THE LEADS COME FROM -->
+  <section class="au-section au-leadsource" id="auLeadSource">
+    <div class="wrap">
+      <div class="au-head reveal">
+        <h2 class="au-h2">Posts are not the outcome. Leads are.</h2>
+      </div>
+      <div class="au-story-body reveal">
+        <p>Every share may carry a tracked link (simple UTMed link to your landing page). When someone in that attendee's network clicks it, they land on your registration page, your gated report, or a page that captures their details before it hands them off.</p>
+        <p>Every click, form fill and registration is attributed back to the event campaign you ran. You end up with net new leads, not just an impressions number.</p>
+        <p>Which means when your VP asks what the booth produced, you can answer the question they actually asked.</p>
+      </div>
+      <blockquote class="au-pb-quote reveal">Nobody cuts the budget for the thing that's visibly working. This is how you make it visible.</blockquote>
+    </div>
+  </section>
 
   <section class="au-section au-roi" id="auRoi">
     <div class="wrap">
       <div class="au-head reveal">
         <span class="au-tag">Your numbers</span>
-        <h2 class="au-h2">What could <em>your</em> next event bring in?</h2>
-        <p class="au-sub">Add a row for each audience you could reach. Every number here is yours to change.</p>
+        <h2 class="au-h2">Run it on your own event.</h2>
+        <p class="au-sub">Start with your attendee count and your own benchmarks. Every number on this page is yours to change.</p>
       </div>
 
       <div class="au-calc reveal">
@@ -4741,6 +4849,85 @@
             <p>Each row models one activation. We take your audience size, apply the share rate to get the number of people who actually post, then multiply by their average network to get reach. Reach becomes clicks at your click-through rate, and clicks become conversions at your conversion rate.</p>
           </div>
         </details>
+
+        <form class="au-form au-form-sim" id="auSimForm" novalidate>
+          <p class="au-form-lead">Need a dedicated simulation for your upcoming event?</p>
+          <p class="au-sub" style="font-size:15px; margin-bottom:16px;">Share the details - Name, email Phone, Event Link or details - submit</p>
+          <div class="au-sim-grid">
+            <label for="auSimName" class="sr-only">Name</label>
+            <input type="text" id="auSimName" name="name" class="au-form-input" placeholder="Name" required>
+            <label for="auSimEmail" class="sr-only">Email</label>
+            <input type="email" id="auSimEmail" name="email" class="au-form-input" placeholder="Email" required autocomplete="email" spellcheck="false">
+            <label for="auSimPhone" class="sr-only">Phone</label>
+            <input type="tel" id="auSimPhone" name="phone" class="au-form-input" placeholder="Phone">
+            <label for="auSimEvent" class="sr-only">Event Link or details</label>
+            <input type="text" id="auSimEvent" name="event" class="au-form-input" placeholder="Event Link or details">
+          </div>
+          <button type="submit" class="au-form-btn au-sim-submit" id="auSimSubmit">
+            <span>Submit</span>
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>
+          </button>
+          <div class="au-form-err" id="auSimErr" role="alert" aria-live="polite"></div>
+        </form>
+    </div>
+  </section>
+
+  <!-- FAQ: merged from the doc's two FAQ blocks (Section 8 + Section 12) -->
+  <section class="au-section au-faq" id="auFaq">
+    <div class="wrap">
+      <div class="au-head reveal">
+        <h2 class="au-h2">The common questions:</h2>
+      </div>
+      <div class="au-faq-list reveal">
+        <details class="au-faq-item">
+          <summary>Will attendees actually post?</summary>
+          <div class="au-faq-a"><p>Some will not, and that is fine. Nobody is required to take part and non-participants are never tracked or contacted. With a live leaderboard and a prize on the table, participation runs 40 to 70 percent of an event, and higher among the people who reach your booth.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Won't every post look identical?</summary>
+          <div class="au-faq-a"><p>You can create as many variations per post as you need, each with a different hook, and each graphic may carry the sharer's own name and photo or just a photo. If you want attendees can edit before they post. The feed does not read as automated because it isn't.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>How much does my team have to do?</summary>
+          <div class="au-faq-a"><p>One person, under 15 minutes, before the event. During the event, a wozku page with QR code goes on a screen. That is the operational footprint.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Is this an employee advocacy tool?</summary>
+          <div class="au-faq-a"><p>No. There is no roster to enrol, no weekly content queue, no dashboard tracking who shared and who didn't. It runs for one event and stops.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Does this work for virtual events and webinars?</summary>
+          <div class="au-faq-a"><p>Yes. The QR code is for the room. For virtual events the same campaign runs from a link in the registration email, the chat, or the follow-up.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Which networks does it post to?</summary>
+          <div class="au-faq-a"><p>LinkedIn, Slack and X. Attendees connect their own account once and approve every post. Nothing is ever posted on their behalf.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Do attendees need to install anything?</summary>
+          <div class="au-faq-a"><p>No. The QR code opens a browser page. There is no app and no account to create.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>How far in advance do we need to set this up?</summary>
+          <div class="au-faq-a"><p>A contest takes under 15 minutes to build. Campaigns that run before, during and after the event get better results, so a week or two of lead time helps, but same-day setup is possible.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>How do we know which leads came from this?</summary>
+          <div class="au-faq-a"><p>Every share carries a tracked link, and every click, form fill and registration is attributed to the attendee who generated it.</p></div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMERCIALS -->
+  <section class="au-section au-commercials" id="auCommercials">
+    <div class="wrap">
+      <div class="au-head reveal">
+        <h2 class="au-h2">You pay for shares. Nothing else.</h2>
+      </div>
+      <div class="au-story-body reveal">
+        <p>No per-seat fees. No per-campaign fees. No platform minimum before you can run your first event. You pay for the LinkedIn shares your attendees actually make.</p>
+      </div>
     </div>
   </section>
 
@@ -4927,8 +5114,9 @@
     <div class="wrap">
       <div class="au-cta-card reveal">
         <div class="au-cta-col">
-          <h2 class="au-cta-h2">Ready to pack the room at your next event?</h2>
-          <p class="au-cta-sub">The same system behind every program on this page, written down.</p>
+          <h2 class="au-cta-h2">Ready to see what your next event could produce?</h2>
+          <p class="au-cta-sub">The same system running behind every program on this page, written down.</p>
+          <p class="au-cta-sub au-cta-closing">Your next event is already paid for. The booth, the flights, the stand build. The only question is whether the people who show up leave with something to say.</p>
 
           <form class="au-form au-form-cta" id="auCtaForm" novalidate>
             <label for="auCtaEmail" class="sr-only">Work email</label>
@@ -4943,7 +5131,7 @@
               </button>
             </div>
             <div class="au-form-err" id="auCtaErr" role="alert" aria-live="polite"></div>
-            <div class="au-form-note">Takes under 15 minutes to launch · Zero coding required</div>
+            <div class="au-form-note">No code. No procurement cycle. No call required to read it.</div>
           </form>
         </div>
 
@@ -4952,7 +5140,7 @@
 
             <!-- the leaves the cover closes onto -->
             <div class="au-book-pages">
-              <span class="au-book-run">The Advocacy Multiplier Playbook</span>
+              <span class="au-book-run">More Leads Per Event: The Field Marketer's Playbook</span>
               <h4 class="au-book-h">Contents</h4>
               <ol class="au-book-toc">
                 <li><b>I</b><span>The attendee as channel</span><i></i><em>7</em></li>
@@ -4969,7 +5157,7 @@
                 <img src="/playbook-cover.opt.jpg" alt="" width="564" height="780" loading="lazy">
                 <div class="au-book-spine"></div>
               </div>
-              <div class="au-book-liner"><span>Wozku &middot; 2026 Edition</span></div>
+              <div class="au-book-liner"><span>Wozku, 2026 Edition</span></div>
             </div>
 
           </div>
@@ -4985,8 +5173,8 @@
     <div class="wrap">
       <div class="au-ty-hero">
         <h1 class="au-ty-h1">The playbook is on its way to your inbox.</h1>
-        <p class="au-ty-sub">Want the fast version instead?</p>
-        <p class="au-ty-body">Grab 15 minutes with our team and we'll show you exactly how this fits your next event, whether that's a trade show booth, a regional dinner, or a webinar.</p>
+        <p class="au-ty-sub">While you are here: want to see what this would look like on your specific event?</p>
+        <p class="au-ty-body">Fifteen minutes with our team. We will take your last event's numbers and show you what the same event produces with attendees sharing.</p>
       </div>
 
       <div class="au-cal">
@@ -4998,7 +5186,7 @@
             </span>
             <div class="au-cal-hostmeta">
               <span class="au-cal-host-name">Wozku Growth Team</span>
-              <strong class="au-cal-event-title">15-Min Strategy Session</strong>
+              <strong class="au-cal-event-title">15-minute working session</strong>
             </div>
           </div>
 
@@ -5040,7 +5228,7 @@
               </div>
               <div class="au-cal-meta-text">
                 <span>Location</span>
-                <strong>Google Meet / Zoom</strong>
+                <strong>Google Meet or Zoom</strong>
               </div>
             </li>
           </ul>
@@ -5094,7 +5282,7 @@
               </div>
 
               <button type="button" class="au-cal-confirm" id="auCalConfirm">
-                <span>Confirm Strategy Call</span>
+                <span>Confirm session</span>
                 <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
               </button>
             </div>
@@ -5108,7 +5296,7 @@
             </span>
             <h2 class="au-cal-h">You're scheduled</h2>
             <p class="au-cal-when" id="auCalWhen"></p>
-            <p class="au-cal-note">A calendar invitation with the meeting link has been sent to your work email.</p>
+            <p class="au-cal-note">A calendar invitation with the meeting link is on its way to your work email.</p>
             <div class="au-cal-expect">
               <strong>What we will cover</strong>
               <ul>
@@ -5133,7 +5321,7 @@
         <a href="#top" class="logo" aria-label="Wozku Home">
           <img src="/src/assets/wozku_logo-black.svg" alt="Wozku" class="logo-img" onerror="this.src='/wozku_logo-black.svg'">
         </a>
-        <p class="footer-tagline">The Advocacy-Led Growth platform for B2B field marketers and event managers.</p>
+        <p class="footer-tagline">The lead generation platform for B2B field marketers and event teams.</p>
       </div>
       <div class="footer-meta">
         <span>© 2026 Wozku Inc. All rights reserved.</span>
@@ -5850,6 +6038,33 @@ function wireCaptureForm(formId, inputId, errId) {
 }
 wireCaptureForm('auHeroForm', 'auHeroEmail', 'auHeroErr');
 wireCaptureForm('auCtaForm', 'auCtaEmail', 'auCtaErr');
+wireCaptureForm('auRedhatForm', 'auRedhatEmail', 'auRedhatErr');
+
+// Calculator "dedicated simulation" form: name + email required, phone/event optional.
+(function wireSimForm() {
+  const form = document.getElementById('auSimForm');
+  const name = document.getElementById('auSimName');
+  const email = document.getElementById('auSimEmail');
+  const err = document.getElementById('auSimErr');
+  if (!form || !name || !email) return;
+  [name, email].forEach((el) => el.addEventListener('input', () => { if (err) err.textContent = ''; }));
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!name.value.trim()) {
+      if (err) err.textContent = 'Enter your name.';
+      name.focus();
+      return;
+    }
+    if (!EMAIL_RE.test(email.value.trim())) {
+      if (err) err.textContent = 'Enter a valid email.';
+      email.focus();
+      return;
+    }
+    if (err) err.textContent = '';
+    // TODO(backend): POST { name, email, phone, event } -> Slack notification. Ghost for now.
+    showThankYou();
+  });
+})();
 
 const navBackBtn = document.getElementById('navBackBtn');
 if (navBackBtn) {
