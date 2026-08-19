@@ -2777,7 +2777,11 @@
 
   /* ---- Thank-You View Redesign ---- */
   .au-ty{
-    padding:80px 0 100px;
+    /* 80px cleared nothing back when this view hid the header outright. The
+       header now stays (floating pill, ~87px tall including its top offset),
+       so this has to clear that first and then leave real breathing room, not
+       just touch it. */
+    padding:144px 0 100px;
     background:radial-gradient(circle at 50% 15%, rgba(16, 185, 129, 0.06) 0%, transparent 65%);
     min-height:100vh;
     /* dvh tracks the mobile URL bar; 100vh is the *largest* viewport, which left a
@@ -3066,7 +3070,7 @@
   #auConfetti{position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:9998;}
 
   @media (max-width:600px){
-    .au-ty{padding:88px 0 72px;}
+    .au-ty{padding:128px 0 72px;}
     .au-cal-side, .au-cal-main{padding:24px 20px;}
     .au-section{padding:64px 0;}
     .au-math{padding:72px 0;}
