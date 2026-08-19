@@ -4376,6 +4376,7 @@
   /* rather than nine separate boxes. */
   .au-faq{padding:96px 0;}
   .au-faq-grid .au-faq-list{display:flex; flex-direction:column; max-width:none;}
+  .au-faq-sub{margin-top:16px; font-size:16.5px; line-height:1.6; max-width:36ch;}
   .au-faq-item{
     border-top:1px solid var(--line);
     padding:0; background:none; border-radius:0;
@@ -4523,16 +4524,20 @@
               title="Intro" aria-label="Go to Intro" aria-current="location">
         <span class="side-nav-dash"></span>
       </button>
+      <button type="button" class="side-nav-item" data-target="auMath" data-kind="subtitle"
+              title="Before &amp; After" aria-label="Go to Before and After">
+        <span class="side-nav-dash"></span>
+      </button>
       <button type="button" class="side-nav-item" data-target="auHow" data-kind="subtitle"
               title="How It Works" aria-label="Go to How It Works">
         <span class="side-nav-dash"></span>
       </button>
       <button type="button" class="side-nav-item" data-target="auProblem" data-kind="subtitle"
-              title="Problem" aria-label="Go to Problem">
+              title="They Play" aria-label="Go to They Play">
         <span class="side-nav-dash"></span>
       </button>
-      <button type="button" class="side-nav-item" data-target="auMath" data-kind="subtitle"
-              title="The Math" aria-label="Go to The Math">
+      <button type="button" class="side-nav-item" data-target="auProofBanner" data-kind="subtitle"
+              title="Red Hat Result" aria-label="Go to Red Hat Result">
         <span class="side-nav-dash"></span>
       </button>
       <button type="button" class="side-nav-item" data-target="auRoi" data-kind="subtitle"
@@ -4549,6 +4554,10 @@
       </button>
       <button type="button" class="side-nav-item" data-target="auProof" data-kind="section"
               title="Case Studies" aria-label="Go to Case Studies">
+        <span class="side-nav-dash"></span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="auFaq" data-kind="subtitle"
+              title="FAQ" aria-label="Go to FAQ">
         <span class="side-nav-dash"></span>
       </button>
       <button type="button" class="side-nav-item" data-target="auCta" data-kind="title"
@@ -5296,56 +5305,6 @@
     </div>
   </section>
 
-  <!-- FAQ: merged from the doc's two FAQ blocks (Section 8 + Section 12) -->
-  <section class="au-section au-faq" id="auFaq">
-    <div class="wrap">
-      <div class="au-editorial au-faq-grid reveal">
-        <div class="au-editorial-head">
-          <span class="au-tag">Questions</span>
-          <h2 class="au-h2">The common questions:</h2>
-        </div>
-        <div class="au-faq-list">
-        <details class="au-faq-item">
-          <summary>Will attendees actually post?</summary>
-          <div class="au-faq-a"><p>Some will not, and that is fine. Nobody is required to take part and non-participants are never tracked or contacted. With a live leaderboard and a prize on the table, participation runs 40 to 70 percent of an event, and higher among the people who reach your booth.</p></div>
-        </details>
-        <details class="au-faq-item">
-          <summary>Won't every post look identical?</summary>
-          <div class="au-faq-a"><p>You can create as many variations per post as you need, each with a different hook, and each graphic may carry the sharer's own name and photo or just a photo. If you want attendees can edit before they post. The feed does not read as automated because it isn't.</p></div>
-        </details>
-        <details class="au-faq-item">
-          <summary>How much does my team have to do?</summary>
-          <div class="au-faq-a"><p>One person, under 15 minutes, before the event. During the event, a wozku page with QR code goes on a screen. That is the operational footprint.</p></div>
-        </details>
-        <details class="au-faq-item">
-          <summary>Is this an employee advocacy tool?</summary>
-          <div class="au-faq-a"><p>No. There is no roster to enrol, no weekly content queue, no dashboard tracking who shared and who didn't. It runs for one event and stops.</p></div>
-        </details>
-        <details class="au-faq-item">
-          <summary>Does this work for virtual events and webinars?</summary>
-          <div class="au-faq-a"><p>Yes. The QR code is for the room. For virtual events the same campaign runs from a link in the registration email, the chat, or the follow-up.</p></div>
-        </details>
-        <details class="au-faq-item">
-          <summary>Which networks does it post to?</summary>
-          <div class="au-faq-a"><p>LinkedIn, Slack and X. Attendees connect their own account once and approve every post. Nothing is ever posted on their behalf.</p></div>
-        </details>
-        <details class="au-faq-item">
-          <summary>Do attendees need to install anything?</summary>
-          <div class="au-faq-a"><p>No. The QR code opens a browser page. There is no app and no account to create.</p></div>
-        </details>
-        <details class="au-faq-item">
-          <summary>How far in advance do we need to set this up?</summary>
-          <div class="au-faq-a"><p>A contest takes under 15 minutes to build. Campaigns that run before, during and after the event get better results, so a week or two of lead time helps, but same-day setup is possible.</p></div>
-        </details>
-        <details class="au-faq-item">
-          <summary>How do we know which leads came from this?</summary>
-          <div class="au-faq-a"><p>Every share carries a tracked link, and every click, form fill and registration is attributed to the attendee who generated it.</p></div>
-        </details>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- COMMERCIALS -->
   <section class="au-section au-commercials" id="auCommercials">
     <div class="wrap">
@@ -5536,6 +5495,57 @@
   </section>
 
   <!-- ASK YOUR AI -->
+
+  <!-- FAQ: merged from the doc's two FAQ blocks (Section 8 + Section 12) -->
+  <section class="au-section au-faq" id="auFaq">
+    <div class="wrap">
+      <div class="au-editorial au-faq-grid reveal">
+        <div class="au-editorial-head">
+          <span class="au-tag">Before you run one</span>
+          <h2 class="au-h2">The questions we get asked first.</h2>
+          <p class="au-sub au-faq-sub">Everything worth knowing before you put this on an event.</p>
+        </div>
+        <div class="au-faq-list">
+        <details class="au-faq-item">
+          <summary>Will attendees actually post?</summary>
+          <div class="au-faq-a"><p>Some will not, and that is fine. Nobody is required to take part and non-participants are never tracked or contacted. With a live leaderboard and a prize on the table, participation runs 40 to 70 percent of an event, and higher among the people who reach your booth.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Won't every post look identical?</summary>
+          <div class="au-faq-a"><p>You can create as many variations per post as you need, each with a different hook, and each graphic may carry the sharer's own name and photo or just a photo. If you want attendees can edit before they post. The feed does not read as automated because it isn't.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>How much does my team have to do?</summary>
+          <div class="au-faq-a"><p>One person, under 15 minutes, before the event. During the event, a wozku page with QR code goes on a screen. That is the operational footprint.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Is this an employee advocacy tool?</summary>
+          <div class="au-faq-a"><p>No. There is no roster to enrol, no weekly content queue, no dashboard tracking who shared and who didn't. It runs for one event and stops.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Does this work for virtual events and webinars?</summary>
+          <div class="au-faq-a"><p>Yes. The QR code is for the room. For virtual events the same campaign runs from a link in the registration email, the chat, or the follow-up.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Which networks does it post to?</summary>
+          <div class="au-faq-a"><p>LinkedIn, Slack and X. Attendees connect their own account once and approve every post. Nothing is ever posted on their behalf.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>Do attendees need to install anything?</summary>
+          <div class="au-faq-a"><p>No. The QR code opens a browser page. There is no app and no account to create.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>How far in advance do we need to set this up?</summary>
+          <div class="au-faq-a"><p>A contest takes under 15 minutes to build. Campaigns that run before, during and after the event get better results, so a week or two of lead time helps, but same-day setup is possible.</p></div>
+        </details>
+        <details class="au-faq-item">
+          <summary>How do we know which leads came from this?</summary>
+          <div class="au-faq-a"><p>Every share carries a tracked link, and every click, form fill and registration is attributed to the attendee who generated it.</p></div>
+        </details>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- FINAL CTA -->
   <section class="au-section au-cta" id="auCta">
