@@ -1783,6 +1783,10 @@
   }
   .au-norma-card-head{
     padding:30px 28px 22px;
+    min-height:190px;
+    display:flex;
+    flex-direction:column;
+    box-sizing:border-box;
   }
   .au-norma-num{
     width:28px;
@@ -1815,48 +1819,69 @@
     line-height:1.2;
   }
   .au-norma-desc{
-    font-size:16px;
+    font-size:15.5px;
     line-height:1.55;
     color:#334155;
     font-weight:500;
     margin:0;
   }
 
-  /* Card Visual Stage (Frameless, clean floating UI components) */
+  /* Card Visual Stage (Uniform height & perfect alignment across all 3 cards) */
   .au-norma-card-visual{
     position:relative;
-    flex:1;
-    min-height:280px;
+    height:280px;
     background:#F8FAFC;
     border-top:1px solid #E2E8F0;
     display:flex;
     align-items:center;
     justify-content:center;
     overflow:hidden;
-    padding:24px 20px;
+    padding:20px;
+    box-sizing:border-box;
   }
 
-  /* Floating UI Card inside Card 1 and Card 2 */
-  .au-norma-ui-card{
+  /* Floating image container inside each step card */
+  .au-norma-img-box{
+    position:relative;
     width:100%;
-    max-width:280px;
+    height:100%;
+    max-height:240px;
     background:#FFFFFF;
     border:1px solid #E2E8F0;
     border-radius:20px;
-    padding:18px;
+    overflow:hidden;
     box-shadow:
       0 10px 25px -5px rgba(15, 23, 42, 0.06),
       0 0 0 1px rgba(15, 23, 42, 0.04);
-    transition:transform .45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .45s ease;
     display:flex;
-    flex-direction:column;
-    gap:10px;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+    box-sizing:border-box;
+    transition:transform .45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .45s ease;
   }
-  .au-norma-card:hover .au-norma-ui-card{
-    transform:translateY(-6px) scale(1.02);
+  .au-norma-card:hover .au-norma-img-box{
+    transform:translateY(-4px) scale(1.02);
     box-shadow:
       0 20px 40px -10px rgba(15, 23, 42, 0.10),
       0 0 0 1px rgba(16, 185, 129, 0.2);
+  }
+  .au-norma-step-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .au-norma-step-img--1{
+    object-position:15% 15%;
+    transform:scale(1.24);
+    transform-origin:15% 15%;
+  }
+  .au-norma-step-img--2{
+    object-position:50% 0%;
+  }
+  .au-norma-step-img--3{
+    object-position:50% 62%;
   }
 
   /* Card 1 Visual: QR Portal Content */
@@ -4119,241 +4144,247 @@
   .hero-wf-ask .au-form-bar{box-shadow:none;}
   .hero-wf-ask .au-form-bar:focus-within{box-shadow:0 0 0 4px rgba(16,185,129,0.14);}
 
-  /* ---- The shelf, and the card it opens ----
-     Five spines stand in the headline band, above the divider. The open one
-     leaves the shelf and its figure appears below the divider, on white. Glass
-     spines were unreadable against the emerald, so these are solid white.
-     Desktop only. Below 1000px both are display:none and the numbered rail
-     under the divider carries the figures, which keeps exactly one of the two
-     in the accessibility tree rather than reading the numbers twice. */
-  .au-shelf, .au-step-cards{display:none;}
-  @media (min-width:1000px){
-    .au-shelf{
-      display:flex; gap:10px; align-items:stretch; justify-content:flex-end;
-      height:176px; min-width:0;
-    }
-    .au-shelf-item{
-      flex:0 0 52px; min-width:0; padding:16px 0 18px; margin:0;
-      display:flex; flex-direction:column; align-items:center; justify-content:space-between;
-      cursor:pointer; border-radius:12px;
-      background:#FFFFFF; border:1px solid rgba(255,255,255,0.9);
-      box-shadow:0 14px 30px -18px rgba(6,32,24,0.5);
-      transition:flex-basis .5s cubic-bezier(0.22, 1, 0.28, 1),
-                 opacity .4s ease, transform .5s cubic-bezier(0.22, 1, 0.28, 1),
-                 margin .5s cubic-bezier(0.22, 1, 0.28, 1);
-    }
-    .au-shelf-item:hover{transform:translateY(-3px);}
-    .au-shelf-item:focus-visible{outline:2px solid #FFFFFF; outline-offset:3px;}
-    .au-shelf-n{
-      font-family:var(--font-mono), monospace; font-size:12px;
-      color:var(--brand-emerald-deep); font-variant-numeric:tabular-nums;
-    }
-    /* Set on its side, so a 52px spine still carries a readable label. */
-    .au-shelf-word{
-      writing-mode:vertical-rl; transform:rotate(180deg);
-      font-family:var(--font-mono), monospace;
-      font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
-      color:var(--ink-dim); white-space:nowrap;
-    }
-    /* The open step stays on the shelf and is marked, rather than leaving a
-       gap. It reads as "you are here" against the four still closed. */
-    .au-shelf-item.is-open{
-      flex-basis:64px;
-      background:var(--brand-emerald);
-      border-color:var(--brand-emerald);
-      box-shadow:0 16px 34px -16px rgba(6,78,59,0.6);
-      transform:translateY(-6px);
-    }
-    .au-shelf-item.is-open .au-shelf-n{color:#FFFFFF;}
-    .au-shelf-item.is-open .au-shelf-word{color:rgba(255,255,255,0.9);}
-    .au-shelf-item.is-open:hover .au-shelf-word{color:#FFFFFF;}
+  /* ================= EXPERIMENT: wireframe hero ==============================
+     Headline band, a full-bleed hairline under it, then two columns: copy and
+     the ask on the left, the 5-step journey pipeline with directional arrows
+     on the right, divided by a vertical hairline.
+     ------------------------------------------------------------------------ */
+  .hero-wf-rule, .hero-wf-lower{
+    position:relative; z-index:2;
+  }
+  /* ================= EXPERIMENT: wireframe hero ==============================
+     Headline band, a full-bleed hairline under it, then two columns: copy and
+     the ask on the left, the 5-step journey pipeline with directional arrows
+     on the right, divided by a vertical hairline.
+     ------------------------------------------------------------------------ */
+  .hero-editorial{
+    min-height:100vh;
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+  }
+  .hero-wf-rule, .hero-wf-lower{
+    position:relative; z-index:2;
+  }
+  .hero-wf-rule{
+    height:1px; width:100%; margin-top:52px;
+    background:rgba(15,23,42,0.12);
+  }
+  .hero-wf-lower{
+    width:100%; box-sizing:border-box;
+    max-width:var(--container); margin:0 auto;
+    display:grid; grid-template-columns:1fr;
+    padding:0 24px;
+  }
+  .hero-wf-left{padding-top:28px;}
+  .hero-wf-left .hero-editorial-sub{
+    text-align:left; margin-left:0; margin-right:0;
+    max-width:46ch; font-size:15.5px; line-height:1.6; color:var(--ink-dim);
+    margin-bottom:14px;
+    text-shadow:none;
+  }
+  .hero-wf-ask{margin-top:26px;}
+  .hero-wf-ask .au-form-hero{margin:0; max-width:520px;}
+  .hero-wf-ask .au-form-bar{box-shadow:none;}
+  .hero-wf-ask .au-form-bar:focus-within{box-shadow:0 0 0 4px rgba(16,185,129,0.14);}
 
-    /* Same hinge as the playbook book at the foot of the page: left-edge
-       transform-origin, 1.05s, cubic-bezier(.55, 0, .18, 1). The card drops from
-       the shelf and swings open on its spine. */
-    /* Top aligned to the copy on the left. .hero-wf-left carries 26px of top
-       padding, so this matches it rather than centring in the row. */
-    .au-step-cards{
-      display:block; position:relative;
-      align-self:start; margin-top:26px;
-      perspective:1700px;
-    }
-    .au-step-card{
-      display:none;
-      padding:26px 28px; border-radius:16px;
-      border:1px solid var(--line); background:#FFFFFF;
-      box-shadow:0 18px 40px -26px rgba(15,23,42,0.32);
-      text-align:left;
-    }
-    .au-step-card.is-open{
-      display:block;
-      transform-origin:left center; transform-style:preserve-3d;
-      backface-visibility:hidden; -webkit-backface-visibility:hidden;
-      animation:auStepOpen 1.05s cubic-bezier(.55, 0, .18, 1);
-    }
-    /* Only one card is display:block at a time, so going block re-runs this on
-       every open without needing to restart it by hand. */
-    @keyframes auStepOpen{
-      from{opacity:0; transform:translateY(-30px) rotateY(-104deg);}
-      55%{opacity:1;}
-      to{opacity:1; transform:translateY(0) rotateY(0deg);}
-    }
-    .au-step-card-n{
-      display:block; margin-bottom:12px;
-      font-family:var(--font-mono), monospace;
-      font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
-      color:var(--brand-emerald-deep);
-    }
-    .au-step-card b{
-      display:block;
-      font-family:var(--font-display); font-size:clamp(34px, 3.4vw, 48px);
-      font-weight:700; letter-spacing:-0.04em; line-height:1;
-      color:var(--ink); font-variant-numeric:tabular-nums;
-    }
-    .au-step-card-label{
-      display:block; margin-top:9px;
-      font-size:16px; font-weight:600; color:var(--ink);
-    }
-    .au-step-card small{
-      display:block; margin-top:8px;
-      font-size:12.5px; line-height:1.45; color:var(--ink-dim); max-width:34ch;
-    }
-    .au-step-card[data-i="4"] b{color:var(--brand-emerald-deep);}
-  }
-  @media (prefers-reduced-motion: reduce){
-    .au-shelf-item{transition:none;}
-    .au-step-card.is-open{animation:none;}
-  }
-  /* The spines are the control, so they have to look like one. */
-  @media (min-width:1000px){
-    .au-shelf-item:hover .au-shelf-word{color:var(--brand-emerald-deep);}
-  }
+  .hero-wf-vdiv{display:none;}
 
-  /* The journey rail. One step per row, numbered 01 to 05, hung off a single
-     vertical line so the sequence is unmistakable. Replaced a three-across grid
-     that wrapped after the third figure, so it never read as a 1-to-5 order,
-     and where a two-line caption in one cell pushed its neighbours off the
-     shared baseline. Every row owns its own baseline now, so that cannot recur. */
-  .hero-wf-lower .au-hero-chain{
+  /* 5-Step Connected Pipeline (Right Column) */
+  .au-pipeline{
     position:relative;
-    display:block; list-style:none;
-    max-width:none; width:100%; margin:36px 0 0; padding:0 0 8px;
+    display:flex; flex-direction:column;
+    gap:6px;
+    list-style:none; margin:0; padding:0;
+    width:100%;
   }
-  .hero-wf-lower .au-hero-chain::before{display:none;}
-  /* Compact by necessity: five stacked steps at three lines each made the hero
-     483px taller than the grid it replaced and pushed it past the fold. The
-     figure and its label share one baseline, and only the caption takes a
-     second line, which brings a row from 97px to about 56px. */
-  .au-step{
+  .au-pipe-step{
     position:relative;
-    display:grid; grid-template-columns:auto minmax(0, 1fr);
-    column-gap:16px; align-items:start;
-    padding:0 0 13px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    height:46px;
+    padding:0 14px;
+    border-radius:12px;
+    box-sizing:border-box;
+    background:#FFFFFF;
+    border:1px solid rgba(15,23,42,0.08);
+    box-shadow:0 1px 3px rgba(15,23,42,0.03);
+    transition:transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
   }
-  .au-step:last-child{padding-bottom:0;}
-  /* The rail. Drawn from each number down to the next one rather than as one
-     element behind the list, so it stops cleanly at the last step whatever the
-     rows measure. */
-  .au-step:not(:last-child)::before{
-    content:""; position:absolute; left:13px; top:30px; bottom:0; width:1px;
-    background:rgba(15,23,42,0.14);
+  .au-pipe-step:hover{
+    transform:translateX(3px);
+    border-color:rgba(16,185,129,0.3);
+    box-shadow:0 4px 12px -2px rgba(15,23,42,0.06);
   }
-  .au-step-n{
-    position:relative; z-index:1;
+  .au-pipe-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-shrink:0;
+  }
+  .au-pipe-num{
     display:flex; align-items:center; justify-content:center;
-    width:27px; height:27px; border-radius:50%; box-sizing:border-box;
-    border:1px solid rgba(15,23,42,0.16); background:#FFFFFF;
+    width:24px; height:24px; border-radius:50%;
+    border:1px solid rgba(15,23,42,0.16);
+    background:#FAFAF9;
     font-family:var(--font-mono), monospace;
-    font-size:10px; letter-spacing:0.02em; color:var(--ink-dim);
+    font-size:10px; font-weight:600; letter-spacing:0.02em;
+    color:var(--ink-dim);
+    font-variant-numeric:tabular-nums;
+    flex-shrink:0;
+  }
+  .au-pipe-stat{
+    display:flex; align-items:baseline; gap:7px;
+  }
+  .au-pipe-stat b{
+    font-family:var(--font-display);
+    font-size:clamp(17px, 1.6vw, 19px);
+    font-weight:700; letter-spacing:-0.03em; line-height:1;
+    color:var(--ink);
     font-variant-numeric:tabular-nums;
   }
-  /* The outcome is the only step that earns colour, same rule the old row had. */
-  .au-step.is-final .au-step-n{
-    border-color:var(--brand-emerald);
-    background:var(--brand-emerald); color:#FFFFFF;
+  .au-pipe-label{
+    font-size:13.5px; font-weight:600; line-height:1;
+    color:var(--ink);
+    white-space:nowrap;
   }
-  /* .hero-editorial centres its text, so this has to say so explicitly or the
-     figures drift to the middle of the column and away from the rail. */
-  /* .hero-editorial centres its text, so this has to say so explicitly or the
-     figures drift to the middle of the column and away from the rail. */
-  .au-step-body{
-    display:grid; grid-template-columns:auto minmax(0, 1fr);
-    column-gap:10px; align-items:baseline;
+  .au-pipe-note{
+    font-size:11.5px; line-height:1;
+    color:var(--ink-dim); opacity:0.85;
+    text-align:right;
+    white-space:nowrap;
+    margin-left:auto;
+  }
+
+  /* Between steps connector arrow indicator */
+  .au-pipe-conn{
+    display:flex; justify-content:flex-start;
+    padding-left:22px; margin:-2px 0;
+    color:var(--brand-emerald-deep);
+    opacity:0.65;
+  }
+  .au-pipe-conn svg{width:8px; height:10px;}
+
+  /* Step 5 Payoff / Outcome styling (Custom height with subnote) */
+  .au-pipe-step.is-payoff{
+    height:auto;
+    min-height:58px;
+    padding:10px 14px;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:center;
+    gap:4px;
+    background:rgba(16,185,129,0.06);
+    border:1.5px solid rgba(16,185,129,0.38);
+    box-shadow:0 2px 8px -2px rgba(16,185,129,0.15);
+  }
+  .au-pipe-step.is-payoff .au-pipe-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+  }
+  .au-pipe-step.is-payoff .au-pipe-num{
+    background:var(--brand-emerald);
+    border-color:var(--brand-emerald);
+    color:#FFFFFF;
+    box-shadow:0 2px 6px -1px rgba(16,185,129,0.4);
+  }
+  .au-pipe-step.is-payoff .au-pipe-stat b{
+    color:var(--brand-emerald-deep);
+    font-size:clamp(18px, 1.7vw, 21px);
+  }
+  .au-pipe-step.is-payoff .au-pipe-label{
+    color:var(--brand-emerald-deep);
+    font-weight:700;
+  }
+  .au-pipe-step.is-payoff .au-pipe-subnote{
+    font-size:11.5px; line-height:1.3;
+    color:var(--ink-dim); opacity:0.9;
+    padding-left:36px;
     text-align:left;
   }
-  .au-step-body b{
-    font-family:var(--font-display); font-size:clamp(20px, 1.9vw, 26px);
-    font-weight:700; letter-spacing:-0.035em; line-height:1;
-    color:var(--ink); font-variant-numeric:tabular-nums;
-  }
-  .au-step-body span{
-    font-size:13.5px; font-weight:500; line-height:1.3; color:var(--ink-dim);
-  }
-  .au-step.is-final .au-step-body b{color:var(--brand-emerald-deep);}
-  .au-step.is-final .au-step-body span{color:var(--ink);}
-  /* The doc's sourcing caption. A <small>, not another <span>, so it does not
-     inherit the label rule above. Quiet: it qualifies the figure, it does not
-     compete with it. */
-  /* Sits under both, spanning the figure and label columns. */
-  .hero-wf-lower .au-chain-note{
-    grid-column:1 / -1;
-    display:block; margin-top:3px;
-    font-size:11.5px; line-height:1.35; letter-spacing:0;
-    color:var(--ink-dim); opacity:0.78; max-width:46ch;
+  .au-pipe-badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:3px 10px; border-radius:999px;
+    background:rgba(5,150,105,0.16);
+    border:1.5px solid #059669;
+    font-family:var(--font-mono), monospace;
+    font-size:10.5px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase;
+    color:#047857;
+    box-shadow:0 1px 3px rgba(4,120,87,0.15);
   }
 
   @media (min-width:1000px){
     .hero-content-wrap.is-wf{max-width:var(--container);}
     .is-wf .hero-wf-head{
-      text-align:left; max-width:none;
-      display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 46%);
-      column-gap:5%; align-items:center;
+      text-align:left; max-width:920px;
+      display:block;
     }
     .hero-wf-head-copy{min-width:0;}
-    .is-wf .au-hero-lockup{align-items:flex-start; margin-bottom:24px;}
+    .is-wf .au-hero-lockup{align-items:flex-start; margin-bottom:18px;}
     .is-wf .au-eyebrow{text-align:left;}
     .is-wf h1.hero-editorial-title{
       text-align:left; margin-left:0; margin-right:0;
-      font-size:clamp(38px, 3.9vw, 55px); line-height:1.06;
+      font-size:clamp(38px, 4.3vw, 55px); line-height:1.08;
     }
 
-    /* Everything above the divider is squeezed so the copy, the card and the
-       email field all sit inside a 700px viewport, which is roughly what a
-       14-inch laptop gives you once browser chrome is off. */
-    .hero-editorial{padding-top:96px;}
-    .hero-wf-rule{margin-top:40px;}
-    /* Left column sits on the container inset; the grid runs to the page edge. */
+    .hero-editorial{padding-top:104px; padding-bottom:88px;}
+    .hero-wf-rule{margin-top:46px;}
+
     .hero-wf-lower{
-      grid-template-columns:minmax(0, 46fr) minmax(0, 50fr);
-      column-gap:4%;
+      grid-template-columns:minmax(0, 50fr) auto minmax(0, 48fr);
+      column-gap:0;
+      align-items:center;
       padding:0 24px;
+      margin-top:6px;
     }
-    /* The bottom padding is what lands the form's baseline on the bottom of the
-       last row's labels: it absorbs the grid's overhang plus the cell padding
-       and centring slack under that text. */
     .hero-wf-left{
-      padding-top:26px; padding-bottom:6px;
+      padding-top:20px; padding-bottom:6px; padding-right:36px;
       display:flex; flex-direction:column;
     }
-    /* Pushes the ask to the bottom of the column, as in the wireframe. */
-    .hero-wf-ask{margin-top:auto; padding-top:26px;}
-    /* The shelf in the headline band carries the figures above 1000px. */
-    .hero-wf-lower .au-hero-chain{display:none;}
+    .hero-wf-vdiv{
+      display:block;
+      width:1px; height:100%; min-height:260px;
+      background:rgba(15,23,42,0.12);
+      margin:0 12px;
+      align-self:stretch;
+    }
+    .hero-wf-right{
+      padding-top:14px; padding-bottom:6px; padding-left:32px;
+      display:flex; flex-direction:column; justify-content:center;
+    }
+    .hero-wf-ask{margin-top:22px; padding-top:0;}
   }
+
   @media (max-width:999px){
-    /* Stacked: copy, ask, then the rail full width with its own top rule. */
-    .hero-wf-lower .au-hero-chain{
-      border-top:1px solid rgba(15,23,42,0.12);
-      margin-top:40px; padding-top:32px;
+    .hero-title-br{display:none;}
+    .hero-wf-vdiv{
+      display:block;
+      height:1px; width:100%;
+      background:rgba(15,23,42,0.12);
+      margin:36px 0 28px;
+    }
+    .hero-wf-right{
+      width:100%;
     }
   }
-  @media (max-width:599px){
-    .au-step{column-gap:14px; padding-bottom:16px;}
-    .au-step-n{width:26px; height:26px; font-size:10px;}
-    .au-step:not(:last-child)::before{left:12.5px; top:29px;}
-    .au-step-body b{font-size:24px;}
-    .au-step-body span{font-size:13.5px;}
-    .hero-wf-lower .au-chain-note{max-width:none;}
+
+  @media (max-width:640px){
+    .au-pipe-step{
+      height:auto; min-height:46px;
+      padding:10px 14px;
+      flex-wrap:wrap;
+    }
+    .au-pipe-note{
+      text-align:left;
+      margin-left:36px;
+      margin-top:2px;
+      width:100%;
+    }
   }
   /* ================= /EXPERIMENT ============================================ */
 
@@ -4553,53 +4584,153 @@
 
   /* ---- content-v3: "they play" attendee-proof story cards ---- */
   .au-problem .au-head{margin-bottom:40px;}
-  .au-story-grid{display:grid; grid-template-columns:1fr; gap:20px;}
-  @media (min-width:760px){ .au-story-grid{grid-template-columns:1fr 1fr;} }
+  .au-story-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:24px;
+    align-items:stretch;
+  }
+  @media (min-width:768px){
+    .au-story-grid{
+      grid-template-columns:1fr 1fr;
+    }
+  }
   .au-story-card{
-    padding:30px 28px; border-radius:var(--radius-lg); background:var(--bg-subtle);
+    padding:32px 28px 24px;
+    border-radius:var(--radius-lg);
+    background:var(--bg-subtle);
     border:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    height:100%;
+    box-sizing:border-box;
+    box-shadow:0 4px 20px -2px rgba(15, 23, 42, 0.04);
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .au-story-card:hover{
+    box-shadow:0 12px 30px -4px rgba(15, 23, 42, 0.08);
+  }
+  .au-story-card-top{
+    display:flex;
+    flex-direction:column;
+    flex-grow:1;
+    margin-bottom:24px;
   }
   .au-story-kicker{
-    font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:0.08em;
-    text-transform:uppercase; color:var(--brand-emerald-deep); margin-bottom:10px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--brand-emerald-deep);
+    margin-bottom:10px;
   }
-  .au-story-co{font-family:var(--font-display); font-size:22px; font-weight:700; letter-spacing:-0.02em; margin-bottom:12px;}
-  .au-story-txt{font-size:15px; line-height:1.65; color:var(--ink-dim);}
+  .au-story-co{
+    font-family:var(--font-display);
+    font-size:24px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin-bottom:12px;
+    color:var(--ink);
+  }
+  .au-story-txt{
+    font-size:15px;
+    line-height:1.65;
+    color:var(--ink-dim);
+    margin:0;
+  }
 
-  /* Sify result: four figures over one caption, as a single plate. */
+  /* Result plate inside each story card */
   .au-story-result{
-    margin:28px 0 0; border-radius:var(--radius-lg); overflow:hidden;
-    background:var(--dark-pill); color:#FFFFFF;
+    margin:0;
+    border-radius:18px;
+    overflow:hidden;
+    background:var(--dark-pill);
+    color:#FFFFFF;
+    box-shadow:0 10px 25px -5px rgba(15, 23, 42, 0.15);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    height:120px;
+    box-sizing:border-box;
   }
   .au-story-stat-block{
-    display:grid; grid-template-columns:repeat(2, 1fr); gap:24px 0;
-    padding:32px 24px 28px;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:20px 12px;
+    padding:24px 20px 20px;
   }
-  @media (min-width:820px){ .au-story-stat-block{grid-template-columns:repeat(4, 1fr);} }
-  .au-story-stat{display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 14px; position:relative;}
+  @media (min-width:1100px){
+    .au-story-stat-block{
+      grid-template-columns:repeat(4, 1fr);
+      gap:12px 0;
+    }
+  }
+  .au-story-stat{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:0 8px;
+    position:relative;
+  }
   .au-story-stat + .au-story-stat::before{
-    content:""; position:absolute; left:0; top:4px; bottom:4px; width:1px;
-    background:rgba(255,255,255,0.14);
+    content:"";
+    position:absolute;
+    left:0;
+    top:4px;
+    bottom:4px;
+    width:1px;
+    background:rgba(255,255,255,0.12);
   }
-  @media (max-width:819px){
+  @media (max-width:1099px){
     .au-story-stat:nth-child(odd)::before{display:none;}
   }
   .au-story-stat b{
-    font-family:var(--font-display); font-size:clamp(24px, 3vw, 32px); font-weight:700;
-    letter-spacing:-0.03em; line-height:1.05; color:#FFFFFF;
+    font-family:var(--font-display);
+    font-size:clamp(20px, 2.2vw, 26px);
+    font-weight:700;
+    letter-spacing:-0.03em;
+    line-height:1.1;
+    color:#FFFFFF;
   }
   .au-story-stat span{
-    margin-top:7px; font-family:var(--font-mono); font-size:10.5px; font-weight:500;
-    letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.58); line-height:1.4;
+    margin-top:6px;
+    font-family:var(--font-mono);
+    font-size:9.5px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,0.58);
+    line-height:1.35;
+    min-height:36px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+  }
+  .au-story-stat.is-empty b{
+    color:rgba(255,255,255,0.35);
+    font-weight:400;
   }
 
-  /* Caption row inside the plate, divided from the figures by a hairline. */
-  .au-story-who{
-    margin:0; padding:18px 24px 20px; text-align:center;
-    border-top:1px solid rgba(255,255,255,0.12);
-    font-size:14px; line-height:1.6; color:rgba(255,255,255,0.62);
+  /* Full-width horizontal banner below the 2 story cards */
+  .au-story-who-banner{
+    margin-top:20px;
+    padding:18px 28px;
+    border-radius:18px;
+    background:var(--dark-pill);
+    color:rgba(255,255,255,0.78);
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 10px 25px -5px rgba(15, 23, 42, 0.12);
+    text-align:center;
+    font-size:14.5px;
+    line-height:1.6;
   }
-  .au-story-who strong{color:#FFFFFF; font-weight:600;}
+  .au-story-who-banner strong{
+    color:#FFFFFF;
+    font-weight:700;
+  }
 
   /* ---- content-v3: shared prose column ---- */
   /* Centred by default so it sits with the centred heading, quote and callout */
@@ -4935,7 +5066,7 @@
   .au-simband-plate{
     position:relative; isolation:isolate; overflow:hidden;
     border-radius:var(--radius-lg); padding:44px 40px;
-    display:grid; grid-template-columns:1fr; gap:36px; align-items:center;
+    display:grid; grid-template-columns:1fr; gap:36px; align-items:start;
     background:
       linear-gradient(180deg, #0FA972 0%, #077A55 12%, #064530 32%, #04241B 58%, #02100C 82%, #010806 100%);
     box-shadow:0 30px 70px -46px rgba(4, 60, 44, 0.55);
@@ -4948,6 +5079,7 @@
     .au-simband-plate{
       grid-template-columns:minmax(0,0.9fr) minmax(0,1fr); gap:64px;
       padding:52px 52px;
+      align-items:start;
     }
   }
   .au-simband-copy .au-tag{color:#6EE7B7; margin-bottom:14px;}
@@ -4970,9 +5102,10 @@
   }
 
   .au-form-sim{margin:0;}
-  .au-sim-grid{display:grid; grid-template-columns:1fr; gap:16px; margin-bottom:22px;}
+  .au-sim-grid{display:grid; grid-template-columns:1fr; gap:16px; margin-bottom:0;}
   @media (min-width:620px){ .au-sim-grid{grid-template-columns:1fr 1fr;} }
   .au-sim-field{display:flex; flex-direction:column; gap:7px; min-width:0;}
+  .au-sim-field.is-full{grid-column:1 / -1;}
   .au-sim-field label{
     font-family:var(--font-mono); font-size:10.5px; font-weight:500;
     letter-spacing:0.09em; text-transform:uppercase; color:rgba(255,255,255,0.5);
@@ -4984,6 +5117,13 @@
     background:rgba(255,255,255,0.06);
     border:1px solid rgba(255,255,255,0.14); border-radius:12px;
     transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    box-sizing:border-box;
+  }
+  .au-sim-field textarea.au-form-input{
+    min-height:92px;
+    resize:vertical;
+    font-family:inherit;
+    line-height:1.55;
   }
   .au-sim-field .au-form-input::placeholder{color:rgba(255,255,255,0.34);}
   .au-sim-field .au-form-input:focus{
@@ -4993,7 +5133,7 @@
   }
   /* .au-form-btn is inline-flex, so it needs to become a block-level flex box */
   /* before it will stretch to the form width. */
-  .au-sim-submit{display:flex; width:100%; justify-content:center; padding:15px 24px; font-size:15px;}
+  .au-sim-submit{display:flex; width:100%; justify-content:center; padding:16px 24px; font-size:15px; margin-top:20px;}
   .au-form-sim .au-form-err{text-align:left;}
 
   .au-cta-closing{margin-top:12px;}
@@ -5100,45 +5240,7 @@
           <div class="au-hero-lockup">
             <div class="au-eyebrow" id="auHeroEyebrow">B2B Field Marketers Running Own &amp; Third Party Events</div>
           </div>
-          <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events you are already running.</h1>
-        </div>
-
-        <!-- The five figures as a shelf of closed spines. One opens at a time and
-             the set advances on a timer. Desktop only: below 1000px this is
-             display:none and the numbered rail under the divider takes over, so
-             only one of the two is ever in the accessibility tree. -->
-        <!-- A shelf of closed spines. The open one leaves the shelf and its
-             figure opens below the divider, in the white band, which is where
-             there is room for it and contrast to read it. Desktop only: below
-             1000px this is display:none and the numbered rail under the divider
-             carries the figures, so only one of the two is ever in the
-             accessibility tree. -->
-        <div class="au-shelf" id="auShelf" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
-          <button type="button" class="au-shelf-item is-open" data-i="0"
-                  aria-controls="auStepCard1" aria-expanded="true">
-            <span class="au-shelf-n">01</span>
-            <span class="au-shelf-word">Step 1</span>
-          </button>
-          <button type="button" class="au-shelf-item" data-i="1"
-                  aria-controls="auStepCard2" aria-expanded="false">
-            <span class="au-shelf-n">02</span>
-            <span class="au-shelf-word">Step 2</span>
-          </button>
-          <button type="button" class="au-shelf-item" data-i="2"
-                  aria-controls="auStepCard3" aria-expanded="false">
-            <span class="au-shelf-n">03</span>
-            <span class="au-shelf-word">Step 3</span>
-          </button>
-          <button type="button" class="au-shelf-item" data-i="3"
-                  aria-controls="auStepCard4" aria-expanded="false">
-            <span class="au-shelf-n">04</span>
-            <span class="au-shelf-word">Step 4</span>
-          </button>
-          <button type="button" class="au-shelf-item" data-i="4"
-                  aria-controls="auStepCard5" aria-expanded="false">
-            <span class="au-shelf-n">05</span>
-            <span class="au-shelf-word">Step 5</span>
-          </button>
+          <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events<br class="hero-title-br">you are already running.</h1>
         </div>
       </div>
     </div>
@@ -5169,86 +5271,85 @@
         </div>
       </div>
 
-      <!-- The chain as a numbered journey: one step per row down a single
-           rail, so it reads 01 to 05 rather than as a table. Each row owns
-           its own baseline, which is what fixes the caption lines pushing
-           their neighbours down in the old grid. -->
-      <!-- Opened by the shelf above. One card visible at a time. -->
-      <div class="au-step-cards" id="auStepCards">
-        <article class="au-step-card is-open" id="auStepCard1" data-i="0">
-          <span class="au-step-card-n">Step 1</span>
-          <b>400</b>
-          <span class="au-step-card-label">booth visitors</span>
-          <small>the ones you already paid to meet</small>
-        </article>
-        <article class="au-step-card" id="auStepCard2" data-i="1">
-          <span class="au-step-card-n">Step 2</span>
-          <b>200</b>
-          <span class="au-step-card-label">posts to LinkedIn</span>
-          <small>one scan, one tap, no app</small>
-        </article>
-        <article class="au-step-card" id="auStepCard3" data-i="2">
-          <span class="au-step-card-n">Step 3</span>
-          <b>240,000</b>
-          <span class="au-step-card-label">potential reach</span>
-          <small>1,200 per sharer, observed across multiple campaigns</small>
-        </article>
-        <article class="au-step-card" id="auStepCard4" data-i="3">
-          <span class="au-step-card-n">Step 4</span>
-          <b>500</b>
-          <span class="au-step-card-label">clicks to your page</span>
-          <small>observed across multiple campaigns</small>
-        </article>
-        <article class="au-step-card" id="auStepCard5" data-i="4">
-          <span class="au-step-card-n">Step 5</span>
-          <b>200-250</b>
-          <span class="au-step-card-label">net-new leads</span>
-          <small>people who were never at your event</small>
-        </article>
-      </div>
+      <div class="hero-wf-vdiv" aria-hidden="true"></div>
 
-      <ol class="au-hero-chain au-hero-steps" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
-        <li class="au-step">
-          <span class="au-step-n" aria-hidden="true">01</span>
-          <div class="au-step-body">
-            <b>400</b>
-            <span>booth visitors</span>
-            <small class="au-chain-note">the ones you already paid to meet</small>
+      <div class="hero-wf-right">
+        <ol class="au-pipeline" id="auHeroPipeline" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
+          <li class="au-pipe-step">
+            <div class="au-pipe-left">
+              <span class="au-pipe-num">01</span>
+              <div class="au-pipe-stat">
+                <b>400</b>
+                <span class="au-pipe-label">booth visitors</span>
+              </div>
+            </div>
+            <span class="au-pipe-note">the ones you already paid to meet</span>
+          </li>
+
+          <div class="au-pipe-conn" aria-hidden="true">
+            <svg viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 1v9M2 7l3 3 3-3"/></svg>
           </div>
-        </li>
-        <li class="au-step">
-          <span class="au-step-n" aria-hidden="true">02</span>
-          <div class="au-step-body">
-            <b>200</b>
-            <span>posts to LinkedIn</span>
-            <small class="au-chain-note">one scan, one tap, no app</small>
+
+          <li class="au-pipe-step">
+            <div class="au-pipe-left">
+              <span class="au-pipe-num">02</span>
+              <div class="au-pipe-stat">
+                <b>200</b>
+                <span class="au-pipe-label">posts to LinkedIn</span>
+              </div>
+            </div>
+            <span class="au-pipe-note">one scan, one tap, no app</span>
+          </li>
+
+          <div class="au-pipe-conn" aria-hidden="true">
+            <svg viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 1v9M2 7l3 3 3-3"/></svg>
           </div>
-        </li>
-        <li class="au-step">
-          <span class="au-step-n" aria-hidden="true">03</span>
-          <div class="au-step-body">
-            <b>240,000</b>
-            <span>potential reach</span>
-            <small class="au-chain-note">1,200 per sharer, observed across multiple campaigns</small>
+
+          <li class="au-pipe-step">
+            <div class="au-pipe-left">
+              <span class="au-pipe-num">03</span>
+              <div class="au-pipe-stat">
+                <b>240,000</b>
+                <span class="au-pipe-label">potential reach</span>
+              </div>
+            </div>
+            <span class="au-pipe-note">1,200 reach per attendee post</span>
+          </li>
+
+          <div class="au-pipe-conn" aria-hidden="true">
+            <svg viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 1v9M2 7l3 3 3-3"/></svg>
           </div>
-        </li>
-        <li class="au-step">
-          <span class="au-step-n" aria-hidden="true">04</span>
-          <div class="au-step-body">
-            <b>500</b>
-            <span>clicks to your page</span>
-            <small class="au-chain-note">observed across multiple campaigns</small>
+
+          <li class="au-pipe-step">
+            <div class="au-pipe-left">
+              <span class="au-pipe-num">04</span>
+              <div class="au-pipe-stat">
+                <b>500</b>
+                <span class="au-pipe-label">clicks to your page</span>
+              </div>
+            </div>
+            <span class="au-pipe-note">observed across campaigns</span>
+          </li>
+
+          <div class="au-pipe-conn" aria-hidden="true">
+            <svg viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 1v9M2 7l3 3 3-3"/></svg>
           </div>
-        </li>
-        <li class="au-step is-final">
-          <span class="au-step-n" aria-hidden="true">05</span>
-          <div class="au-step-body">
-            <b>200-250</b>
-            <span>net-new leads</span>
-            <small class="au-chain-note">people who were never at your event</small>
-          </div>
-        </li>
-      </ol>
+
+          <li class="au-pipe-step is-payoff">
+            <div class="au-pipe-top">
+              <div class="au-pipe-left">
+                <span class="au-pipe-num">05</span>
+                <div class="au-pipe-stat">
+                  <b>200-250</b>
+                  <span class="au-pipe-label">net-new leads</span>
+                </div>
+              </div>
+              <span class="au-pipe-badge">OUTCOME</span>
+            </div>
+            <span class="au-pipe-subnote">people who were never at your event</span>
+          </li>
+        </ol>
+      </div>
     </div>
 
     <div class="hero-content-wrap">
@@ -5542,34 +5643,8 @@
             <p class="au-norma-desc">A QR code on your booth screen. It opens in the browser. Nothing to download, no account to create.</p>
           </div>
           <div class="au-norma-card-visual">
-            <div class="au-norma-ui-card au-norma-qr-card">
-              <div class="au-norma-badge-pill">
-                <span class="au-norma-live-dot"></span>
-                <span>BOOTH 402 PORTAL</span>
-              </div>
-              <div class="au-norma-qr-box">
-                <div class="au-norma-scan-laser"></div>
-                <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
-                  <rect width="80" height="80" rx="8" fill="#FFFFFF"/>
-                  <rect x="8" y="8" width="22" height="22" rx="4" fill="none" stroke="#0F172A" stroke-width="4"/>
-                  <rect x="15" y="15" width="8" height="8" rx="1.5" fill="#0F172A"/>
-                  <rect x="50" y="8" width="22" height="22" rx="4" fill="none" stroke="#0F172A" stroke-width="4"/>
-                  <rect x="57" y="15" width="8" height="8" rx="1.5" fill="#0F172A"/>
-                  <rect x="8" y="50" width="22" height="22" rx="4" fill="none" stroke="#0F172A" stroke-width="4"/>
-                  <rect x="15" y="57" width="8" height="8" rx="1.5" fill="#0F172A"/>
-                  <rect x="36" y="12" width="6" height="6" rx="1" fill="#10B981"/>
-                  <rect x="36" y="36" width="8" height="8" rx="1.5" fill="#0F172A"/>
-                  <rect x="48" y="36" width="6" height="6" rx="1" fill="#10B981"/>
-                  <rect x="60" y="48" width="8" height="8" rx="1.5" fill="#0F172A"/>
-                  <rect x="36" y="52" width="7" height="7" rx="1" fill="#0F172A"/>
-                  <rect x="48" y="60" width="8" height="8" rx="1.5" fill="#10B981"/>
-                  <rect x="62" y="62" width="6" height="6" rx="1" fill="#0F172A"/>
-                </svg>
-              </div>
-              <div class="au-norma-portal-meta">
-                <strong>CloudSummit 2026</strong>
-                <span>Tap to broadcast &amp; claim swag</span>
-              </div>
+            <div class="au-norma-img-box">
+              <img src="/src/assets/step 1.png" alt="Attendees scan the QR code on the booth screen" class="au-norma-step-img au-norma-step-img--1" loading="lazy" decoding="async" onerror="this.src='/step-1.png'">
             </div>
           </div>
         </div>
@@ -5582,23 +5657,8 @@
             <p class="au-norma-desc">The post is already written and branded by you with specific CTA links that you want to push. One tap sends it to their LinkedIn.</p>
           </div>
           <div class="au-norma-card-visual">
-            <div class="au-norma-ui-card">
-              <div class="au-norma-post-author">
-                <div class="au-norma-av">SJ</div>
-                <div>
-                  <strong>Sarah Jenkins</strong>
-                  <span>VP Growth · Verified Attendee</span>
-                </div>
-              </div>
-              <p class="au-norma-post-text">"Had an amazing time learning about advocate amplification at <strong>#CloudSummit26</strong>! Check out Booth 402. 👋"</p>
-              <div class="au-norma-post-badge">
-                <b>CloudSummit 2026 VIP Pass</b>
-                <span>wozku.com/summit?utm_advocate=sarah</span>
-              </div>
-              <div class="au-norma-share-btn">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76c.92 0 1.66-.74 1.66-1.66 0-.92-.74-1.66-1.66-1.66-.92 0-1.66.74-1.66 1.66 0 .92.74 1.66 1.66 1.66m1.39 9.74v-8.37H5.07v8.37h2.78z"/></svg>
-                <span>Share to LinkedIn</span>
-              </div>
+            <div class="au-norma-img-box">
+              <img src="/src/assets/step 2.png" alt="Pre-written, branded post ready for one-tap sharing to LinkedIn" class="au-norma-step-img au-norma-step-img--2" loading="lazy" decoding="async" onerror="this.src='/step-2.png'">
             </div>
           </div>
         </div>
@@ -5611,31 +5671,8 @@
             <p class="au-norma-desc">Points land instantly. Their name goes up on the leaderboard. Top scorers walk away with the prize.</p>
           </div>
           <div class="au-norma-card-visual">
-            <div class="au-norma-mockup-combo">
-              <div class="au-norma-xp-banner">
-                <span class="au-norma-xp-tag">🎉 SHARED &amp; VERIFIED</span>
-                <div class="au-norma-xp-score">1,450 XP</div>
-              </div>
-              <div class="au-norma-stage-mini">
-                <div class="au-norma-stage-mini-head">
-                  <span>MAINSTAGE 4K BROADCAST</span>
-                  <span class="au-norma-live-dot"></span>
-                </div>
-                <div class="au-norma-stage-mini-row is-winner">
-                  <span class="au-norma-stage-rank">👑 #1</span>
-                  <span class="au-norma-stage-name">Sarah Jenkins</span>
-                  <span class="au-norma-stage-pts">1,450 XP</span>
-                </div>
-                <div class="au-norma-stage-mini-row">
-                  <span class="au-norma-stage-rank">#2</span>
-                  <span class="au-norma-stage-name">David Lee</span>
-                  <span class="au-norma-stage-pts">1,200 XP</span>
-                </div>
-              </div>
-              <div class="au-norma-reward-pill">
-                <span>🎁 Wozku Premium Swag Bag</span>
-                <b>Claimed ✓</b>
-              </div>
+            <div class="au-norma-img-box">
+              <img src="/src/assets/step 3.png" alt="Live leaderboard with instant points and reward verification" class="au-norma-step-img au-norma-step-img--3" loading="lazy" decoding="async" onerror="this.src='/step-3.png'">
             </div>
           </div>
         </div>
@@ -5653,30 +5690,47 @@
 
       <div class="au-story-grid reveal">
 
+        <!-- Elastic Card -->
         <article class="au-story-card">
-          <div class="au-story-kicker">Treasure Hunt, Singapore</div>
-          <h3 class="au-story-co">Elastic</h3>
-          <p class="au-story-txt">Elastic hid QR codes across the venue, each one tied to the booth or demo it sat beside. Attendees went hunting for them, then started telling each other where to find them. Sponsor booths that normally get walked past had people searching for them.</p>
+          <div class="au-story-card-top">
+            <div class="au-story-kicker">Treasure Hunt, Singapore</div>
+            <h3 class="au-story-co">Elastic</h3>
+            <p class="au-story-txt">Elastic hid QR codes across the venue, each one tied to the booth or demo it sat beside. Attendees went hunting for them, then started telling each other where to find them. Sponsor booths that normally get walked past had people searching for them.</p>
+          </div>
+
+          <div class="au-story-result">
+            <div class="au-story-stat-block">
+              <div class="au-story-stat"><b>456</b><span>shares</span></div>
+              <div class="au-story-stat"><b>817,850</b><span>potential reach</span></div>
+              <div class="au-story-stat"><b>5,570</b><span>likes</span></div>
+              <div class="au-story-stat"><b>319</b><span>clicks from networks</span></div>
+            </div>
+          </div>
         </article>
 
+        <!-- Sify Card -->
         <article class="au-story-card">
-          <div class="au-story-kicker">Mission Game, Gartner IT Symposium</div>
-          <h3 class="au-story-co">Sify</h3>
-          <p class="au-story-txt">Attendees were handed a card: scan five QR codes across the venue, share as you go, score 100 points, top three win. They walked the floor completing it, checking the leaderboard at the booth to see if they were still in the top three.</p>
+          <div class="au-story-card-top">
+            <div class="au-story-kicker">Mission Game, Gartner IT Symposium</div>
+            <h3 class="au-story-co">Sify</h3>
+            <p class="au-story-txt">Attendees were handed a card: scan five QR codes across the venue, share as you go, score 100 points, top three win. They walked the floor completing it, checking the leaderboard at the booth to see if they were still in the top three.</p>
+          </div>
+
+          <div class="au-story-result">
+            <div class="au-story-stat-block">
+              <div class="au-story-stat"><b>98</b><span>shares</span></div>
+              <div class="au-story-stat"><b>141,034</b><span>potential reach</span></div>
+              <div class="au-story-stat"><b>1,697</b><span>likes</span></div>
+              <div class="au-story-stat"><b>18.3x</b><span>return on earned media value</span></div>
+            </div>
+          </div>
         </article>
 
-      </div>
+      </div><!-- /.au-story-grid -->
 
-      <!-- "Who posted" is a caption on these figures, so it lives inside the -->
-      <!-- same plate rather than floating underneath it as a loose line. -->
-      <div class="au-story-result reveal">
-        <div class="au-story-stat-block">
-          <div class="au-story-stat"><b>98</b><span>shares</span></div>
-          <div class="au-story-stat"><b>141,034</b><span>potential reach</span></div>
-          <div class="au-story-stat"><b>1,697</b><span>likes</span></div>
-          <div class="au-story-stat"><b>18.3x</b><span>return on earned media value</span></div>
-        </div>
-        <p class="au-story-who"><strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.</p>
+      <!-- Full-width horizontal banner below the two cards -->
+      <div class="au-story-who-banner reveal">
+        <strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.
       </div>
 
       <div class="au-editorial is-tail reveal">
@@ -5744,25 +5798,25 @@
 
         </article>
 
-        <!-- Campaign photos. Stacked at rest, fanned into a row on hover. To -->
-        <!-- swap a placeholder for a real photo, replace the <span> inside the -->
-        <!-- figure with <img src="/rh-1.jpg" alt="..."> and drop the file in -->
-        <!-- public/. Nothing else needs to change. -->
+        <!-- Campaign photos. Stacked at rest, fanned into a row on hover. -->
         <div class="au-rh-fan reveal" id="auRhFan" tabindex="0" aria-label="Red Hat campaign photos. Hover or focus to fan out.">
+          <!-- 3: Left card -->
           <figure class="au-rh-shot au-rh-shot--1">
-            <img src="/rh-1.jpg" alt="Attendees at the Red Hat and Intel booth, scanning the Scan Share and Win QR code on the leaderboard screen" loading="lazy" decoding="async"
-                 onerror="this.remove()">
-            <span class="au-rh-ph">Add image 1</span>
+            <img src="/src/assets/redhat - 3.png" alt="Delegates at the Red Hat Enterprise Linux 10 stand, sharing to LinkedIn from the QR code" loading="lazy" decoding="async"
+                 onerror="this.src='/redhat-3.png'">
+            <span class="au-rh-ph">Red Hat 3</span>
           </figure>
+          <!-- 1: Centre card -->
           <figure class="au-rh-shot au-rh-shot--2">
-            <img src="/rh-2.jpg" alt="A crowd around the Red Hat and Intel booth screen during the Social Champs contest" loading="lazy" decoding="async"
-                 onerror="this.remove()">
-            <span class="au-rh-ph">Add image 2</span>
+            <img src="/src/assets/redhat - 1.png" alt="Attendees at the Red Hat and Intel booth, scanning the Scan Share and Win QR code on the leaderboard screen" loading="lazy" decoding="async"
+                 onerror="this.src='/redhat-1.png'">
+            <span class="au-rh-ph">Red Hat 1</span>
           </figure>
+          <!-- 2: Right card -->
           <figure class="au-rh-shot au-rh-shot--3">
-            <img src="/rh-3.jpg" alt="Delegates at the Red Hat Enterprise Linux 10 stand, sharing to LinkedIn from the QR code" loading="lazy" decoding="async"
-                 onerror="this.remove()">
-            <span class="au-rh-ph">Add image 3</span>
+            <img src="/src/assets/redhat - 2.png" alt="A crowd around the Red Hat and Intel booth screen during the Social Champs contest" loading="lazy" decoding="async"
+                 onerror="this.src='/redhat-2.png'">
+            <span class="au-rh-ph">Red Hat 2</span>
           </figure>
         </div>
 
@@ -5911,9 +5965,9 @@
               <label for="auSimPhone">Phone</label>
               <input type="tel" id="auSimPhone" name="phone" class="au-form-input" placeholder="Optional">
             </div>
-            <div class="au-sim-field">
+            <div class="au-sim-field is-full">
               <label for="auSimEvent">Event link or details</label>
-              <input type="text" id="auSimEvent" name="event" class="au-form-input" placeholder="Where and when is it?">
+              <textarea id="auSimEvent" name="event" class="au-form-input" placeholder="Where and when is it?" rows="3"></textarea>
             </div>
           </div>
           <button type="submit" class="au-form-btn au-sim-submit" id="auSimSubmit">
@@ -5977,39 +6031,39 @@
           <p class="au-sub au-faq-sub">Everything worth knowing before you put this on an event.</p>
         </div>
         <div class="au-faq-list">
-        <details class="au-faq-item">
+        <details class="au-faq-item" name="faq">
           <summary>Will attendees actually post?</summary>
           <div class="au-faq-a"><p>Some will not, and that is fine. Nobody is required to take part and non-participants are never tracked or contacted. With a live leaderboard and a prize on the table, participation runs 40 to 70 percent of an event, and higher among the people who reach your booth.</p></div>
         </details>
-        <details class="au-faq-item">
+        <details class="au-faq-item" name="faq">
           <summary>Won't every post look identical?</summary>
           <div class="au-faq-a"><p>You can create as many variations per post as you need, each with a different hook, and each graphic may carry the sharer's own name and photo or just a photo. If you want attendees can edit before they post. The feed does not read as automated because it isn't.</p></div>
         </details>
-        <details class="au-faq-item">
+        <details class="au-faq-item" name="faq">
           <summary>How much does my team have to do?</summary>
           <div class="au-faq-a"><p>One person, under 15 minutes, before the event. During the event, a wozku page with QR code goes on a screen. That is the operational footprint.</p></div>
         </details>
-        <details class="au-faq-item">
+        <details class="au-faq-item" name="faq">
           <summary>Is this an employee advocacy tool?</summary>
           <div class="au-faq-a"><p>No. There is no roster to enrol, no weekly content queue, no dashboard tracking who shared and who didn't. It runs for one event and stops.</p></div>
         </details>
-        <details class="au-faq-item">
+        <details class="au-faq-item" name="faq">
           <summary>Does this work for virtual events and webinars?</summary>
           <div class="au-faq-a"><p>Yes. The QR code is for the room. For virtual events the same campaign runs from a link in the registration email, the chat, or the follow-up.</p></div>
         </details>
-        <details class="au-faq-item">
+        <details class="au-faq-item" name="faq">
           <summary>Which networks does it post to?</summary>
           <div class="au-faq-a"><p>LinkedIn, Slack and X. Attendees connect their own account once and approve every post. Nothing is ever posted on their behalf.</p></div>
         </details>
-        <details class="au-faq-item">
+        <details class="au-faq-item" name="faq">
           <summary>Do attendees need to install anything?</summary>
           <div class="au-faq-a"><p>No. The QR code opens a browser page. There is no app and no account to create.</p></div>
         </details>
-        <details class="au-faq-item">
+        <details class="au-faq-item" name="faq">
           <summary>How far in advance do we need to set this up?</summary>
           <div class="au-faq-a"><p>A contest takes under 15 minutes to build. Campaigns that run before, during and after the event get better results, so a week or two of lead time helps, but same-day setup is possible.</p></div>
         </details>
-        <details class="au-faq-item">
+        <details class="au-faq-item" name="faq">
           <summary>How do we know which leads came from this?</summary>
           <div class="au-faq-a"><p>Every share carries a tracked link, and every click, form fill and registration is attributed to the attendee who generated it.</p></div>
         </details>
@@ -6943,42 +6997,7 @@ function wireCaptureForm(formId, inputId, errId) {
     showThankYou();
   });
 }
-// Hero shelf: five spines, one open at a time, advancing on a timer.
-// Desktop only, so it bails out when the shelf is not laid out. Pauses while a
-// pointer or the keyboard is on it, so it never yanks a step away mid-read.
-(function heroShelf() {
-  const shelf = document.getElementById('auShelf');
-  const cards = document.getElementById('auStepCards');
-  if (!shelf || !cards) return;
-  const items = Array.from(shelf.querySelectorAll('.au-shelf-item'));
-  const panels = Array.from(cards.querySelectorAll('.au-step-card'));
-  if (items.length !== panels.length || !items.length) return;
 
-  // No timer. A step opens because someone asked for it, and stays open until
-  // they ask for another. Step 1 is open on load so the band is never empty.
-  function open(n) {
-    items.forEach((el, k) => {
-      const on = k === n;
-      el.classList.toggle('is-open', on);
-      el.setAttribute('aria-expanded', on ? 'true' : 'false');
-    });
-    panels.forEach((el, k) => el.classList.toggle('is-open', k === n));
-  }
-
-  items.forEach((el, k) => {
-    el.addEventListener('click', () => open(k));
-    el.addEventListener('keydown', (e) => {
-      // Left and right walk the shelf, which is what a tablist-like row should do.
-      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      e.preventDefault();
-      const next = (k + (e.key === 'ArrowRight' ? 1 : -1) + items.length) % items.length;
-      open(next);
-      items[next].focus();
-    });
-  });
-
-  open(0);
-})();
 
 wireCaptureForm('auHeroForm', 'auHeroEmail', 'auHeroErr');
 wireCaptureForm('auCtaForm', 'auCtaEmail', 'auCtaErr');
@@ -9424,6 +9443,22 @@ function fireConfetti() {
   window.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);
   update();
+})();
+
+// FAQ Accordion: ensure only one FAQ item can be open at any time
+(function initFaqAccordion() {
+  const faqItems = document.querySelectorAll('.au-faq-item');
+  faqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (item.open) {
+        faqItems.forEach((other) => {
+          if (other !== item && other.open) {
+            other.open = false;
+          }
+        });
+      }
+    });
+  });
 })();
 
 </script>
