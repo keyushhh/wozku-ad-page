@@ -4082,8 +4082,12 @@
   }
   /* .hero-editorial is a centred flex column, so without width:100% this
      shrink-to-fits and the grid never reaches the right edge. */
+  /* Same track as the nav: header nav is max-width var(--container) with 24px
+     padding, so matching it lands the copy on the logo and the grid's right
+     edge on the CTA. */
   .hero-wf-lower{
     width:100%; box-sizing:border-box;
+    max-width:var(--container); margin:0 auto;
     display:grid; grid-template-columns:1fr;
     padding:0 24px;
   }
@@ -4092,16 +4096,12 @@
     text-align:left; margin-left:0; margin-right:0;
     max-width:46ch; font-size:16px; line-height:1.6; color:var(--ink-dim);
     margin-bottom:14px;
+    /* The base rule carries a shadow for white type on the emerald. This copy
+       is dark on white, where it just reads as blur. */
+    text-shadow:none;
   }
   .hero-wf-ask{margin-top:30px;}
-  .hero-wf-ask .au-hero-chain-note{
-    text-align:left; margin:0 0 14px; color:var(--ink-dim); font-size:14px;
-  }
   .hero-wf-ask .au-form-hero{margin:0; max-width:520px;}
-  .hero-wf-ask .au-form-hero .au-form-note{
-    text-align:left; color:var(--ink-dim); font-weight:500; text-shadow:none;
-  }
-  .hero-wf-ask .au-form-hero .au-form-note strong{color:var(--ink-dim);}
 
   /* The ruled grid. Verticals are absolute so they can run past the last row. */
   .is-wf ~ .hero-wf-lower .au-hero-chain,
@@ -4143,7 +4143,7 @@
   .hero-wf-lower .au-chain-node.is-final span{color:var(--ink);}
 
   @media (min-width:1000px){
-    .hero-content-wrap.is-wf{max-width:1200px;}
+    .hero-content-wrap.is-wf{max-width:var(--container);}
     .is-wf .hero-wf-head{text-align:left; max-width:66%;}
     .is-wf .au-hero-lockup{align-items:flex-start; margin-bottom:24px;}
     .is-wf .au-eyebrow{text-align:left;}
@@ -4157,7 +4157,7 @@
     .hero-wf-lower{
       grid-template-columns:minmax(0, 44fr) minmax(0, 52fr);
       column-gap:4%;
-      padding:0 0 0 var(--wf-inset);
+      padding:0 24px;
     }
     .hero-wf-left{
       padding-top:46px; padding-bottom:40px;
@@ -4761,7 +4761,6 @@
         <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn. One scan, one tap, and a post you already wrote goes out on LinkedIn. Your Product messaging reaches their network from their profile.</p>
 
         <div class="hero-wf-ask">
-          <p class="au-hero-chain-note">Same booth. Same swag budget. Zero ad spend.</p>
           <form class="au-form au-form-hero" id="auHeroForm" novalidate>
             <label for="auHeroEmail" class="sr-only">Work email</label>
             <div class="au-form-bar">
@@ -4775,7 +4774,6 @@
               </button>
             </div>
             <div class="au-form-err" id="auHeroErr" role="alert" aria-live="polite"></div>
-            <div class="au-form-note" id="auHeroPill">Free playbook &middot; 4 chapters &middot; no call required</div>
           </form>
         </div>
       </div>
