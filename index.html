@@ -4064,6 +4064,64 @@
     margin-top:34px;
   }
 
+  /* ================= EXPERIMENT: split hero ==================================
+     Copy holds the left column, the five figures sit as a grid in the bottom
+     right. Everything below (video header, carousel) still spans the full
+     width. Self-contained: remove this block and the `is-split` class on
+     .hero-content-wrap plus the .hero-split-copy wrapper to go back.
+     ------------------------------------------------------------------------ */
+  @media (min-width:1080px){
+    .hero-content-wrap.is-split{
+      display:grid;
+      grid-template-columns:minmax(0, 1.08fr) minmax(0, 0.82fr);
+      column-gap:72px;
+      align-items:end;
+      text-align:left;
+      max-width:1240px;
+    }
+    /* Copy column */
+    .is-split .hero-split-copy{grid-column:1; grid-row:1; text-align:left;}
+    .is-split .au-hero-lockup{align-items:flex-start; margin-bottom:26px;}
+    .is-split .au-eyebrow{text-align:left;}
+    .is-split h1.hero-editorial-title{text-align:left; margin-left:0; margin-right:0;}
+    .is-split .hero-editorial-sub{text-align:left; margin-left:0; margin-right:0; max-width:52ch;}
+
+    /* Figures: bottom-right grid, on the emerald, so the type inverts back. */
+    .is-split .au-hero-chain-wrap{
+      grid-column:2; grid-row:1; align-self:end;
+      margin-top:0; margin-bottom:6px;
+    }
+    .is-split .au-hero-chain{
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      max-width:none; padding-top:0;
+      gap:26px 20px;
+      border-top:1px solid rgba(255,255,255,0.16);
+      padding-top:30px;
+    }
+    .is-split .au-hero-chain::before{display:none;}
+    .is-split .au-chain-node{
+      align-items:flex-start; text-align:left; padding:0;
+    }
+    .is-split .au-chain-node + .au-chain-node::before{display:none;}
+    .is-split .au-chain-node b{
+      font-size:clamp(24px, 2.1vw, 31px); color:#FFFFFF;
+    }
+    .is-split .au-chain-node span{
+      margin-top:5px; font-size:12.5px; color:rgba(255,255,255,0.6);
+    }
+    .is-split .au-chain-node.is-final{grid-column:1 / -1;}
+    .is-split .au-chain-node.is-final b{color:#6EE7B7;}
+    .is-split .au-chain-node.is-final span{color:rgba(255,255,255,0.86);}
+    .is-split .au-hero-chain-note{
+      text-align:left; margin:20px 0 0; color:rgba(255,255,255,0.5); font-size:13.5px;
+    }
+
+    /* Everything after the two columns spans the grid again. */
+    .is-split .au-hero-video-header{grid-column:1 / -1; grid-row:2;}
+    .is-split .vc{grid-column:1 / -1; grid-row:3;}
+  }
+  /* ================= /EXPERIMENT ============================================ */
+
   /* ---- Hero funnel figures ---- */
   /* Five numbers on one baseline, divided by hairlines. Deliberately no card, */
   /* no per-node boxes, no step chips and no arrows: the row already reads left */
@@ -4635,15 +4693,17 @@
     <div class="hero-fade" aria-hidden="true"></div>
 
     <!-- Hero Typography Content -->
-    <div class="hero-content-wrap">
-      <!-- One typographic lockup, not two stacked chips. The glass pill and its -->
-      <div class="au-hero-lockup">
-        <div class="au-eyebrow" id="auHeroEyebrow">B2B Field Marketers Running Own &amp; Third Party Events</div>
-      </div>
+    <div class="hero-content-wrap is-split">
+      <div class="hero-split-copy">
+        <!-- One typographic lockup, not two stacked chips. The glass pill and its -->
+        <div class="au-hero-lockup">
+          <div class="au-eyebrow" id="auHeroEyebrow">B2B Field Marketers Running Own &amp; Third Party Events</div>
+        </div>
 
-      <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events you are already running.</h1>
-      <p class="hero-editorial-sub" id="auHeroSub">You already gamify the booth. Spin the wheel - scan the badge - take the swag. It ends with a set of data in a spreadsheet.</p>
-      <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn. One scan, one tap, and a post you already wrote goes out on LinkedIn. Your Product messaging reaches their network from their profile.</p>
+        <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events you are already running.</h1>
+        <p class="hero-editorial-sub" id="auHeroSub">You already gamify the booth. Spin the wheel - scan the badge - take the swag. It ends with a set of data in a spreadsheet.</p>
+        <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn. One scan, one tap, and a post you already wrote goes out on LinkedIn. Your Product messaging reaches their network from their profile.</p>
+      </div>
 
       <!-- What 400 paid-for booth visitors turn into. Five figures on one -->
       <!-- baseline, separated by hairlines. No cards, no step chips, no arrows: -->
@@ -7508,7 +7568,19 @@ initBookingCalendar();
     const hr = hero.getBoundingClientRect();
     if (!hr.height) return;                 // still inside a display:none view
 
-    const tailRect = tail && tail.getBoundingClientRect();
+    let tailRect = tail && tail.getBoundingClientRect();
+
+    // In the split layout the figures sit beside the copy, inside the band, so
+    // the band has to clear them too. In the stacked layout they live below it
+    // and must not be counted, or the emerald would swallow them.
+    const wrap = hero.querySelector('.hero-content-wrap');
+    const chainWrap = hero.querySelector('.au-hero-chain-wrap');
+    const split = wrap && wrap.classList.contains('is-split')
+      && getComputedStyle(wrap).display === 'grid';
+    if (split && chainWrap && tailRect) {
+      const cr = chainWrap.getBoundingClientRect();
+      if (cr.height && cr.bottom > tailRect.bottom) tailRect = cr;
+    }
 
     let band, fadeTop;
     if (tailRect && tailRect.height) {
