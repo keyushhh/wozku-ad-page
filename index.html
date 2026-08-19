@@ -3143,12 +3143,14 @@
     .bs-particles{display:none;}
   }
   /* ============ HERO VIDEO CAROUSEL (#auHeroCarousel) ===================
-     Five frames in one row, centred on the middle one: a desktop window with a
-     phone on each side, and a further desktop window off each edge. Three are
-     visible at rest; the outer two are clipped by the viewport, which is what
-     tells you the row continues.
+     ONE frame on screen at a time. The other four are still in the row, still
+     in order, but they are not shown and not playing: they arrive on the arrows
+     or a swipe. Five videos competing for attention in the hero was the whole
+     problem, so the row now presents exactly one thing to look at.
 
      ORDER:  desktop 2 | phone 1 | DESKTOP MAIN | phone 2 | desktop 3
+
+     The frame the visitor lands on is the desktop main, in the middle.
 
      The frames are the real mockups from src/assets: browser.svg and
      iphone.svg, placed as ordinary <img>s so each one keeps its exact
@@ -3156,9 +3158,10 @@
      top. ONE measurement drives the row, --winw, and every other number is read
      off those two files.
 
-     Frames are bottom aligned rather than centred. The browser carries a title
-     bar and the phone does not, so aligning them on a common baseline is what
-     makes the row read as objects standing on a surface.
+     --phonew is set so the phone's total height equals the browser's total
+     height. With one frame on screen the viewport height would otherwise jump
+     every time you moved between a window and a phone, shoving the rest of the
+     page up and down. Matching them keeps it still.
      ==================================================================== */
   .vc{
     /* The browser window's width. Everything else is derived from it.
@@ -3178,20 +3181,16 @@
        The vw term is tuned so the three-frame row always fits the page gutter:
        the row needs 1.5622 x --winw + 4 x --vc-gap and the wrap gives us
        100vw - 48px. */
-    --winw:clamp(260px, calc(63vw - 110px), 620px);
-    --phonew:calc(var(--winw) * 0.2811);
+    --winw:clamp(280px, 62vw, 760px);
+    /* browser height x (iphone width / iphone height) = matching total heights.
+       784/1280 x 345/701 = 0.30137 */
+    --phonew:calc(var(--winw) * 0.30137);
     --vc-gap:30px;
 
     position:relative;
-    /* Exactly three frames wide, plus one gap of bleed at each end.
-
-       That bleed is what the edge fade is drawn over, and it is why the gap and
-       the fade are the same measurement: at rest the left phone's outer edge
-       lands exactly where the fade ends, and the fourth and fifth frames land
-       exactly on the viewport edge. So three frames are on screen at full
-       strength, the other two are genuinely outside it, and anything crossing
-       the boundary mid-transition dissolves instead of being cut. */
-    width:calc(var(--winw) + 2 * var(--phonew) + 4 * var(--vc-gap));
+    /* One frame wide, sized to the widest of them, which is the browser. The
+       phone is narrower and simply sits centred in the same box. */
+    width:var(--winw);
     max-width:100%;
     /* Belt and braces against the shrink-to-fit problem noted on
        .hero-content-wrap: this must never report an intrinsic width. */
@@ -3217,28 +3216,15 @@
     display:flex;
     align-items:flex-end;
     transition:height 0.5s cubic-bezier(0.22, 1, 0.28, 1);
-
-    /* The edge fade. One gap wide at each end, which at rest is empty space, so
-       nothing on screen is dimmed by it. Its whole job is the moment of
-       transition, when a frame is crossing the boundary: it dissolves out
-       instead of being sliced off against a hard edge. */
-    -webkit-mask-image:linear-gradient(90deg,
-      transparent 0,
-      #000 var(--vc-gap),
-      #000 calc(100% - var(--vc-gap)),
-      transparent 100%);
-    mask-image:linear-gradient(90deg,
-      transparent 0,
-      #000 var(--vc-gap),
-      #000 calc(100% - var(--vc-gap)),
-      transparent 100%);
+    /* No edge fade any more. It existed to dissolve the frames that used to
+       flank the centre one; with a single frame on screen there is nothing at
+       the edges to hide, and a fade here would only dim the frame's own sides. */
   }
   .vc-track{flex:0 0 auto;}
 
-  /* At the two ends of the row the active frame is shown on its own. Stopping
-     on the first or last frame otherwise leaves its inward neighbours crowding
-     the view, which reads as the row having been scrolled off centre rather
-     than as a frame you chose to look at. */
+  /* One frame on screen. The rest of the row is laid out and positioned exactly
+     as before, so the slide still travels and still lands, but only the frame
+     you are on is drawn. */
   /* The frame that lands in the centre sits forward; the two beside it sit
      back. Scaled from the bottom edge so every frame stays on the shared
      baseline, and scaled DOWN rather than up so nothing ever exceeds the
@@ -3247,9 +3233,8 @@
     transform-origin:50% 100%;
     transition:opacity 0.45s ease, transform 0.55s cubic-bezier(0.34, 1.36, 0.52, 1);
   }
-  .vc-slide:not(.is-active){transform:scale(0.94); opacity:0.88;}
-  .vc-slide.is-active{transform:scale(1);}
-  .vc.is-solo .vc-slide:not(.is-active){opacity:0; pointer-events:none;}
+  .vc-slide:not(.is-active){transform:scale(0.96); opacity:0; pointer-events:none;}
+  .vc-slide.is-active{transform:scale(1); opacity:1;}
 
   /* Entrance, once the row is actually on screen. Staggered from the centre
      outwards so the main frame arrives first and the flanking ones follow. */
@@ -3262,10 +3247,6 @@
     transition:opacity 0.6s ease, transform 0.75s cubic-bezier(0.22, 1, 0.28, 1);
   }
   .vc.vc-anim.is-in .vframe{opacity:1; transform:none;}
-  .vc.vc-anim.is-in .vc-slide:nth-child(2) .vframe,
-  .vc.vc-anim.is-in .vc-slide:nth-child(4) .vframe{transition-delay:0.09s;}
-  .vc.vc-anim.is-in .vc-slide:nth-child(1) .vframe,
-  .vc.vc-anim.is-in .vc-slide:nth-child(5) .vframe{transition-delay:0.18s;}
   .vc-track{
     display:flex;
     /* Bottom aligned: see the note above about the title bar. */
@@ -3304,7 +3285,9 @@
   .vframe-screen{
     position:absolute;
     overflow:hidden;
-    background:#05100C;
+    /* Black, so any letterbox from a clip whose ratio is not the screen's reads
+       as letterbox rather than as a coloured band. */
+    background:#000000;
   }
   /* browser.svg: screen is 0 / 53 / 1280 / 731 inside a 1280 x 784 window. */
   .vc-slide--desk .vframe-screen{
@@ -3328,8 +3311,12 @@
     position:absolute; inset:0;
     display:block;
     width:100%; height:100%;
-    object-fit:cover;
-    background:#05100C;
+    /* contain, not cover: nothing is cropped. The browser mockup's screen is
+       1280x731 and the footage is 16:9, so cover was trimming a slice off the
+       frame. The mismatch is under 2%, which contain turns into a ~3px letterbox
+       against a black screen well: invisible, and no content lost. */
+    object-fit:contain;
+    background:#000000;
   }
   /* Up until the file can actually paint, so a frame whose video has not been
      uploaded yet reads as deliberate rather than broken. */
@@ -3475,10 +3462,12 @@
        own: the desktop across the viewport, the phone against the viewport
        height. Everything else derives exactly as it does above. */
     .vc{
-      --winw:min(84vw, 430px);
-      /* Off the viewport height rather than the window width here: at this size
-         the phone is a frame you look at on its own, not one flanking a window,
-         so it is sized to be worth looking at. 345/701 is the asset's ratio. */
+      --winw:min(88vw, 460px);
+      /* Off the viewport height rather than the window width here. Matching the
+         browser's height keeps the viewport still on desktop, but at this size
+         the browser frame is short and a height-matched phone would be a
+         sliver, so the phone is sized to be worth looking at instead and the
+         viewport animates between the two. 345/701 is the asset's ratio. */
       --phonew:calc(min(52svh, 420px) * 345 / 701);
       --vc-gap:16px;
       margin-top:30px;
@@ -5301,18 +5290,17 @@ function applyNavTargets() {
 }
 applyNavTargets();
 
-// 2C. HERO VIDEO CAROUSEL. Five frames in one row, centred on the middle one:
-// a desktop window with a phone on each side, and a further desktop window off
-// each edge. Replaced the scroll-driven laptop rig, which now lives in
-// laptop-parallax-kit.zip for reuse.
+// 2C. HERO VIDEO CAROUSEL. Five frames in one row, ONE on screen at a time:
+// three browser windows and two phones, landing on the middle one. Replaced the
+// scroll-driven laptop rig, which now lives in laptop-parallax-kit.zip for reuse.
 //
 // Two rules matter here:
 //  - The row is positioned in PIXELS, by measuring the active slide and
 //    centring it. Slides are deliberately different widths (a phone is not a
 //    window), so the usual translateX(-index * 100%) does not apply.
-//  - Three frames are on screen at once, so three videos play at once. They are
-//    armed in two waves, centre first, so the hero is not competing with two
-//    other downloads while it paints.
+//  - Exactly one video is ever armed and ever playing: the one you are looking
+//    at. So arriving on the page costs one video, not five, and moving through
+//    the row fetches them one at a time as they are asked for.
 (function videoCarousel() {
   const root = document.getElementById('auHeroCarousel');
   const track = document.getElementById('auVcTrack');
@@ -5336,8 +5324,6 @@ applyNavTargets();
   // Start on the centre frame, which is the desktop main.
   let index = Math.floor(slides.length / 2);
   let onScreen = true;
-  // Until the centre frame is playing, its neighbours are not fetched at all.
-  let warmed = false;
   // The resting offset of the row, in px. Drag works relative to it.
   let base = 0;
 
@@ -5370,16 +5356,14 @@ applyNavTargets();
   });
 
   // ---- playback ----------------------------------------------------------
-  // The visible set is the active frame and its two neighbours. Everything
-  // outside it is paused and re-muted, so leaving a frame never leaves its
-  // audio armed for the next visit.
+  // Only the frame on screen is armed and playing. Everything else is paused
+  // and re-muted, so leaving a frame never leaves its audio armed for the next
+  // visit, and a frame nobody has reached is never fetched at all.
   function syncPlayback() {
-    // Nothing outside the visible set plays. In solo mode that set is one frame.
-    const reach = warmed && !isSolo() ? 1 : 0;
     slides.forEach((slide, i) => {
       const video = videoOf(slide);
       if (!video) return;
-      const near = Math.abs(i - index) <= reach;
+      const near = i === index;
       if (near && onScreen) {
         arm(video);
         if (video.paused) video.play().catch(() => {});
@@ -5390,18 +5374,6 @@ applyNavTargets();
     });
   }
 
-  // Second wave: the neighbours are fetched once the centre frame is actually
-  // playing, or after a beat if it never gets there (a missing file, a codec
-  // the browser will not take). Either way the row fills in.
-  function warmUp() {
-    if (warmed) return;
-    warmed = true;
-    syncPlayback();
-  }
-  const centre = videoOf(slides[index]);
-  if (centre) centre.addEventListener('playing', warmUp, { once: true });
-  setTimeout(warmUp, 2500);
-
   // ---- position ----------------------------------------------------------
   // offsetLeft is a layout measurement and is not affected by the transform we
   // are about to set, so this stays correct across repeated calls.
@@ -5410,44 +5382,26 @@ applyNavTargets();
     return (viewport.clientWidth / 2) - (el.offsetLeft + el.offsetWidth / 2);
   }
 
-  // Which frames actually intersect the viewport horizontally at rest. On a
-  // desktop that is three; on a phone the neighbours are pushed clean off the
-  // sides and it is one.
-  function onScreenSlides() {
-    const w = viewport.clientWidth;
-    return slides.filter((s) => {
-      const left = s.offsetLeft + base;
-      return left < w && left + s.offsetWidth > 0;
-    });
-  }
-
-  // At the two ends of the row the active frame is shown on its own, so it is
-  // the only thing that counts for sizing or playback.
-  const isSolo = () => index === 0 || index === slides.length - 1;
-
+  // The viewport hugs the one frame on screen. On desktop the phone and the
+  // browser are the same height so this never moves; on mobile the phone is
+  // taller than the window and it animates between the two.
   function sizeViewport() {
-    const shown = isSolo() ? [slides[index]] : onScreenSlides();
-    if (!shown.length) return;
-    const tallest = Math.max.apply(null, shown.map((s) => s.offsetHeight));
-    const next = tallest + 'px';
+    const next = slides[index].offsetHeight + 'px';
     if (viewport.style.height !== next) viewport.style.height = next;
   }
 
   function render() {
     base = offsetFor(index);
     track.style.transform = 'translate3d(' + base.toFixed(2) + 'px, 0, 0)';
-    const solo = isSolo();
-    root.classList.toggle('is-solo', solo);
     sizeViewport();
     slides.forEach((slide, i) => {
       const active = i === index;
-      const visible = active || (!solo && Math.abs(i - index) <= 1);
       slide.classList.toggle('is-active', active);
       // Frames off screen are out of the tab order: tabbing must not land on a
       // control nobody can see.
-      slide.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      slide.setAttribute('aria-hidden', active ? 'false' : 'true');
       slide.querySelectorAll('button').forEach((b) => {
-        if (visible) b.removeAttribute('tabindex');
+        if (active) b.removeAttribute('tabindex');
         else b.setAttribute('tabindex', '-1');
       });
     });
@@ -5563,15 +5517,7 @@ applyNavTargets();
     if (!btn || !video) return;
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const turningOn = video.muted;
-      if (turningOn) {
-        // Three frames are playing at once, so only one of them may be audible.
-        slides.forEach((other) => {
-          const v = videoOf(other);
-          if (v && v !== video && !v.muted) { v.muted = true; syncMute(other); }
-        });
-      }
-      video.muted = !turningOn;
+      video.muted = !video.muted;
       // Unmuting is a user gesture, so an audible play is allowed from here.
       if (!video.muted) { arm(video); if (video.paused) video.play().catch(() => {}); }
       syncMute(slide);
