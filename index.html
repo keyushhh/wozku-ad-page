@@ -3272,6 +3272,14 @@
   .vc-slide.is-near{opacity:0.3;}
   .vc-slide.is-active{opacity:1; transform:scale(1); pointer-events:auto;}
 
+  /* A phone is much narrower than a browser window, so when the phone is the
+     main frame its neighbours are not corner slivers, they are most of a window
+     each. At the opacity that suits a 65px sliver, that much ghost dominates the
+     row. Drop it right back: enough to read as "there is more this way" and no
+     more. The row's width is fixed, so this is the only lever that does not move
+     the arrows. */
+  .vc.is-phone-main .vc-slide.is-near{opacity:0.08;}
+
   /* Entrance, once the row is actually on screen. Staggered from the centre
      outwards so the main frame arrives first and the flanking ones follow. */
   /* Gated behind .vc-anim, which the script adds on start-up. If the script
@@ -5430,6 +5438,9 @@ applyNavTargets();
   function render() {
     const current = slides[index];
     sizeRow(current);
+    // Governs how far back the ghosts sit: see the .is-phone-main note in the
+    // stylesheet for why a phone in the middle needs them much fainter.
+    root.classList.toggle('is-phone-main', current.classList.contains('vc-slide--phone'));
 
     // offsetLeft and offsetWidth are layout measurements, unaffected by the
     // transform below, so this stays correct across repeated calls. clientWidth is
