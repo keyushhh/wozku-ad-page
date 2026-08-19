@@ -4013,144 +4013,49 @@
     margin-top:34px;
   }
 
-  /* ---- Hero Funnel Multiplier Card ---- */
-  .au-hero-funnel-card{
-    position:relative;
-    max-width:1080px;
-    width:100%;
-    margin:34px auto 0;
-    padding:24px 26px 20px;
-    background:rgba(4, 28, 22, 0.6);
-    border:1px solid rgba(255, 255, 255, 0.16);
-    border-radius:var(--radius-lg);
-    backdrop-filter:blur(24px) saturate(1.4);
-    -webkit-backdrop-filter:blur(24px) saturate(1.4);
-    box-shadow:
-      0 20px 48px -12px rgba(0, 0, 0, 0.45),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    z-index:2;
-    box-sizing:border-box;
-  }
+  /* ---- Hero funnel figures ---- */
+  /* Five numbers on one baseline, divided by hairlines. Deliberately no card, */
+  /* no per-node boxes, no step chips and no arrows: the row already reads left */
+  /* to right, and every one of those was decoration competing with the figures. */
   .au-hero-chain{
-    display:flex;
-    align-items:stretch;
-    justify-content:center;
-    gap:8px;
-    width:100%;
-    margin:0;
+    position:relative; z-index:2;
+    display:grid; grid-template-columns:repeat(5, 1fr);
+    width:100%; max-width:940px; margin:46px auto 0;
   }
   .au-chain-node{
     position:relative;
-    flex:1 1 0;
-    min-width:140px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-    padding:16px 10px 14px;
-    background:rgba(255, 255, 255, 0.05);
-    border:1px solid rgba(255, 255, 255, 0.1);
-    border-radius:16px;
-    transition:transform .2s ease, border-color .2s ease, background .2s ease;
-    box-sizing:border-box;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    padding:0 12px;
   }
-  .au-chain-node:hover{
-    background:rgba(255, 255, 255, 0.09);
-    border-color:rgba(255, 255, 255, 0.22);
-    transform:translateY(-2px);
-  }
-  .au-chain-step{
-    font-family:var(--font-mono);
-    font-size:10px;
-    font-weight:600;
-    letter-spacing:0.08em;
-    color:rgba(255, 255, 255, 0.52);
-    margin-bottom:6px;
-    text-transform:uppercase;
+  /* Hairline between figures, inset from the baseline so it never touches type. */
+  .au-chain-node + .au-chain-node::before{
+    content:""; position:absolute; left:0; top:6px; bottom:6px; width:1px;
+    background:linear-gradient(180deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.18) 22%,
+      rgba(255,255,255,0.18) 78%,
+      rgba(255,255,255,0) 100%);
   }
   .au-chain-node b{
     font-family:var(--font-display);
-    font-size:clamp(19px, 1.9vw, 25px);
-    font-weight:700;
-    letter-spacing:-0.025em;
-    color:#FFFFFF;
-    line-height:1.1;
-    text-shadow:0 1px 8px rgba(0, 0, 0, 0.3);
+    font-size:clamp(26px, 3vw, 40px);
+    font-weight:700; letter-spacing:-0.04em; line-height:1;
+    color:#FFFFFF; font-variant-numeric:tabular-nums;
   }
   .au-chain-node span{
-    font-size:13px;
-    font-weight:600;
-    color:rgba(255, 255, 255, 0.92);
-    margin-top:4px;
-    line-height:1.3;
+    margin-top:10px;
+    font-size:13.5px; font-weight:500; line-height:1.35;
+    letter-spacing:-0.01em; color:rgba(255,255,255,0.62);
   }
-  .au-chain-node small{
-    font-size:11px;
-    line-height:1.35;
-    color:rgba(255, 255, 255, 0.68);
-    margin-top:auto;
-    padding-top:6px;
-  }
-  .au-chain-arrow{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-shrink:0;
-    width:20px;
-    color:rgba(16, 185, 129, 0.85);
-  }
-  .au-chain-arrow svg{
-    width:18px;
-    height:18px;
-  }
-  .au-chain-node.is-final{
-    background:linear-gradient(160deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.12) 100%);
-    border:1.5px solid rgba(16, 185, 129, 0.55);
-    box-shadow:0 0 24px -4px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  }
-  .au-chain-node.is-final:hover{
-    border-color:rgba(16, 185, 129, 0.75);
-    background:linear-gradient(160deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.18) 100%);
-  }
-  .au-chain-node.is-final .au-chain-step{
-    color:var(--brand-emerald);
-    font-weight:700;
-  }
-  .au-chain-node.is-final b{
-    color:#34D399;
-    text-shadow:0 0 16px rgba(16, 185, 129, 0.5);
-  }
-  .au-chain-node.is-final span{
-    color:#FFFFFF;
-    font-weight:700;
-  }
-  .au-chain-node.is-final small{
-    color:rgba(255, 255, 255, 0.88);
-  }
-  .au-hero-chain-pill{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    margin-top:16px;
-    padding:6px 16px;
-    background:rgba(16, 185, 129, 0.12);
-    border:1px solid rgba(16, 185, 129, 0.25);
-    border-radius:100px;
-    font-family:var(--font-mono);
-    font-size:12px;
-    font-weight:600;
-    letter-spacing:0.04em;
-    color:#34D399;
-  }
-  .au-hero-chain-pill .au-chain-dot{
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:#34D399;
-    box-shadow:0 0 8px #34D399;
+  /* The outcome is the only figure that earns colour. */
+  .au-chain-node.is-final b{color:#6EE7B7;}
+  .au-chain-node.is-final span{color:rgba(255,255,255,0.82);}
+
+  .au-hero-chain-note{
+    position:relative; z-index:2;
+    margin:30px auto 0; text-align:center;
+    font-size:14.5px; font-weight:500; letter-spacing:-0.01em;
+    color:rgba(255,255,255,0.55);
   }
 
   /* ---- Video Showcase Header (Above Video Carousel) ---- */
@@ -4204,62 +4109,35 @@
     max-width:620px;
     margin:0 auto;
   }
+  /* Plain caption rather than a pill. It is an affordance hint, not a badge. */
   .au-video-hint{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    margin-top:14px;
-    font-family:var(--font-mono);
-    font-size:11px;
-    font-weight:500;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    color:var(--ink-dim);
-    background:rgba(15, 23, 42, 0.04);
-    border:1px solid var(--line);
-    border-radius:100px;
-    padding:5px 14px;
+    display:block; margin-top:16px;
+    font-size:13.5px; font-weight:500; letter-spacing:-0.005em;
+    color:rgba(100, 116, 139, 0.85);
   }
-  .au-video-hint span{display:inline-flex; align-items:center; gap:5px;}
+  .au-video-hint span{display:inline;}
+  .au-video-hint span + span{margin-left:2px;}
 
-  @media (max-width:960px){
-    .au-hero-funnel-card{
-      padding:20px 16px 18px;
-    }
+  /* Five across becomes a 2x3 grid on narrow screens, with the outcome given */
+  /* the full last row. Row hairlines replace the column ones. */
+  @media (max-width:820px){
     .au-hero-chain{
-      flex-wrap:wrap;
-      gap:10px;
+      grid-template-columns:repeat(2, 1fr);
+      max-width:440px; margin-top:36px; row-gap:30px;
     }
-    .au-chain-node{
-      min-width:calc(33.333% - 10px);
+    .au-chain-node + .au-chain-node::before{display:none;}
+    .au-chain-node:nth-child(even)::before{
+      content:""; display:block; position:absolute; left:0; top:6px; bottom:6px; width:1px;
+      background:rgba(255,255,255,0.16);
     }
-    .au-chain-arrow{
-      display:none;
-    }
+    .au-chain-node.is-final{grid-column:1 / -1;}
+    .au-chain-node.is-final::before{display:none;}
   }
   @media (max-width:640px){
-    .au-hero-funnel-card{
-      padding:16px 12px 16px;
-      margin-top:24px;
-    }
-    .au-chain-node{
-      min-width:calc(50% - 6px);
-      padding:12px 8px 10px;
-    }
-    .au-chain-node.is-final{
-      min-width:100%;
-    }
-    .au-hero-chain-pill{
-      font-size:11px;
-      padding:5px 12px;
-      text-align:center;
-    }
-    .au-hero-video-header{
-      margin-top:42px;
-    }
-    .au-video-head-sub{
-      font-size:15px;
-    }
+    .au-hero-chain{margin-top:30px; row-gap:26px;}
+    .au-hero-chain-note{margin-top:24px; font-size:13.5px;}
+    .au-hero-video-header{margin-top:42px;}
+    .au-video-head-sub{font-size:15px;}
   }
 
   /* ---- content-v3: how-it-works kicker + closing body line ---- */
@@ -4353,11 +4231,62 @@
     font-size:18px; font-weight:500; color:var(--ink);
   }
 
-  /* ---- content-v3: outperform / lead-source sections ---- */
-  /* These are short prose sections: they do not need the full 96px band top */
-  /* and bottom that the card-heavy sections use. */
-  .au-outperform, .au-leadsource, .au-commercials{padding:72px 0;}
-  .au-outperform .au-head, .au-leadsource .au-head, .au-commercials .au-head{margin-bottom:0;}
+  /* ---- content-v3: editorial two-column prose sections ---- */
+  /* Stacked centre-aligned eyebrow / headline / quote / paragraphs / callout */
+  /* reads like a blog post. Anchoring the headline in its own column and */
+  /* setting the argument beside it turns each one back into a designed */
+  /* statement, and matches the asymmetry .au-math already uses. */
+  .au-outperform, .au-leadsource{padding:104px 0;}
+  .au-commercials{padding:88px 0;}
+
+  .au-editorial{
+    display:grid; grid-template-columns:1fr; gap:34px; align-items:start;
+  }
+  @media (min-width:900px){
+    .au-editorial{grid-template-columns:minmax(0,0.85fr) minmax(0,1fr); gap:80px;}
+  }
+  .au-editorial-head{margin:0;}
+  .au-editorial-head .au-tag{margin-bottom:18px;}
+  .au-editorial-head .au-h2{
+    font-size:clamp(30px, 3.5vw, 46px); letter-spacing:-0.035em; line-height:1.08; margin:0;
+  }
+  @media (min-width:900px){
+    /* Holds the headline in view while the argument beside it scrolls past. */
+    .au-editorial-head{position:sticky; top:120px;}
+  }
+  .au-editorial-body{display:flex; flex-direction:column; gap:22px; max-width:56ch;}
+  .au-editorial-body p{
+    font-size:17px; line-height:1.65; color:var(--ink-dim); margin:0; letter-spacing:-0.005em;
+  }
+  .au-editorial-body p strong{color:var(--ink); font-weight:600;}
+
+  /* Lead statement: the sentence the section is really about. Scoped under */
+  /* .au-editorial-body so it outranks the `.au-editorial-body p` size above. */
+  .au-editorial .au-editorial-lead{
+    font-family:"Instrument Serif", Georgia, serif;
+    font-size:clamp(25px, 2.5vw, 33px); font-weight:400; font-style:italic;
+    line-height:1.25; letter-spacing:-0.015em; color:var(--ink);
+    margin:0 0 6px; padding:0;
+  }
+  .au-editorial .au-editorial-lead em{font-style:italic; color:var(--brand-emerald-deep);}
+
+  /* Closing note: a hairline rule instead of a filled card, so it reads as an */
+  /* aside rather than another block competing with the section. */
+  /* Scoped like the lead above, for the same specificity reason. */
+  .au-editorial .au-editorial-note{
+    margin:6px 0 0; padding-left:20px;
+    border-left:2px solid var(--brand-emerald);
+    font-size:16px; font-weight:500; line-height:1.55; letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+  /* The Sify tail sits under a stat row rather than opening a section, so its */
+  /* lead is a touch quieter and the block carries its own top rule. */
+  .au-editorial.is-tail{
+    margin-top:52px; padding-top:44px; border-top:1px solid var(--line);
+  }
+  .au-editorial.is-tail .au-editorial-head .au-editorial-lead{
+    font-size:clamp(22px, 2.1vw, 28px); margin:0;
+  }
 
   /* Pull-quote: deliberately a different voice from the H2 (serif italic, */
   /* emerald) so the two never read as competing headlines. */
@@ -4585,57 +4514,32 @@
       <p class="hero-editorial-sub" id="auHeroSub">You already gamify the booth. Spin the wheel - scan the badge - take the swag. It ends with a set of data in a spreadsheet.</p>
       <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn. One scan, one tap, and a post you already wrote goes out on LinkedIn. Your Product messaging reaches their network from their profile.</p>
 
-      <!-- Funnel multiplier card: what 400 paid-for booth visitors turn into -->
-      <div class="au-hero-funnel-card" id="auHeroFunnelCard">
-        <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
-          <div class="au-chain-node">
-            <span class="au-chain-step">01 &bull; BOOTH</span>
-            <b>400</b>
-            <span>booth visitors</span>
-            <small>the ones you already paid to meet</small>
-          </div>
-          <div class="au-chain-arrow" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
-          </div>
-          <div class="au-chain-node">
-            <span class="au-chain-step">02 &bull; TAP</span>
-            <b>200</b>
-            <span>posts to LinkedIn</span>
-            <small>one scan, one tap, no app</small>
-          </div>
-          <div class="au-chain-arrow" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
-          </div>
-          <div class="au-chain-node">
-            <span class="au-chain-step">03 &bull; REACH</span>
-            <b>240,000</b>
-            <span>potential reach</span>
-            <small>1,200 per sharer across campaigns</small>
-          </div>
-          <div class="au-chain-arrow" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
-          </div>
-          <div class="au-chain-node">
-            <span class="au-chain-step">04 &bull; TRAFFIC</span>
-            <b>500</b>
-            <span>clicks to your page</span>
-            <small>observed across multiple campaigns</small>
-          </div>
-          <div class="au-chain-arrow" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
-          </div>
-          <div class="au-chain-node is-final">
-            <span class="au-chain-step">&#9733; NET RESULT</span>
-            <b>200-250</b>
-            <span>net-new leads</span>
-            <small>people who were never at your event</small>
-          </div>
+      <!-- What 400 paid-for booth visitors turn into. Five figures on one -->
+      <!-- baseline, separated by hairlines. No cards, no step chips, no arrows: -->
+      <!-- the reading order is left to right already, so anything else is noise. -->
+      <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
+        <div class="au-chain-node">
+          <b>400</b>
+          <span>booth visitors</span>
         </div>
-        <div class="au-hero-chain-pill">
-          <span class="au-chain-dot"></span>
-          <span>Same booth. Same swag budget. Zero ad spend.</span>
+        <div class="au-chain-node">
+          <b>200</b>
+          <span>posts to LinkedIn</span>
+        </div>
+        <div class="au-chain-node">
+          <b>240,000</b>
+          <span>potential reach</span>
+        </div>
+        <div class="au-chain-node">
+          <b>500</b>
+          <span>clicks to your page</span>
+        </div>
+        <div class="au-chain-node is-final">
+          <b>200-250</b>
+          <span>net-new leads</span>
         </div>
       </div>
+      <p class="au-hero-chain-note">Same booth. Same swag budget. Zero ad spend.</p>
 
       <!-- Video Showcase Header Section (introduces the live event video carousel) -->
       <div class="au-hero-video-header" id="auHeroVideoHeader">
@@ -5069,12 +4973,16 @@
 
       <p class="au-story-who reveal"><strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.</p>
 
-      <div class="au-story-body is-long reveal">
-        <p>It is worth sitting with that for a second.</p>
-        <p>Think about what it normally takes to get a CISO to say your product name in public. Not a reply to an email. Not a meeting. A post on their own profile, under their own name, where their board and their peers can see it.</p>
-        <p>There is no ad unit you can buy that produces that. There is no sequence that produces it. It is usually the output of a customer relationship measured in years, and you cannot manufacture it on a normal Tuesday for any amount of money.</p>
-        <p>Here it happened in an afternoon, at a booth, because it was gamified.</p>
-        <p>And the reach that follows is not generic reach. A CIO's network is mostly other CIOs. Those 141,034 potential impressions landed in front of the exact titles Sify sells to, which is the audience their paid campaigns spend the most to reach and never get an endorsement from.</p>
+      <div class="au-editorial is-tail reveal">
+        <div class="au-editorial-head">
+          <p class="au-editorial-lead">It is worth sitting with that for a second.</p>
+        </div>
+        <div class="au-editorial-body">
+          <p>Think about what it normally takes to get a CISO to say your product name in public. Not a reply to an email. Not a meeting. A post on their own profile, under their own name, where their board and their peers can see it.</p>
+          <p>There is no ad unit you can buy that produces that. There is no sequence that produces it. It is usually the output of a customer relationship measured in years, and you cannot manufacture it on a normal Tuesday for any amount of money.</p>
+          <p>Here it happened in an afternoon, at a booth, because it was gamified.</p>
+          <p>And the reach that follows is not generic reach. A CIO's network is mostly other CIOs. Those 141,034 potential impressions landed in front of the exact titles Sify sells to, which is the audience their paid campaigns spend the most to reach and never get an endorsement from.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -5155,32 +5063,36 @@
   <!-- WHY THE ATTENDEE POST OUTPERFORMS YOURS -->
   <section class="au-section au-outperform" id="auOutperform">
     <div class="wrap">
-      <div class="au-head reveal">
-        <span class="au-tag">Why it travels</span>
-        <h2 class="au-h2">The same message, from a person instead of a page.</h2>
+      <div class="au-editorial reveal">
+        <div class="au-editorial-head">
+          <span class="au-tag">Why it travels</span>
+          <h2 class="au-h2">The same message, from a person instead of a page.</h2>
+        </div>
+        <div class="au-editorial-body">
+          <p class="au-editorial-lead">Your CEO's keynote deserves better than 40 likes from people who already report to her.</p>
+          <p>Your company page reaches the people who already follow you. Most of them are colleagues, existing customers and competitors. And perhaps, you have already noticed, it is not working anymore.</p>
+          <p>An attendee's post reaches a network of peers who share their job title, and it arrives from someone they already trust. The same message travels 3 to 10 times further from a person than from a brand page.</p>
+          <p class="au-editorial-note">This is why the promo kit never worked. It was the right content, sent through the wrong account.</p>
+        </div>
       </div>
-      <blockquote class="au-pb-quote is-large reveal">Your CEO's keynote deserves better than 40 likes from people who already report to her.</blockquote>
-      <div class="au-story-body reveal">
-        <p>Your company page reaches the people who already follow you. Most of them are colleagues, existing customers and competitors. And perhaps, you have already noticed, it is not working anymore.</p>
-        <p>An attendee's post reaches a network of peers who share their job title, and it arrives from someone they already trust. The same message travels 3 to 10 times further from a person than from a brand page.</p>
-      </div>
-      <p class="au-callout reveal">This is why the promo kit never worked. It was the right content, sent through the wrong account.</p>
     </div>
   </section>
 
   <!-- WHERE THE LEADS COME FROM -->
   <section class="au-section au-leadsource" id="auLeadSource">
     <div class="wrap">
-      <div class="au-head reveal">
-        <span class="au-tag">Attribution</span>
-        <h2 class="au-h2">Posts are not the outcome. Leads are.</h2>
+      <div class="au-editorial reveal">
+        <div class="au-editorial-head">
+          <span class="au-tag">Attribution</span>
+          <h2 class="au-h2">Posts are not the outcome. Leads are.</h2>
+        </div>
+        <div class="au-editorial-body">
+          <p>Every share may carry a tracked link (simple UTMed link to your landing page). When someone in that attendee's network clicks it, they land on your registration page, your gated report, or a page that captures their details before it hands them off.</p>
+          <p>Every click, form fill and registration is attributed back to the event campaign you ran. You end up with net new leads, not just an impressions number.</p>
+          <p>Which means when your VP asks what the booth produced, you can answer the question they actually asked.</p>
+          <p class="au-editorial-lead">Nobody cuts the budget for the thing that's visibly working. This is how you make it visible.</p>
+        </div>
       </div>
-      <div class="au-story-body reveal">
-        <p>Every share may carry a tracked link (simple UTMed link to your landing page). When someone in that attendee's network clicks it, they land on your registration page, your gated report, or a page that captures their details before it hands them off.</p>
-        <p>Every click, form fill and registration is attributed back to the event campaign you ran. You end up with net new leads, not just an impressions number.</p>
-        <p>Which means when your VP asks what the booth produced, you can answer the question they actually asked.</p>
-      </div>
-      <blockquote class="au-pb-quote reveal">Nobody cuts the budget for the thing that's visibly working. This is how you make it visible.</blockquote>
     </div>
   </section>
 
@@ -7414,26 +7326,25 @@ initBookingCalendar();
   if (!hero) return;
 
   function apply() {
-    const funnelCard = hero.querySelector('.au-hero-funnel-card') || hero.querySelector('.au-hero-chain');
-    const videoHead = hero.querySelector('.au-hero-video-header');
+    // The figures row is the last thing sitting on the emerald, so the band has
+    // to clear it and its note before the page dissolves to white.
+    const tail = hero.querySelector('.au-hero-chain-note') || hero.querySelector('.au-hero-chain');
     const hr = hero.getBoundingClientRect();
     if (!hr.height) return;                 // still inside a display:none view
 
-    // Bottom of the band: encompass the funnel card so it sits nicely inside the emerald glow
-    const cardRect = funnelCard && funnelCard.getBoundingClientRect();
-    const vhRect = videoHead && videoHead.getBoundingClientRect();
+    const tailRect = tail && tail.getBoundingClientRect();
 
     let band;
-    if (cardRect && cardRect.height) {
-      band = cardRect.bottom - hr.top + 50;
+    if (tailRect && tailRect.height) {
+      band = tailRect.bottom - hr.top + 96;
     } else {
       band = Math.round(window.innerHeight * 0.85);
     }
 
-    // Start of the dissolve: right at the bottom edge of the funnel card
+    // Dissolve begins just past the note, so the type never sits on the seam.
     let fadeTop;
-    if (cardRect && cardRect.height) {
-      fadeTop = Math.max(0, cardRect.bottom - hr.top - 20);
+    if (tailRect && tailRect.height) {
+      fadeTop = Math.max(0, tailRect.bottom - hr.top + 16);
     } else {
       fadeTop = band * 0.65;
     }
