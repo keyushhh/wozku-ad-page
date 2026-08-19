@@ -4119,6 +4119,87 @@
   .hero-wf-ask .au-form-bar{box-shadow:none;}
   .hero-wf-ask .au-form-bar:focus-within{box-shadow:0 0 0 4px rgba(16,185,129,0.14);}
 
+  /* ---- The shelf, and the card it opens ----
+     Five spines stand in the headline band, above the divider. The open one
+     leaves the shelf and its figure appears below the divider, on white. Glass
+     spines were unreadable against the emerald, so these are solid white.
+     Desktop only. Below 1000px both are display:none and the numbered rail
+     under the divider carries the figures, which keeps exactly one of the two
+     in the accessibility tree rather than reading the numbers twice. */
+  .au-shelf, .au-step-cards{display:none;}
+  @media (min-width:1000px){
+    .au-shelf{
+      display:flex; gap:10px; align-items:stretch; justify-content:flex-end;
+      height:196px; min-width:0;
+    }
+    .au-shelf-item{
+      flex:0 0 52px; min-width:0; padding:16px 0 18px; margin:0;
+      display:flex; flex-direction:column; align-items:center; justify-content:space-between;
+      cursor:pointer; border-radius:12px;
+      background:#FFFFFF; border:1px solid rgba(255,255,255,0.9);
+      box-shadow:0 14px 30px -18px rgba(6,32,24,0.5);
+      transition:flex-basis .5s cubic-bezier(0.22, 1, 0.28, 1),
+                 opacity .4s ease, transform .5s cubic-bezier(0.22, 1, 0.28, 1),
+                 margin .5s cubic-bezier(0.22, 1, 0.28, 1);
+    }
+    .au-shelf-item:hover{transform:translateY(-3px);}
+    .au-shelf-item:focus-visible{outline:2px solid #FFFFFF; outline-offset:3px;}
+    .au-shelf-n{
+      font-family:var(--font-mono), monospace; font-size:12px;
+      color:var(--brand-emerald-deep); font-variant-numeric:tabular-nums;
+    }
+    /* Set on its side, so a 52px spine still carries a readable label. */
+    .au-shelf-word{
+      writing-mode:vertical-rl; transform:rotate(180deg);
+      font-family:var(--font-mono), monospace;
+      font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
+      color:var(--ink-dim); white-space:nowrap;
+    }
+    /* The open step is not on the shelf: it is the card below the divider.
+       Collapsed rather than display:none so the others slide across to close
+       the gap instead of jumping. */
+    .au-shelf-item.is-open{
+      flex-basis:0; opacity:0; transform:translateY(-10px);
+      margin-left:-10px; pointer-events:none; overflow:hidden;
+    }
+
+    .au-step-cards{display:block; position:relative; align-self:center;}
+    .au-step-card{
+      display:none;
+      padding:26px 28px; border-radius:16px;
+      border:1px solid var(--line); background:#FFFFFF;
+      box-shadow:0 18px 40px -26px rgba(15,23,42,0.32);
+      text-align:left;
+    }
+    .au-step-card.is-open{display:block; animation:auStepIn .45s cubic-bezier(0.22, 1, 0.28, 1);}
+    @keyframes auStepIn{from{opacity:0; transform:translateY(-8px);} to{opacity:1; transform:none;}}
+    .au-step-card-n{
+      display:block; margin-bottom:12px;
+      font-family:var(--font-mono), monospace;
+      font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase;
+      color:var(--brand-emerald-deep);
+    }
+    .au-step-card b{
+      display:block;
+      font-family:var(--font-display); font-size:clamp(34px, 3.4vw, 48px);
+      font-weight:700; letter-spacing:-0.04em; line-height:1;
+      color:var(--ink); font-variant-numeric:tabular-nums;
+    }
+    .au-step-card-label{
+      display:block; margin-top:9px;
+      font-size:16px; font-weight:600; color:var(--ink);
+    }
+    .au-step-card small{
+      display:block; margin-top:8px;
+      font-size:12.5px; line-height:1.45; color:var(--ink-dim); max-width:34ch;
+    }
+    .au-step-card[data-i="4"] b{color:var(--brand-emerald-deep);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .au-shelf-item{transition:none;}
+    .au-step-card.is-open{animation:none;}
+  }
+
   /* The journey rail. One step per row, numbered 01 to 05, hung off a single
      vertical line so the sequence is unmistakable. Replaced a three-across grid
      that wrapped after the third figure, so it never read as a 1-to-5 order,
@@ -4194,7 +4275,12 @@
 
   @media (min-width:1000px){
     .hero-content-wrap.is-wf{max-width:var(--container);}
-    .is-wf .hero-wf-head{text-align:left; max-width:66%;}
+    .is-wf .hero-wf-head{
+      text-align:left; max-width:none;
+      display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 46%);
+      column-gap:5%; align-items:center;
+    }
+    .hero-wf-head-copy{min-width:0;}
     .is-wf .au-hero-lockup{align-items:flex-start; margin-bottom:24px;}
     .is-wf .au-eyebrow{text-align:left;}
     .is-wf h1.hero-editorial-title{
@@ -4205,7 +4291,7 @@
     .hero-wf-rule{margin-top:64px;}
     /* Left column sits on the container inset; the grid runs to the page edge. */
     .hero-wf-lower{
-      grid-template-columns:minmax(0, 44fr) minmax(0, 52fr);
+      grid-template-columns:minmax(0, 46fr) minmax(0, 50fr);
       column-gap:4%;
       padding:0 24px;
     }
@@ -4218,10 +4304,8 @@
     }
     /* Pushes the ask to the bottom of the column, as in the wireframe. */
     .hero-wf-ask{margin-top:auto; padding-top:44px;}
-    .hero-wf-lower .au-hero-chain{
-      margin:0; padding-bottom:20px;
-      align-self:stretch;
-    }
+    /* The shelf in the headline band carries the figures above 1000px. */
+    .hero-wf-lower .au-hero-chain{display:none;}
   }
   @media (max-width:999px){
     /* Stacked: copy, ask, then the rail full width with its own top rule. */
@@ -4979,10 +5063,50 @@
          3x2 ruled grid flush to the right edge of the page. -->
     <div class="hero-content-wrap is-wf">
       <div class="hero-wf-head">
-        <div class="au-hero-lockup">
-          <div class="au-eyebrow" id="auHeroEyebrow">B2B Field Marketers Running Own &amp; Third Party Events</div>
+        <div class="hero-wf-head-copy">
+          <div class="au-hero-lockup">
+            <div class="au-eyebrow" id="auHeroEyebrow">B2B Field Marketers Running Own &amp; Third Party Events</div>
+          </div>
+          <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events you are already running.</h1>
         </div>
-        <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events you are already running.</h1>
+
+        <!-- The five figures as a shelf of closed spines. One opens at a time and
+             the set advances on a timer. Desktop only: below 1000px this is
+             display:none and the numbered rail under the divider takes over, so
+             only one of the two is ever in the accessibility tree. -->
+        <!-- A shelf of closed spines. The open one leaves the shelf and its
+             figure opens below the divider, in the white band, which is where
+             there is room for it and contrast to read it. Desktop only: below
+             1000px this is display:none and the numbered rail under the divider
+             carries the figures, so only one of the two is ever in the
+             accessibility tree. -->
+        <div class="au-shelf" id="auShelf" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
+          <button type="button" class="au-shelf-item is-open" data-i="0"
+                  aria-controls="auStepCard1" aria-expanded="true">
+            <span class="au-shelf-n">01</span>
+            <span class="au-shelf-word">Step 1</span>
+          </button>
+          <button type="button" class="au-shelf-item" data-i="1"
+                  aria-controls="auStepCard2" aria-expanded="false">
+            <span class="au-shelf-n">02</span>
+            <span class="au-shelf-word">Step 2</span>
+          </button>
+          <button type="button" class="au-shelf-item" data-i="2"
+                  aria-controls="auStepCard3" aria-expanded="false">
+            <span class="au-shelf-n">03</span>
+            <span class="au-shelf-word">Step 3</span>
+          </button>
+          <button type="button" class="au-shelf-item" data-i="3"
+                  aria-controls="auStepCard4" aria-expanded="false">
+            <span class="au-shelf-n">04</span>
+            <span class="au-shelf-word">Step 4</span>
+          </button>
+          <button type="button" class="au-shelf-item" data-i="4"
+                  aria-controls="auStepCard5" aria-expanded="false">
+            <span class="au-shelf-n">05</span>
+            <span class="au-shelf-word">Step 5</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -5016,6 +5140,40 @@
            rail, so it reads 01 to 05 rather than as a table. Each row owns
            its own baseline, which is what fixes the caption lines pushing
            their neighbours down in the old grid. -->
+      <!-- Opened by the shelf above. One card visible at a time. -->
+      <div class="au-step-cards" id="auStepCards">
+        <article class="au-step-card is-open" id="auStepCard1" data-i="0">
+          <span class="au-step-card-n">Step 1</span>
+          <b>400</b>
+          <span class="au-step-card-label">booth visitors</span>
+          <small>the ones you already paid to meet</small>
+        </article>
+        <article class="au-step-card" id="auStepCard2" data-i="1">
+          <span class="au-step-card-n">Step 2</span>
+          <b>200</b>
+          <span class="au-step-card-label">posts to LinkedIn</span>
+          <small>one scan, one tap, no app</small>
+        </article>
+        <article class="au-step-card" id="auStepCard3" data-i="2">
+          <span class="au-step-card-n">Step 3</span>
+          <b>240,000</b>
+          <span class="au-step-card-label">potential reach</span>
+          <small>1,200 per sharer, observed across multiple campaigns</small>
+        </article>
+        <article class="au-step-card" id="auStepCard4" data-i="3">
+          <span class="au-step-card-n">Step 4</span>
+          <b>500</b>
+          <span class="au-step-card-label">clicks to your page</span>
+          <small>observed across multiple campaigns</small>
+        </article>
+        <article class="au-step-card" id="auStepCard5" data-i="4">
+          <span class="au-step-card-n">Step 5</span>
+          <b>200-250</b>
+          <span class="au-step-card-label">net-new leads</span>
+          <small>people who were never at your event</small>
+        </article>
+      </div>
+
       <ol class="au-hero-chain au-hero-steps" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
         <li class="au-step">
           <span class="au-step-n" aria-hidden="true">01</span>
@@ -6752,6 +6910,58 @@ function wireCaptureForm(formId, inputId, errId) {
     showThankYou();
   });
 }
+// Hero shelf: five spines, one open at a time, advancing on a timer.
+// Desktop only, so it bails out when the shelf is not laid out. Pauses while a
+// pointer or the keyboard is on it, so it never yanks a step away mid-read.
+(function heroShelf() {
+  const shelf = document.getElementById('auShelf');
+  const cards = document.getElementById('auStepCards');
+  if (!shelf || !cards) return;
+  const items = Array.from(shelf.querySelectorAll('.au-shelf-item'));
+  const panels = Array.from(cards.querySelectorAll('.au-step-card'));
+  if (items.length !== panels.length || !items.length) return;
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let i = 0;
+  let timer = null;
+  let held = false;
+
+  function open(n) {
+    i = (n + items.length) % items.length;
+    items.forEach((el, k) => {
+      const on = k === i;
+      el.classList.toggle('is-open', on);
+      el.setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+    panels.forEach((el, k) => el.classList.toggle('is-open', k === i));
+  }
+
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+
+  function start() {
+    stop();
+    // Below 1000px the shelf is display:none and the rail under the divider
+    // carries the figures, so there is nothing to advance.
+    if (held || reduced.matches || !shelf.offsetParent) return;
+    timer = setInterval(() => open(i + 1), 3600);
+  }
+
+  items.forEach((el, k) => {
+    el.addEventListener('click', () => { open(k); start(); });
+    el.addEventListener('focus', () => { open(k); });
+  });
+
+  ['pointerenter', 'focusin'].forEach((e) => shelf.addEventListener(e, () => { held = true; stop(); }));
+  ['pointerleave', 'focusout'].forEach((e) => shelf.addEventListener(e, () => { held = false; start(); }));
+
+  window.addEventListener('resize', start, { passive: true });
+  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+  if (reduced.addEventListener) reduced.addEventListener('change', start);
+
+  open(0);
+  start();
+})();
+
 wireCaptureForm('auHeroForm', 'auHeroEmail', 'auHeroErr');
 wireCaptureForm('auCtaForm', 'auCtaEmail', 'auCtaErr');
 wireCaptureForm('auRedhatForm', 'auRedhatEmail', 'auRedhatErr');
