@@ -434,8 +434,15 @@
   }
   .hero-content-wrap{
     position:relative; z-index:2;
+    /* .hero-editorial is a column flex box with align-items:center, which makes
+       this a shrink-to-fit item rather than a full-width block. Without an
+       explicit width it sizes to its widest child, and the carousel's row of
+       frames is deliberately wider than the screen, so the wrap was inflating
+       to 1068px inside a 390px section and pushing the page sideways. */
+    width:100%;
     max-width:1200px; margin:0 auto;
     padding:0 24px;
+    box-sizing:border-box;
   }
   h1.hero-editorial-title{
     font-size:clamp(34px, 3.9vw, 52px);
@@ -3136,61 +3143,154 @@
     .bs-particles{display:none;}
   }
   /* ============ HERO VIDEO CAROUSEL (#auHeroCarousel) ===================
-     Three device frames, one visible at a time. Replaced the scroll-driven
-     laptop rig: same job, no pinned scroll, no per-frame 3D transform, and
-     it behaves identically at every width instead of needing a separate
-     phone build below 700px.
+     Five frames in one row, centred on the middle one: a desktop window with a
+     phone on each side, and a further desktop window off each edge. Three are
+     visible at rest; the outer two are clipped by the viewport, which is what
+     tells you the row continues.
 
-     Only the active slide's <video> ever gets a src attached, so a visitor
-     who never advances the carousel downloads exactly one file. See the
-     videoCarousel module in the script for that gating.
+     ORDER:  desktop 2 | phone 1 | DESKTOP MAIN | phone 2 | desktop 3
+
+     ONE measurement drives the row. --deskw is set; the shared frame height
+     comes off it at 16:9, and the phone width comes off that height at 9:19.5.
+     So the whole composition scales from a single clamp and no two numbers can
+     drift out of step. Mobile overrides exactly two of those variables.
+
+     Frames are bottom aligned rather than centred. A desktop frame carries a
+     title bar and a phone does not, so aligning their screens on a common
+     baseline is what makes the row read as objects standing on a surface.
      ==================================================================== */
   .vc{
+    /* The desktop frame's width. Everything else is derived from it. The vw
+       term is tuned so the three-frame row below always fits the page gutter:
+       required width is 1.52 x --deskw + 4 x --vc-gap, and the wrap gives us
+       100vw - 48px, so --deskw has to stay under about 0.62vw. */
+    --deskw:clamp(260px, calc(62vw - 112px), 620px);
+    --frameh:calc(var(--deskw) * 9 / 16);
+    /* Phones share the desktop screen's height by default. */
+    --phoneh:var(--frameh);
+    --phonew:calc(var(--phoneh) * 0.4615);
+    --vc-gap:30px;
+
     position:relative;
-    width:100%;
-    max-width:940px;
+    /* Exactly three frames wide, plus one gap of bleed at each end.
+
+       That bleed is what the edge fade is drawn over, and it is why the gap and
+       the fade are the same measurement: at rest the left phone's outer edge
+       lands exactly where the fade ends, and the fourth and fifth frames land
+       exactly on the viewport edge. So three frames are on screen at full
+       strength, the other two are genuinely outside it, and anything crossing
+       the boundary mid-transition dissolves instead of being cut. */
+    width:calc(var(--deskw) + 2 * var(--phonew) + 4 * var(--vc-gap));
+    max-width:100%;
+    /* Belt and braces against the shrink-to-fit problem noted on
+       .hero-content-wrap: this must never report an intrinsic width. */
+    min-width:0;
     margin:46px auto 0;
   }
-  /* The viewport clips the neighbouring slides. It carries the frames' drop
-     shadow as padding rather than letting overflow:hidden slice it off. */
   .vc-viewport{
     overflow:hidden;
-    padding:14px 0 26px;
-    margin:-14px 0 -26px;
+    /* Just enough room for a focus ring, which is 2px wide at 3px offset. */
+    padding:6px 0;
+    margin:-6px 0;
     touch-action:pan-y;
+    /* Bottom anchored, so when the row is taller than the viewport it is the
+       TOP that gets clipped and every frame keeps standing on the same
+       baseline. Without this the track would hang from the top and a short
+       frame would drop out of view entirely.
+
+       The height itself is set by the script, to the tallest frame currently on
+       screen. A 16:9 window and a 9:19.5 phone are very different heights, so a
+       fixed box would mean a pane of dead space above whichever one is shorter.
+       At desktop widths the tallest frame is always visible and this resolves to
+       a constant; it only really moves on mobile, one frame at a time. */
+    display:flex;
+    align-items:flex-end;
+    transition:height 0.5s cubic-bezier(0.22, 1, 0.28, 1);
+
+    /* The edge fade. One gap wide at each end, which at rest is empty space, so
+       nothing on screen is dimmed by it. Its whole job is the moment of
+       transition, when a frame is crossing the boundary: it dissolves out
+       instead of being sliced off against a hard edge. */
+    -webkit-mask-image:linear-gradient(90deg,
+      transparent 0,
+      #000 var(--vc-gap),
+      #000 calc(100% - var(--vc-gap)),
+      transparent 100%);
+    mask-image:linear-gradient(90deg,
+      transparent 0,
+      #000 var(--vc-gap),
+      #000 calc(100% - var(--vc-gap)),
+      transparent 100%);
   }
+  .vc-track{flex:0 0 auto;}
+
+  /* At the two ends of the row the active frame is shown on its own. Stopping
+     on the first or last frame otherwise leaves its inward neighbours crowding
+     the view, which reads as the row having been scrolled off centre rather
+     than as a frame you chose to look at. */
+  /* The frame that lands in the centre sits forward; the two beside it sit
+     back. Scaled from the bottom edge so every frame stays on the shared
+     baseline, and scaled DOWN rather than up so nothing ever exceeds the
+     height the script measured for the viewport. */
+  .vc-slide{
+    transform-origin:50% 100%;
+    transition:opacity 0.45s ease, transform 0.55s cubic-bezier(0.34, 1.36, 0.52, 1);
+  }
+  .vc-slide:not(.is-active){transform:scale(0.94); opacity:0.88;}
+  .vc-slide.is-active{transform:scale(1);}
+  .vc.is-solo .vc-slide:not(.is-active){opacity:0; pointer-events:none;}
+
+  /* Entrance, once the row is actually on screen. Staggered from the centre
+     outwards so the main frame arrives first and the flanking ones follow. */
+  /* Gated behind .vc-anim, which the script adds on start-up. If the script
+     never runs, the entrance never applies and the frames are simply visible,
+     rather than the hero being left blank at opacity 0. */
+  .vc.vc-anim .vframe{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity 0.6s ease, transform 0.75s cubic-bezier(0.22, 1, 0.28, 1);
+  }
+  .vc.vc-anim.is-in .vframe{opacity:1; transform:none;}
+  .vc.vc-anim.is-in .vc-slide:nth-child(2) .vframe,
+  .vc.vc-anim.is-in .vc-slide:nth-child(4) .vframe{transition-delay:0.09s;}
+  .vc.vc-anim.is-in .vc-slide:nth-child(1) .vframe,
+  .vc.vc-anim.is-in .vc-slide:nth-child(5) .vframe{transition-delay:0.18s;}
   .vc-track{
     display:flex;
-    align-items:stretch;
+    /* Bottom aligned: see the note above about the title bar. */
+    align-items:flex-end;
+    gap:var(--vc-gap);
+    width:max-content;
     will-change:transform;
-    transition:transform 0.62s cubic-bezier(0.22, 1, 0.28, 1);
+    /* The snap. A touch of overshoot past 1 in the curve is what makes the row
+       arrive with a click rather than glide to a stop, and the edge fade is what
+       lets it overshoot without the outer frames showing a hard edge. */
+    transition:transform 0.55s cubic-bezier(0.34, 1.36, 0.52, 1);
   }
   .vc-track.is-dragging{transition:none;}
-  .vc-slide{
-    flex:0 0 100%;
-    min-width:0;
-    padding:0 6px;
-    box-sizing:border-box;
-  }
+  .vc-slide{flex:0 0 auto;}
+  .vc-slide--desk{width:var(--deskw);}
+  .vc-slide--phone{width:var(--phonew);}
 
   /* ---- The frame ---- */
   .vframe{
     position:relative;
-    border-radius:16px;
-    padding:0;
     overflow:hidden;
     background:linear-gradient(168deg, #2C3240 0%, #14171F 46%, #0A0C11 100%);
+    /* No outer drop shadow. The viewport clips the row on all four sides, so a
+       cast shadow was being sliced off square along the bottom edge and read as
+       a hard line rather than as depth. The inset hairlines carry the edge. */
     box-shadow:
       inset 0 0 0 1px rgba(255, 255, 255, 0.10),
-      inset 0 1px 0 rgba(255, 255, 255, 0.18),
-      0 30px 60px -28px rgba(4, 26, 20, 0.55);
-    transition:box-shadow 0.4s ease, opacity 0.4s ease;
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
   }
-  /* Off-screen slides sit back a little so the active one is unambiguous. */
-  .vc-slide:not(.is-active) .vframe{opacity:0.55;}
+  .vc-slide--desk .vframe{border-radius:14px;}
+  /* A phone has no title bar, so its own corner radius is the whole tell. */
+  .vc-slide--phone .vframe{border-radius:26px;}
 
-  /* Window chrome. Three dots and a blank address pill: enough to read as an
-     application window without pretending to be a specific browser. */
+  /* Window chrome, desktop frames only. Three dots and a blank address pill:
+     enough to read as an application window without pretending to be a
+     specific browser. */
   .vframe-bar{
     display:flex;
     align-items:center;
@@ -3214,13 +3314,17 @@
     background:rgba(255, 255, 255, 0.06);
   }
 
-  /* The screen well. 16:9 so landscape footage fills it with no letterbox. */
+  /* The screen well. Height is set rather than an aspect ratio, because the
+     width already comes from the slide and the two must agree exactly: a
+     desktop screen is --deskw by --frameh (16:9) and a phone screen is
+     --phonew by --phoneh (9:19.5). */
   .vframe-screen{
     position:relative;
-    aspect-ratio:16 / 9;
+    height:var(--frameh);
     background:#05100C;
     overflow:hidden;
   }
+  .vc-slide--phone .vframe-screen{height:var(--phoneh);}
   .vframe-video{
     position:absolute; inset:0;
     display:block;
@@ -3228,8 +3332,8 @@
     object-fit:cover;
     background:#05100C;
   }
-  /* Shown until the video can actually paint a frame, so a slide whose file
-     has not been uploaded yet reads as deliberate rather than broken. */
+  /* Up until the file can actually paint, so a frame whose video has not been
+     uploaded yet reads as deliberate rather than broken. */
   .vframe-idle{
     position:absolute; inset:0;
     display:flex;
@@ -3241,14 +3345,15 @@
   .vframe.is-playing .vframe-idle{opacity:0; pointer-events:none;}
   .vframe-idle span{
     font-family:var(--font-display);
-    font-size:15px;
+    /* Tracks the frame, so the plate does not shout inside a small phone. */
+    font-size:clamp(9px, calc(var(--frameh) * 0.045), 15px);
     font-weight:700;
     letter-spacing:0.34em;
     text-transform:uppercase;
     color:rgba(255, 255, 255, 0.30);
   }
 
-  /* ---- Per-frame controls ---- */
+  /* ---- Per-frame controls, on the centred frame only ---- */
   .vframe-tools{
     position:absolute;
     right:12px; bottom:12px;
@@ -3257,10 +3362,11 @@
     align-items:center;
     gap:8px;
     opacity:0;
+    pointer-events:none;
     transition:opacity 0.3s ease;
   }
-  /* Always up on touch, where there is no hover to reveal them. */
-  .vc-slide.is-active .vframe-tools{opacity:1;}
+  .vc-slide.is-active .vframe-tools{opacity:1; pointer-events:auto;}
+  .vc-slide--phone .vframe-tools{right:8px; bottom:8px; gap:6px;}
   /* .au-sound-btn is absolutely positioned by default, for the frame it used
      to live in. In here it is one of two chips in a flex row. */
   .vframe-tools .au-sound-btn{
@@ -3269,6 +3375,7 @@
     width:36px; height:36px;
   }
   .vc-fs{
+    position:relative;
     width:36px; height:36px;
     display:grid; place-items:center;
     padding:0;
@@ -3282,6 +3389,9 @@
     box-shadow:0 8px 24px rgba(0, 0, 0, 0.4);
     transition:all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
+  .vc-slide--phone .vframe-tools .au-sound-btn,
+  .vc-slide--phone .vc-fs{width:30px; height:30px;}
+  .vc-slide--phone .vc-fs svg{width:13px; height:13px;}
   .vc-fs svg{width:15px; height:15px;}
   .vc-fs:hover,
   .vc-fs:focus-visible{
@@ -3301,7 +3411,7 @@
   /* ---- Carousel navigation ---- */
   .vc-arrow{
     position:absolute;
-    top:calc(50% - 8px);
+    top:50%;
     z-index:4;
     width:44px; height:44px;
     display:grid; place-items:center;
@@ -3321,6 +3431,9 @@
   .vc-next{right:-22px;}
   .vc-arrow svg{width:18px; height:18px;}
   .vc-arrow:hover{background:#FFFFFF; transform:translateY(-50%) scale(1.06);}
+  /* The click itself, so the control answers before the row has finished moving. */
+  .vc-arrow:active:not([disabled]){transform:translateY(-50%) scale(0.9); transition-duration:0.08s;}
+  .vc-dot:active{transform:scale(0.82); transition-duration:0.08s;}
   .vc-arrow:focus-visible{outline:2px solid var(--brand-emerald); outline-offset:3px;}
   .vc-arrow[disabled]{opacity:0.34; cursor:default; transform:translateY(-50%);}
 
@@ -3329,9 +3442,10 @@
     align-items:center;
     justify-content:center;
     gap:9px;
-    margin-top:18px;
+    margin-top:20px;
   }
   .vc-dot{
+    position:relative;
     width:9px; height:9px;
     padding:0;
     border:none;
@@ -3343,62 +3457,49 @@
   .vc-dot.is-on{width:26px; background:var(--brand-emerald-deep);}
   .vc-dot:focus-visible{outline:2px solid var(--brand-emerald); outline-offset:3px;}
   /* 44px touch target without growing the visible dot. */
-  .vc-dot{position:relative;}
   .vc-dot::after{
     content:""; position:absolute;
     top:50%; left:50%; transform:translate(-50%, -50%);
     width:44px; height:44px;
   }
 
-  @media (max-width:1040px){
-    /* No room outside the frame for the arrows, so they come inboard and sit
-       on the chrome rather than on the page. */
+  @media (max-width:1100px){
+    /* No room outside the row for the arrows, so they come inboard and sit on
+       the frames rather than on the page. */
     .vc-prev{left:8px;}
     .vc-next{right:8px;}
   }
   @media (max-width:700px){
-    .vc{margin-top:30px;}
-    .vc-viewport{padding:10px 0 20px; margin:-10px 0 -20px;}
-    .vc-slide{padding:0 3px;}
-    .vframe{border-radius:14px;}
+    /* Only the two source measurements change. At this width the row cannot
+       show three frames at a comfortable size, so it shows one centred with its
+       neighbours peeking, and each frame is sized to be worth looking at on its
+       own: the desktop across the viewport, the phone against the viewport
+       height. Everything else derives exactly as it does above. */
+    .vc{
+      --deskw:min(84vw, 430px);
+      --phoneh:min(52svh, 420px);
+      --vc-gap:16px;
+      margin-top:30px;
+    }
+    /* Redundant next to swipe, and they cover the footage at this size. */
+    .vc-arrow{display:none;}
+    .vc-dots{margin-top:16px;}
     .vframe-bar{height:28px; padding:0 11px; gap:6px;}
     .vframe-dot{width:7px; height:7px;}
-    .vframe-idle span{font-size:12px;}
-    /* The arrows are redundant next to swipe and they cover the footage. */
-    .vc-arrow{display:none;}
-    .vc-dots{margin-top:14px;}
-
-    /* ---- Portrait cuts get a phone-shaped frame ----
-       Slides 1 and 2 ship a portrait recording at this width. Played inside the
-       landscape window frame it would pillarbox down to a sliver, so the frame
-       itself changes shape: the window chrome goes, the corners round off, and
-       the well becomes 9:19.5 to match the footage. The result reads as a phone,
-       which is what a phone screen recording should sit inside.
-
-       Height is what is constrained, not width: 62svh keeps the whole frame on
-       screen next to the hero copy on a short handset, and the width follows
-       from the aspect ratio rather than being guessed. */
-    .vframe.has-tall{
-      max-width:min(66vw, calc(62svh * 0.462));
-      margin:0 auto;
-      border-radius:30px;
-    }
-    .vframe.has-tall .vframe-bar{display:none;}
-    .vframe.has-tall .vframe-screen{aspect-ratio:9 / 19.5;}
-    /* Slide 3 has no portrait cut, so it stays a 16:9 window and is shorter than
-       its neighbours. Centring the track keeps it from sticking to the top of
-       the taller slides' slot. Remove this once slide-3-mobile.mp4 exists. */
-    .vc-track{align-items:center;}
-    .vframe.has-tall .vframe-tools{right:10px; bottom:10px;}
-    /* The old phone frame was deliberately cropped at the viewport edge, so the
-       hero closed on it with no padding at all. The carousel is a complete
-       object and needs its own breathing room, but not the desktop 110px. */
+    /* The carousel is a complete object here and needs its own breathing room,
+       but not the desktop 110px. */
     .hero-editorial{padding-bottom:56px;}
     .au-trust{padding-top:30px;}
   }
 
   @media (prefers-reduced-motion: reduce){
-    .vc-track{transition:none;}
+    .vc-track,
+    .vc-slide,
+    .vc-viewport,
+    .vframe{transition:none;}
+    /* No entrance and no pop: the row is simply there, at full strength. */
+    .vc.vc-anim .vframe{opacity:1; transform:none;}
+    .vc-slide:not(.is-active){transform:none;}
     .vc-arrow:hover{transform:translateY(-50%);}
     .vc-dot{transition:background 0.2s ease;}
   }
@@ -3988,32 +4089,36 @@
         <div class="au-form-note" id="auHeroPill"><strong>Free playbook</strong> &middot; 4 chapters </div>
       </form>
 
-      <!-- HERO VIDEO CAROUSEL. Three device frames, one at a time, swipeable.
-           This replaced the scroll-driven laptop rig. The rig, its 240vh of
-           pinned scroll and the separate mobile phone frame it needed have all
-           been lifted out into laptop-parallax-kit.zip, which is a standalone
-           plug-and-play copy for reuse elsewhere.
+      <!-- HERO VIDEO CAROUSEL. Five frames in one row, centred on the middle one.
+           Three are visible at rest and the outer two are clipped by the
+           viewport, which is what tells you the row continues.
 
-           TWO CUTS PER SLIDE. data-src-wide is the landscape cut, played from
-           701px up in a window frame. data-src-tall is the portrait cut, played
-           at 700px and below in a phone-shaped frame. They are different
-           footage, not one video letterboxed two ways: wide is the booth, tall
-           is the LinkedIn feed the booth produces.
+             desktop 2 | phone 1 | DESKTOP MAIN | phone 2 | desktop 3
 
-           Slide 3 has no portrait cut yet, so it keeps its landscape one on
-           mobile. Drop /video/slide-3-mobile.mp4 in and add the two data-*-tall
-           attributes plus the has-tall class to make it match the other two.
+           This replaced the scroll-driven laptop rig. That rig, its 240vh of
+           pinned scroll and the separate mobile phone frame it needed were
+           lifted out into laptop-parallax-kit.zip, a standalone plug-and-play
+           copy for reuse elsewhere.
+
+           Each frame owns one video and the file is named for its position, so
+           swapping footage is a file drop with nothing here to edit:
+             /video/desk-2.mp4     /video/desk-2-poster.jpg
+             /video/phone-1.mp4    /video/phone-1-poster.jpg
+             /video/desk-main.mp4  /video/desk-main-poster.jpg
+             /video/phone-2.mp4    /video/phone-2-poster.jpg
+             /video/desk-3.mp4     /video/desk-3-poster.jpg
+           Desktop frames expect 16:9, phone frames expect 9:19.5.
 
            No src and no poster in the markup, only data attributes, so the
            browser cannot fetch anything on page load. The script attaches the
-           right cut for the active slide only: a visitor who never advances
-           downloads one video, not three. Until a file is attached the frame
-           shows its idle Wozku plate rather than a broken box. -->
+           centre frame first and its two neighbours only once that one is
+           playing, so the hero paints before three videos compete for the
+           connection. Frames off screen are never fetched at all. -->
       <div class="vc" id="auHeroCarousel" role="region" aria-roledescription="carousel" aria-label="Product demo videos">
         <div class="vc-viewport" id="auVcViewport">
           <div class="vc-track" id="auVcTrack">
-            <div class="vc-slide" role="group" aria-roledescription="slide" aria-label="Video 1 of 3">
-              <div class="vframe has-tall">
+            <div class="vc-slide vc-slide--desk" role="group" aria-roledescription="slide" aria-label="Frame 1 of 5">
+              <div class="vframe">
                 <div class="vframe-bar" aria-hidden="true">
                   <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
                   <span class="vframe-pill"></span>
@@ -4021,8 +4126,69 @@
                 <div class="vframe-screen">
                   <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
                   <video class="vframe-video" loop muted playsinline preload="none"
-                         data-src-wide="/video/slide-1.mp4" data-poster-wide="/video/slide-1-poster.jpg"
-                         data-src-tall="/video/slide-1-mobile.mp4" data-poster-tall="/video/slide-1-mobile-poster.jpg"
+                         data-src="/video/desk-2.mp4" data-poster="/video/desk-2-poster.jpg"
+                         aria-label="The Wozku stand in the exhibition hall"></video>
+                  <div class="vframe-tools">
+                    <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
+                      <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                        <line x1="23" y1="9" x2="17" y2="15"/>
+                        <line x1="17" y1="9" x2="23" y2="15"/>
+                      </svg>
+                      <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                      </svg>
+                    </button>
+                    <button type="button" class="vc-fs" aria-label="Watch frame 1 fullscreen" title="Fullscreen">
+                      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="vc-slide vc-slide--phone" role="group" aria-roledescription="slide" aria-label="Frame 2 of 5">
+              <div class="vframe">
+                <div class="vframe-screen">
+                  <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
+                  <video class="vframe-video" loop muted playsinline preload="none"
+                         data-src="/video/phone-1.mp4" data-poster="/video/phone-1-poster.jpg"
+                         aria-label="Posts from the event appearing in the LinkedIn feed"></video>
+                  <div class="vframe-tools">
+                    <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
+                      <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                        <line x1="23" y1="9" x2="17" y2="15"/>
+                        <line x1="17" y1="9" x2="23" y2="15"/>
+                      </svg>
+                      <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                      </svg>
+                    </button>
+                    <button type="button" class="vc-fs" aria-label="Watch frame 2 fullscreen" title="Fullscreen">
+                      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="vc-slide vc-slide--desk" role="group" aria-roledescription="slide" aria-label="Frame 3 of 5">
+              <div class="vframe">
+                <div class="vframe-bar" aria-hidden="true">
+                  <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
+                  <span class="vframe-pill"></span>
+                </div>
+                <div class="vframe-screen">
+                  <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
+                  <video class="vframe-video" loop muted playsinline preload="none"
+                         data-src="/video/desk-main.mp4" data-poster="/video/desk-main-poster.jpg"
                          aria-label="Attendees at the Wozku booth, and the live leaderboard screen"></video>
                   <div class="vframe-tools">
                     <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
@@ -4037,96 +4203,93 @@
                         <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
                       </svg>
                     </button>
-                    <button type="button" class="vc-fs" aria-label="Watch video 1 fullscreen" title="Fullscreen">
+                    <button type="button" class="vc-fs" aria-label="Watch frame 3 fullscreen" title="Fullscreen">
                       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
                       </svg>
                     </button>
                   </div>
                 </div>
-          </div>
-        </div>
-        <div class="vc-slide" role="group" aria-roledescription="slide" aria-label="Video 2 of 3">
-          <div class="vframe has-tall">
-            <div class="vframe-bar" aria-hidden="true">
-              <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
-              <span class="vframe-pill"></span>
-            </div>
-            <div class="vframe-screen">
-              <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
-              <video class="vframe-video" loop muted playsinline preload="none"
-                     data-src-wide="/video/slide-2.mp4" data-poster-wide="/video/slide-2-poster.jpg"
-                     data-src-tall="/video/slide-2-mobile.mp4" data-poster-tall="/video/slide-2-mobile-poster.jpg"
-                     aria-label="Posts from the event appearing in the LinkedIn feed"></video>
-              <div class="vframe-tools">
-                <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
-            <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M11 5L6 9H2v6h4l5 4V5z"/>
-              <line x1="23" y1="9" x2="17" y2="15"/>
-              <line x1="17" y1="9" x2="23" y2="15"/>
-            </svg>
-            <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-            </svg>
-                </button>
-                <button type="button" class="vc-fs" aria-label="Watch video 2 fullscreen" title="Fullscreen">
-                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
-                  </svg>
-                </button>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="vc-slide" role="group" aria-roledescription="slide" aria-label="Video 3 of 3">
-          <div class="vframe">
-            <div class="vframe-bar" aria-hidden="true">
-              <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
-              <span class="vframe-pill"></span>
-            </div>
-            <div class="vframe-screen">
-              <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
-              <video class="vframe-video" loop muted playsinline preload="none"
-                     data-src-wide="/video/slide-3.mp4" data-poster-wide="/video/slide-3-poster.jpg"
-                     aria-label="The Wozku stand in the exhibition hall"></video>
-              <div class="vframe-tools">
-                <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
-            <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M11 5L6 9H2v6h4l5 4V5z"/>
-              <line x1="23" y1="9" x2="17" y2="15"/>
-              <line x1="17" y1="9" x2="23" y2="15"/>
-            </svg>
-            <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-            </svg>
-                </button>
-                <button type="button" class="vc-fs" aria-label="Watch video 3 fullscreen" title="Fullscreen">
-                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
-                  </svg>
-                </button>
+            <div class="vc-slide vc-slide--phone" role="group" aria-roledescription="slide" aria-label="Frame 4 of 5">
+              <div class="vframe">
+                <div class="vframe-screen">
+                  <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
+                  <video class="vframe-video" loop muted playsinline preload="none"
+                         data-src="/video/phone-2.mp4" data-poster="/video/phone-2-poster.jpg"
+                         aria-label="A second run of event posts in the LinkedIn feed"></video>
+                  <div class="vframe-tools">
+                    <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
+                      <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                        <line x1="23" y1="9" x2="17" y2="15"/>
+                        <line x1="17" y1="9" x2="23" y2="15"/>
+                      </svg>
+                      <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                      </svg>
+                    </button>
+                    <button type="button" class="vc-fs" aria-label="Watch frame 4 fullscreen" title="Fullscreen">
+                      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+            <div class="vc-slide vc-slide--desk" role="group" aria-roledescription="slide" aria-label="Frame 5 of 5">
+              <div class="vframe">
+                <div class="vframe-bar" aria-hidden="true">
+                  <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
+                  <span class="vframe-pill"></span>
+                </div>
+                <div class="vframe-screen">
+                  <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
+                  <video class="vframe-video" loop muted playsinline preload="none"
+                         data-src="/video/desk-3.mp4" data-poster="/video/desk-3-poster.jpg"
+                         aria-label="Wide view of the exhibition floor"></video>
+                  <div class="vframe-tools">
+                    <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
+                      <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                        <line x1="23" y1="9" x2="17" y2="15"/>
+                        <line x1="17" y1="9" x2="23" y2="15"/>
+                      </svg>
+                      <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                      </svg>
+                    </button>
+                    <button type="button" class="vc-fs" aria-label="Watch frame 5 fullscreen" title="Fullscreen">
+                      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <button type="button" class="vc-arrow vc-prev" id="auVcPrev" aria-label="Previous video">
+        <button type="button" class="vc-arrow vc-prev" id="auVcPrev" aria-label="Previous frame">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 6 10l6 6"/></svg>
         </button>
-        <button type="button" class="vc-arrow vc-next" id="auVcNext" aria-label="Next video">
+        <button type="button" class="vc-arrow vc-next" id="auVcNext" aria-label="Next frame">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 4 6 6-6 6"/></svg>
         </button>
 
         <div class="vc-dots" id="auVcDots">
-          <button type="button" class="vc-dot is-on" aria-label="Show video 1 of 3"></button>
-          <button type="button" class="vc-dot" aria-label="Show video 2 of 3"></button>
-          <button type="button" class="vc-dot" aria-label="Show video 3 of 3"></button>
+          <button type="button" class="vc-dot" aria-label="Show frame 1 of 5"></button>
+          <button type="button" class="vc-dot" aria-label="Show frame 2 of 5"></button>
+          <button type="button" class="vc-dot is-on" aria-label="Show frame 3 of 5"></button>
+          <button type="button" class="vc-dot" aria-label="Show frame 4 of 5"></button>
+          <button type="button" class="vc-dot" aria-label="Show frame 5 of 5"></button>
         </div>
       </div>
 
@@ -5145,18 +5308,23 @@ function applyNavTargets() {
 }
 applyNavTargets();
 
-// 2C. HERO VIDEO CAROUSEL. Three device frames, one visible at a time.
-// Replaced the scroll-driven laptop rig and the separate mobile phone frame it
-// needed; the whole rig now lives in laptop-parallax-kit.zip for reuse.
+// 2C. HERO VIDEO CAROUSEL. Five frames in one row, centred on the middle one:
+// a desktop window with a phone on each side, and a further desktop window off
+// each edge. Replaced the scroll-driven laptop rig, which now lives in
+// laptop-parallax-kit.zip for reuse.
 //
-// The one rule that matters here: only the ACTIVE slide's <video> ever gets a
-// src attached. Three autoplaying demos would be three parallel downloads on a
-// phone connection, which is exactly what the old data-src gating existed to
-// avoid. Advancing the carousel is what arms the next file.
+// Two rules matter here:
+//  - The row is positioned in PIXELS, by measuring the active slide and
+//    centring it. Slides are deliberately different widths (a phone is not a
+//    window), so the usual translateX(-index * 100%) does not apply.
+//  - Three frames are on screen at once, so three videos play at once. They are
+//    armed in two waves, centre first, so the hero is not competing with two
+//    other downloads while it paints.
 (function videoCarousel() {
   const root = document.getElementById('auHeroCarousel');
   const track = document.getElementById('auVcTrack');
-  if (!root || !track) return;
+  const viewport = document.getElementById('auVcViewport');
+  if (!root || !track || !viewport) return;
 
   const slides = Array.from(track.querySelectorAll('.vc-slide'));
   if (!slides.length) return;
@@ -5164,66 +5332,40 @@ applyNavTargets();
   const dots = Array.from(document.querySelectorAll('#auVcDots .vc-dot'));
   const prevBtn = document.getElementById('auVcPrev');
   const nextBtn = document.getElementById('auVcNext');
-  const viewport = document.getElementById('auVcViewport');
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const videoOf = (slide) => slide.querySelector('.vframe-video');
   const frameOf = (slide) => slide.querySelector('.vframe');
 
-  let index = 0;
+  // Opts the row into the entrance animation. Purely a script-is-alive signal:
+  // the frames are visible by default so a dead script cannot blank the hero.
+  root.classList.add('vc-anim');
+
+  // Start on the centre frame, which is the desktop main.
+  let index = Math.floor(slides.length / 2);
   let onScreen = true;
+  // Until the centre frame is playing, its neighbours are not fetched at all.
+  let warmed = false;
+  // The resting offset of the row, in px. Drag works relative to it.
+  let base = 0;
 
   // ---- lazy source attachment -------------------------------------------
-  // Each slide ships up to two cuts of its footage: a landscape one for the
-  // window frame and a portrait one for the phone frame. They are different
-  // footage, so this is a genuine art-direction swap rather than a resolution
-  // switch, which is exactly the case <picture> solves for images and <video>
-  // has no equivalent for. The `media` attribute on <source> was dropped from
-  // the spec for video, so the choice has to be made here.
-  const tallMq = window.matchMedia('(max-width:700px)');
-
-  function cutFor(video) {
-    const wantsTall = tallMq.matches && video.dataset.srcTall;
-    return {
-      src: wantsTall ? video.dataset.srcTall : video.dataset.srcWide,
-      poster: wantsTall ? video.dataset.posterTall : video.dataset.posterWide,
-    };
-  }
-
-  // Idempotent per cut: re-arming with the same src is a no-op, so a slide
-  // revisited ten times still only ever kicks off one download.
+  // Idempotent: re-arming a video that already has its src is a no-op, so a
+  // frame revisited ten times still only ever kicks off one download.
   function arm(video) {
-    if (!video) return;
-    const cut = cutFor(video);
-    if (!cut.src || video.dataset.armedSrc === cut.src) return;
-    video.dataset.armedSrc = cut.src;
+    if (!video || video.dataset.armed === '1') return;
+    const src = video.dataset.src;
+    if (!src) return;
+    video.dataset.armed = '1';
     // The poster is attached here rather than in the markup: a poster in the
-    // markup is fetched eagerly, which would pull three images on page load for
-    // slides nobody has looked at. The idle plate covers the gap until then.
-    if (cut.poster) video.poster = cut.poster;
-    video.src = cut.src;
+    // markup is fetched eagerly, which would pull five images on page load for
+    // frames nobody has looked at. The idle plate covers the gap until then.
+    if (video.dataset.poster) video.poster = video.dataset.poster;
+    video.src = src;
     video.load();
   }
 
-  // Crossing the breakpoint mid-session, by rotating a tablet or dragging a
-  // desktop window narrow, has to re-attach the other cut. Only videos that
-  // were already armed are touched: an untouched slide stays untouched.
-  const onBreakpoint = () => {
-    slides.forEach((slide) => {
-      const video = videoOf(slide);
-      if (!video || !video.dataset.armedSrc) return;
-      const cut = cutFor(video);
-      if (!cut.src || cut.src === video.dataset.armedSrc) return;
-      const wasPlaying = !video.paused;
-      arm(video);
-      if (wasPlaying) video.play().catch(() => {});
-    });
-  };
-  if (tallMq.addEventListener) tallMq.addEventListener('change', onBreakpoint);
-  else if (tallMq.addListener) tallMq.addListener(onBreakpoint);
-
-  // The idle plate stays up until the file can actually paint, so a slide whose
-  // video has not been uploaded yet reads as deliberate rather than broken.
+  // The idle plate stays up until the file can actually paint, so a frame whose
+  // video is missing reads as deliberate rather than broken.
   slides.forEach((slide) => {
     const video = videoOf(slide);
     const frame = frameOf(slide);
@@ -5235,35 +5377,84 @@ applyNavTargets();
   });
 
   // ---- playback ----------------------------------------------------------
-  function playActive() {
-    if (!onScreen) return;
-    const video = videoOf(slides[index]);
-    if (!video) return;
-    arm(video);
-    if (video.paused) video.play().catch(() => {});
-  }
-
-  function pauseAll(except) {
-    slides.forEach((slide) => {
+  // The visible set is the active frame and its two neighbours. Everything
+  // outside it is paused and re-muted, so leaving a frame never leaves its
+  // audio armed for the next visit.
+  function syncPlayback() {
+    // Nothing outside the visible set plays. In solo mode that set is one frame.
+    const reach = warmed && !isSolo() ? 1 : 0;
+    slides.forEach((slide, i) => {
       const video = videoOf(slide);
-      if (!video || video === except) return;
-      if (!video.paused) video.pause();
-      // Leaving a slide should not leave its audio armed for the next visit.
-      if (!video.muted) { video.muted = true; syncMute(slide); }
+      if (!video) return;
+      const near = Math.abs(i - index) <= reach;
+      if (near && onScreen) {
+        arm(video);
+        if (video.paused) video.play().catch(() => {});
+      } else {
+        if (!video.paused) video.pause();
+        if (!video.muted) { video.muted = true; syncMute(slide); }
+      }
     });
   }
 
+  // Second wave: the neighbours are fetched once the centre frame is actually
+  // playing, or after a beat if it never gets there (a missing file, a codec
+  // the browser will not take). Either way the row fills in.
+  function warmUp() {
+    if (warmed) return;
+    warmed = true;
+    syncPlayback();
+  }
+  const centre = videoOf(slides[index]);
+  if (centre) centre.addEventListener('playing', warmUp, { once: true });
+  setTimeout(warmUp, 2500);
+
   // ---- position ----------------------------------------------------------
+  // offsetLeft is a layout measurement and is not affected by the transform we
+  // are about to set, so this stays correct across repeated calls.
+  function offsetFor(i) {
+    const el = slides[i];
+    return (viewport.clientWidth / 2) - (el.offsetLeft + el.offsetWidth / 2);
+  }
+
+  // Which frames actually intersect the viewport horizontally at rest. On a
+  // desktop that is three; on a phone the neighbours are pushed clean off the
+  // sides and it is one.
+  function onScreenSlides() {
+    const w = viewport.clientWidth;
+    return slides.filter((s) => {
+      const left = s.offsetLeft + base;
+      return left < w && left + s.offsetWidth > 0;
+    });
+  }
+
+  // At the two ends of the row the active frame is shown on its own, so it is
+  // the only thing that counts for sizing or playback.
+  const isSolo = () => index === 0 || index === slides.length - 1;
+
+  function sizeViewport() {
+    const shown = isSolo() ? [slides[index]] : onScreenSlides();
+    if (!shown.length) return;
+    const tallest = Math.max.apply(null, shown.map((s) => s.offsetHeight));
+    const next = tallest + 'px';
+    if (viewport.style.height !== next) viewport.style.height = next;
+  }
+
   function render() {
-    track.style.transform = 'translate3d(' + (-index * 100) + '%, 0, 0)';
+    base = offsetFor(index);
+    track.style.transform = 'translate3d(' + base.toFixed(2) + 'px, 0, 0)';
+    const solo = isSolo();
+    root.classList.toggle('is-solo', solo);
+    sizeViewport();
     slides.forEach((slide, i) => {
       const active = i === index;
+      const visible = active || (!solo && Math.abs(i - index) <= 1);
       slide.classList.toggle('is-active', active);
-      // Off-screen slides are out of the tab order: tabbing must not land on a
-      // control the visitor cannot see.
-      slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+      // Frames off screen are out of the tab order: tabbing must not land on a
+      // control nobody can see.
+      slide.setAttribute('aria-hidden', visible ? 'false' : 'true');
       slide.querySelectorAll('button').forEach((b) => {
-        if (active) b.removeAttribute('tabindex');
+        if (visible) b.removeAttribute('tabindex');
         else b.setAttribute('tabindex', '-1');
       });
     });
@@ -5277,12 +5468,25 @@ applyNavTargets();
 
   function goTo(next) {
     const clamped = Math.max(0, Math.min(slides.length - 1, next));
-    if (clamped === index) return;
+    if (clamped === index) { render(); return; }
     index = clamped;
     render();
-    pauseAll(videoOf(slides[index]));
-    playActive();
+    syncPlayback();
   }
+
+  // The row is measured, so anything that changes its measurements has to
+  // re-centre it. Coalesced into a frame so a drag-resize does not thrash.
+  let reflow = 0;
+  function scheduleReflow() {
+    if (reflow) return;
+    reflow = requestAnimationFrame(() => { reflow = 0; render(); });
+  }
+  window.addEventListener('resize', scheduleReflow);
+  window.addEventListener('orientationchange', scheduleReflow);
+  // Deliberately NOT the viewport: sizeViewport() writes its height, so
+  // observing it would feed the observer its own output. A slide tracks the same
+  // CSS variables and is never written to.
+  if ('ResizeObserver' in window) new ResizeObserver(scheduleReflow).observe(slides[0]);
 
   // ---- controls ----------------------------------------------------------
   if (prevBtn) prevBtn.addEventListener('click', () => goTo(index - 1));
@@ -5297,53 +5501,53 @@ applyNavTargets();
   // ---- swipe -------------------------------------------------------------
   // Pointer events, with the horizontal intent test that keeps a vertical drag
   // scrolling the page instead of grabbing the carousel.
-  if (viewport) {
-    let startX = 0, startY = 0, dx = 0, dragging = false, decided = false;
+  let startX = 0, startY = 0, dx = 0, dragging = false, decided = false;
 
-    viewport.addEventListener('pointerdown', (e) => {
-      if (e.pointerType === 'mouse' && e.button !== 0) return;
-      startX = e.clientX; startY = e.clientY;
-      dx = 0; dragging = true; decided = false;
-    });
+  viewport.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    startX = e.clientX; startY = e.clientY;
+    dx = 0; dragging = true; decided = false;
+  });
 
-    viewport.addEventListener('pointermove', (e) => {
-      if (!dragging) return;
-      dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      if (!decided) {
-        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
-        decided = true;
-        // Vertical intent: let go entirely so the page scrolls normally.
-        if (Math.abs(dy) > Math.abs(dx)) { dragging = false; return; }
-        track.classList.add('is-dragging');
-        try { viewport.setPointerCapture(e.pointerId); } catch (err) { /* not supported */ }
-      }
-      // Rubber-band at the two ends so the track cannot be dragged into space.
-      const atEdge = (dx > 0 && index === 0) || (dx < 0 && index === slides.length - 1);
-      const shift = atEdge ? dx * 0.28 : dx;
-      const pct = (shift / viewport.clientWidth) * 100;
-      track.style.transform = 'translate3d(' + (-index * 100 + pct) + '%, 0, 0)';
-    });
+  viewport.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if (!decided) {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      decided = true;
+      // Vertical intent: let go entirely so the page scrolls normally.
+      if (Math.abs(dy) > Math.abs(dx)) { dragging = false; return; }
+      track.classList.add('is-dragging');
+      try { viewport.setPointerCapture(e.pointerId); } catch (err) { /* not supported */ }
+    }
+    // Rubber-band at the two ends so the row cannot be dragged into space.
+    const atEdge = (dx > 0 && index === 0) || (dx < 0 && index === slides.length - 1);
+    const shift = atEdge ? dx * 0.28 : dx;
+    track.style.transform = 'translate3d(' + (base + shift).toFixed(2) + 'px, 0, 0)';
+  });
 
-    const endDrag = () => {
-      if (!dragging) return;
-      dragging = false;
-      track.classList.remove('is-dragging');
-      const threshold = Math.max(42, viewport.clientWidth * 0.14);
-      if (dx <= -threshold) goTo(index + 1);
-      else if (dx >= threshold) goTo(index - 1);
-      else render();
-      dx = 0;
-    };
-    viewport.addEventListener('pointerup', endDrag);
-    viewport.addEventListener('pointercancel', endDrag);
-    viewport.addEventListener('pointerleave', endDrag);
-    // A completed swipe must not also fire the mute or fullscreen button under
-    // the finger.
-    viewport.addEventListener('click', (e) => {
-      if (Math.abs(dx) > 8) { e.stopPropagation(); e.preventDefault(); }
-    }, true);
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove('is-dragging');
+    // Measured against the frame you are on rather than the viewport: the row
+    // holds frames of two very different widths, and a swipe past a narrow
+    // phone should not need the travel a wide window would.
+    const threshold = Math.max(40, slides[index].offsetWidth * 0.22);
+    if (dx <= -threshold) goTo(index + 1);
+    else if (dx >= threshold) goTo(index - 1);
+    else render();
+    dx = 0;
   }
+  viewport.addEventListener('pointerup', endDrag);
+  viewport.addEventListener('pointercancel', endDrag);
+  viewport.addEventListener('pointerleave', endDrag);
+  // A completed swipe must not also fire the mute or fullscreen button that
+  // happened to be under the finger.
+  viewport.addEventListener('click', (e) => {
+    if (Math.abs(dx) > 8) { e.stopPropagation(); e.preventDefault(); }
+  }, true);
 
   // ---- mute --------------------------------------------------------------
   function syncMute(slide) {
@@ -5366,7 +5570,15 @@ applyNavTargets();
     if (!btn || !video) return;
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      video.muted = !video.muted;
+      const turningOn = video.muted;
+      if (turningOn) {
+        // Three frames are playing at once, so only one of them may be audible.
+        slides.forEach((other) => {
+          const v = videoOf(other);
+          if (v && v !== video && !v.muted) { v.muted = true; syncMute(other); }
+        });
+      }
+      video.muted = !turningOn;
       // Unmuting is a user gesture, so an audible play is allowed from here.
       if (!video.muted) { arm(video); if (video.paused) video.play().catch(() => {}); }
       syncMute(slide);
@@ -5459,31 +5671,33 @@ applyNavTargets();
   });
 
   // ---- visibility --------------------------------------------------------
-  // Nothing plays while the carousel is off screen, and nothing is armed until
-  // it has been seen at least once: the hero renders without touching the
-  // network for video at all.
+  // Nothing plays while the carousel is off screen, and nothing is fetched
+  // until it has been seen once: the hero renders without touching the network
+  // for video at all.
   if ('IntersectionObserver' in window) {
     new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         onScreen = entry.isIntersecting;
-        if (onScreen) playActive();
-        else pauseAll(null);
+        // One way: the frames animate in the first time the row is reached and
+        // stay in. Replaying it on every scroll past would be noise.
+        if (onScreen) root.classList.add('is-in');
+        syncPlayback();
       });
-    }, { threshold: 0.3 }).observe(root);
+    }, { threshold: 0.25 }).observe(root);
   } else {
-    playActive();
+    root.classList.add('is-in');
+    syncPlayback();
   }
 
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) pauseAll(null);
-    else playActive();
+    if (document.hidden) { onScreen = false; syncPlayback(); }
+    else { onScreen = true; syncPlayback(); }
   });
 
-  // With reduced motion the slides still change, they just do not slide: the
-  // transition is switched off in CSS, so there is nothing to do here.
-  void reduce;
-
   render();
+  // Fonts and the hero image can settle after first paint and move the row, so
+  // re-measure once everything has loaded.
+  window.addEventListener('load', scheduleReflow);
 })();
 
 // Floating island header
