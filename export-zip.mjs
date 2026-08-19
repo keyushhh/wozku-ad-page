@@ -20,6 +20,7 @@ const excludes = [
   '*.assetcache*',
   '*wozku-artifact.html*',
   '*wozku-preview.html*',
+  '*.tsbuildinfo*',
   '*.DS_Store*',
   '*.zip*'
 ];
