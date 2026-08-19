@@ -4573,7 +4573,9 @@
      shoving the pull-quote around as it opens. Height is therefore explicit. */
   .au-rh-fan{
     --shot-w:min(272px, 30vw);
-    --shot-h:calc(var(--shot-w) * 0.66);
+    /* Roughly 8:7. A 3:2 card read as a thumbnail strip at this width; this is
+       tall enough to hold a photo of a booth with people in front of it. */
+    --shot-h:calc(var(--shot-w) * 0.88);
     /* A full card width plus a gap, so the fanned row does not overlap. */
     --spread:calc(var(--shot-w) + 16px);
     position:relative;
