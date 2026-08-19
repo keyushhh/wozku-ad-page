@@ -783,7 +783,7 @@
   .au-cta .au-form-note{text-align:left; text-shadow:none; color:rgba(255,255,255,0.55);}
   .au-cta .au-form-err{text-align:left;}
 
-  /* ---- Sound toggle and floating overlays (now on the laptop reveal) ---- */
+  /* ---- Sound toggle (used by the hero carousel's per-frame mute chip) ---- */
 
   /* Sound Toggle Button */
   .au-sound-btn{
@@ -3135,406 +3135,272 @@
     .bsa-pre{opacity:1 !important; filter:none !important; transform:none !important;}
     .bs-particles{display:none;}
   }
-  /* LAPTOP REVEAL (#auLaptopTrack, in the hero) */
+  /* ============ HERO VIDEO CAROUSEL (#auHeroCarousel) ===================
+     Three device frames, one visible at a time. Replaced the scroll-driven
+     laptop rig: same job, no pinned scroll, no per-frame 3D transform, and
+     it behaves identically at every width instead of needing a separate
+     phone build below 700px.
 
-  /* The track is pure scroll length: its height IS the animation timeline, with */
-  .lt-track{
+     Only the active slide's <video> ever gets a src attached, so a visitor
+     who never advances the carousel downloads exactly one file. See the
+     videoCarousel module in the script for that gating.
+     ==================================================================== */
+  .vc{
     position:relative;
-    /* Opening takes ~60% of the span and the rest holds the laptop open. Longer */
-    height:240vh;
-    /* Pulled up over the hero copy. The stage pins at the viewport top, so */
-    margin-top:calc(48px - 58svh);
-    pointer-events:none;
+    width:100%;
+    max-width:940px;
+    margin:46px auto 0;
   }
-  .lt-stage{
-    position:sticky;
-    top:0;
-    height:100svh;
-    pointer-events:none;
-    /* The laptop's two base measurements live here rather than on .laptop itself, */
-    --lw:clamp(300px, 62vw, 780px);
-    --lh:calc(var(--lw) * 0.615);
+  /* The viewport clips the neighbouring slides. It carries the frames' drop
+     shadow as padding rather than letting overflow:hidden slice it off. */
+  .vc-viewport{
+    overflow:hidden;
+    padding:14px 0 26px;
+    margin:-14px 0 -26px;
+    touch-action:pan-y;
+  }
+  .vc-track{
+    display:flex;
+    align-items:stretch;
+    will-change:transform;
+    transition:transform 0.62s cubic-bezier(0.22, 1, 0.28, 1);
+  }
+  .vc-track.is-dragging{transition:none;}
+  .vc-slide{
+    flex:0 0 100%;
+    min-width:0;
+    padding:0 6px;
+    box-sizing:border-box;
   }
 
-  /* ---- The rig: camera tilt, rise, dolly and final push ---- */
-  .lt-viewport{
-    position:absolute;
-    inset:0;
+  /* ---- The frame ---- */
+  .vframe{
+    position:relative;
+    border-radius:16px;
+    padding:0;
+    overflow:hidden;
+    background:linear-gradient(168deg, #2C3240 0%, #14171F 46%, #0A0C11 100%);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      0 30px 60px -28px rgba(4, 26, 20, 0.55);
+    transition:box-shadow 0.4s ease, opacity 0.4s ease;
+  }
+  /* Off-screen slides sit back a little so the active one is unambiguous. */
+  .vc-slide:not(.is-active) .vframe{opacity:0.55;}
+
+  /* Window chrome. Three dots and a blank address pill: enough to read as an
+     application window without pretending to be a specific browser. */
+  .vframe-bar{
     display:flex;
     align-items:center;
-    justify-content:center;
-    perspective:2400px;
-    perspective-origin:50% 46%;
-    pointer-events:none;
+    gap:7px;
+    height:34px;
+    padding:0 14px;
+    background:rgba(255, 255, 255, 0.045);
+    box-shadow:inset 0 -1px 0 rgba(255, 255, 255, 0.07);
   }
-  .lt-rig{
-    transform:
-      translate3d(0, var(--lt-y, -7.3svh), 0)
-      rotateX(var(--lt-tilt, -52deg))
-      scale(var(--lt-scale, 0.94));
-    transform-style:preserve-3d;
-    will-change:transform;
-    pointer-events:none;
+  .vframe-dot{
+    width:9px; height:9px;
+    border-radius:100px;
+    background:rgba(255, 255, 255, 0.22);
+    flex:none;
+  }
+  .vframe-pill{
+    flex:1 1 auto;
+    height:14px;
+    margin-left:8px;
+    border-radius:100px;
+    background:rgba(255, 255, 255, 0.06);
   }
 
-  /* ---- The object ---- */
-  .laptop{
-    pointer-events:auto;
-    /* --lw and --lh are inherited from .lt-stage */
-    --dd:calc(var(--lw) * 0.45);
-    --lr:calc(var(--lw) * 0.016);
+  /* The screen well. 16:9 so landscape footage fills it with no letterbox. */
+  .vframe-screen{
     position:relative;
-    width:var(--lw);
-    height:var(--lh);
-    transform-style:preserve-3d;
-  }
-  .au-vol,
-  .au-sound-btn,
-  .laptop-video{
-    pointer-events:auto;
-  }
-
-  /* Hinged about its own bottom edge, which is the hinge line itself. */
-  .laptop-lid{
-    position:absolute;
-    inset:0;
-    transform-origin:50% 100%;
-    transform:rotateX(var(--lt-lid, -90deg));
-    transform-style:preserve-3d;
-  }
-  .laptop-face{
-    position:absolute;
-    inset:0;
+    aspect-ratio:16 / 9;
+    background:#05100C;
     overflow:hidden;
-    /* Top corners only: the bottom edge IS the hinge line, and rounding it left
-       an unpainted quarter-disc at each bottom corner with page white behind. */
-    border-radius:var(--lr) var(--lr) 0 0;
-    -webkit-backface-visibility:hidden;
-    backface-visibility:hidden;
   }
-  /* The two faces are offset in Z to give the lid thickness and to keep them */
-  .laptop-screen{
-    background:#050806;
-    box-shadow:0 0 0 1px rgba(0,0,0,0.55), 0 30px 70px -30px rgba(4, 20, 14, 0.6);
-    transform:translateZ(3px);
+  .vframe-video{
+    position:absolute; inset:0;
+    display:block;
+    width:100%; height:100%;
+    object-fit:cover;
+    background:#05100C;
   }
-  .laptop-screen-inner{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-    border-radius:var(--lr) var(--lr) 0 0;
-  }
-  .laptop-screen-idle{
-    position:absolute;
-    inset:0;
+  /* Shown until the video can actually paint a frame, so a slide whose file
+     has not been uploaded yet reads as deliberate rather than broken. */
+  .vframe-idle{
+    position:absolute; inset:0;
     display:flex;
     align-items:center;
     justify-content:center;
     background:radial-gradient(125% 120% at 50% 0%, #10231B 0%, #050906 70%);
+    transition:opacity 0.5s ease;
   }
-  .laptop-screen-idle span{
+  .vframe.is-playing .vframe-idle{opacity:0; pointer-events:none;}
+  .vframe-idle span{
     font-family:var(--font-display);
-    font-size:calc(var(--lw) * 0.038);
+    font-size:15px;
     font-weight:700;
     letter-spacing:0.34em;
     text-transform:uppercase;
-    color:rgba(255,255,255,0.34);
-  }
-  .laptop-video{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    background:#050806;
-  }
-  /* Painted OVER the footage rather than as padding around it, so the screen */
-  .laptop-bezel{
-    position:absolute;
-    inset:0;
-    border:calc(var(--lw) * 0.013) solid #0A0F0C;
-    border-bottom-width:calc(var(--lw) * 0.03);
-    border-radius:var(--lr) var(--lr) 0 0;
-    box-shadow:
-      inset 0 0 0 1px rgba(255,255,255,0.07),
-      inset 0 0 calc(var(--lw) * 0.05) rgba(0,0,0,0.5);
-  }
-  .laptop-camera{
-    position:absolute;
-    top:calc(var(--lw) * -0.009);
-    left:50%;
-    width:calc(var(--lw) * 0.005);
-    height:calc(var(--lw) * 0.005);
-    transform:translateX(-50%);
-    border-radius:100px;
-    background:#2B3130;
-  }
-  .laptop-shell{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(152deg, #4A5250 0%, #2C3231 38%, #3D4544 62%, #212625 100%);
-    box-shadow:
-      inset 0 0 0 1px rgba(255,255,255,0.14),
-      inset 0 1px 0 rgba(255,255,255,0.2),
-      0 40px 80px -34px rgba(4, 20, 14, 0.55);
-    /* rotateX, not rotateY: the lid itself rotates about X, and turning this face */
-    transform:rotateX(180deg) translateZ(3px);
-    /* Mirrored: this face is upside down, so its CSS bottom is the world top. */
-    border-radius:0 0 var(--lr) var(--lr);
-  }
-  .laptop-shell-mark{
-    width:19%;
-    /* invert() because a black wordmark on graphite does not read at all. */
-    filter:invert(1);
-    opacity:0.3;
+    color:rgba(255, 255, 255, 0.30);
   }
 
-  /* The deck lies flat on the table, hinged at its own top edge. */
-  .laptop-deck{
+  /* ---- Per-frame controls ---- */
+  .vframe-tools{
     position:absolute;
-    top:100%; left:0;
-    width:100%;
-    height:var(--dd);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:calc(var(--lw) * 0.022);
-    padding:calc(var(--lw) * 0.032) calc(var(--lw) * 0.05);
-    box-sizing:border-box;
-    background:linear-gradient(180deg, #333938 0%, #3E4544 30%, #262B2A 100%);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.16);
-    transform-origin:50% 0;
-    transform:rotateX(90deg);
-    transform-style:preserve-3d;
-  }
-  .laptop-keyboard{
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    gap:calc(var(--lw) * 0.006);
-  }
-  .laptop-key-row{
-    display:flex;
-    justify-content:center;
-    gap:calc(var(--lw) * 0.006);
-  }
-  .laptop-key{
-    flex:1 1 0;
-    height:calc(var(--lw) * 0.026);
-    border-radius:calc(var(--lw) * 0.004);
-    background:linear-gradient(180deg, #191D1C 0%, #0E1111 100%);
-    box-shadow:0 1px 0 rgba(255,255,255,0.09);
-  }
-  .laptop-key-wide{ flex:1.7 1 0; }
-  .laptop-key-space{ flex:5.5 1 0; }
-  .laptop-trackpad{
-    width:33%;
-    height:calc(var(--lw) * 0.082);
-    border-radius:calc(var(--lw) * 0.007);
-    background:linear-gradient(180deg, #3A4140 0%, #2C3231 100%);
-    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1);
-  }
-  /* Front lip, dropped vertically off the deck's front edge for real thickness. */
-  .laptop-deck-edge{
-    position:absolute;
-    top:100%; left:0;
-    width:100%;
-    height:calc(var(--lw) * 0.022);
-    border-radius:0 0 calc(var(--lw) * 0.012) calc(var(--lw) * 0.012);
-    background:linear-gradient(180deg, #232827 0%, #141817 100%);
-    transform-origin:50% 0;
-    transform:rotateX(-90deg);
-  }
-  /* Contact shadow, painted on the same plane as the deck and pushed just below it. */
-  .laptop-shadow{
-    position:absolute;
-    top:100%; left:-9%;
-    width:118%;
-    height:calc(var(--dd) * 1.4);
-    border-radius:50%;
-    background:radial-gradient(closest-side ellipse at 50% 42%, rgba(4, 20, 14, 0.3) 0%, rgba(4, 20, 14, 0) 72%);
-    filter:blur(calc(var(--lw) * 0.022));
-    transform-origin:50% 0;
-    transform:rotateX(90deg) translateZ(-4px);
-  }
-
-  /* ---- Stage furniture ---- */
-  /* The volume control only makes sense once the screen is facing you, so it is */
-  .lt-stage .au-vol{
-    position:absolute;
-    /* The control's cross-axis, shared by the pill, the thumb and the button so */
-    --vol-w:34px;
-    /* Beside the screen rather than in the stage's corner, and measured off the */
-    right:calc(50% - var(--lw) * 0.525 - 34px - var(--vol-w));
-    bottom:calc(50% - var(--lh) * 0.525 + 2.4svh);
-    z-index:5;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity 0.45s ease;
-  }
-  .lt-stage.lt-ui-on .au-vol{
-    opacity:1;
-    pointer-events:auto;
-  }
-  /* The button is absolute by default, for the frame it used to sit in; in here */
-  .lt-stage .au-vol .au-sound-btn{
-    position:relative;
-    top:auto; right:auto;
-    width:var(--vol-w);
-    height:var(--vol-w);
-  }
-  .au-vol .au-sound-btn svg{ width:14px; height:14px; }
-  /* Volume pill */
-  @property --vol-a{ syntax:'<color>'; inherits:false; initial-value:#6EE7B7; }
-  @property --vol-b{ syntax:'<color>'; inherits:false; initial-value:#34D399; }
-
-  .au-vol-panel{
-    position:relative;
-    width:var(--vol-w);
-    height:150px;
-    overflow:hidden;
-    border:1px solid rgba(255, 255, 255, 0.16);
-    border-radius:100px;
-    background:rgba(8, 12, 20, 0.86);
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    box-shadow:0 12px 30px rgba(0, 0, 0, 0.45);
-    /* Opens on hover, so it grows out of the button rather than appearing. */
-    opacity:0;
-    visibility:hidden;
-    transform:translateY(10px) scale(0.92);
-    transform-origin:50% 100%;
-    transition:
-      opacity 0.18s ease,
-      transform 0.38s cubic-bezier(0.22, 1, 0.28, 1),
-      visibility 0s linear 0.38s;
-  }
-  .au-vol.is-open .au-vol-panel{
-    opacity:1;
-    visibility:visible;
-    transform:none;
-    transition:
-      opacity 0.18s ease,
-      transform 0.38s cubic-bezier(0.22, 1, 0.28, 1),
-      visibility 0s linear 0s;
-  }
-  /* The input carries focus but is invisible, so the ring goes on the pill. */
-  .au-vol-panel:has(.au-vol-range:focus-visible){
-    outline:2px solid var(--brand-emerald);
-    outline-offset:3px;
-  }
-
-  /* Tick dots, evenly spaced up the track and sitting under the fill. */
-  .au-vol-dots{
-    position:absolute;
-    inset:0;
-    z-index:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:space-between;
-    padding:13px 0;
-    pointer-events:none;
-  }
-  .au-vol-dots span{
-    width:4px;
-    height:4px;
-    border-radius:100px;
-    background:rgba(255, 255, 255, 0.5);
-    opacity:0.8;
-  }
-  .au-vol-fill{
-    position:absolute;
-    bottom:0;
-    left:0;
-    z-index:2;
-    width:100%;
-    /* The collapsed fill is one cross-axis tall, and the cross axis is the pill's */
-    height:calc(var(--vol-w) - 2px);
-    border-radius:100px;
-    background:linear-gradient(to top, var(--vol-a), var(--vol-b));
-    transition:--vol-a 0.45s ease, --vol-b 0.45s ease;
-    pointer-events:none;
-  }
-  .au-vol-thumb{
-    position:absolute;
-    bottom:0;
-    left:0;
+    right:12px; bottom:12px;
     z-index:3;
     display:flex;
-    /* Sized off the content box rather than the width token: at --vol-w it was */
-    width:100%;
-    aspect-ratio:1;
+    align-items:center;
+    gap:8px;
+    opacity:0;
+    transition:opacity 0.3s ease;
+  }
+  /* Always up on touch, where there is no hover to reveal them. */
+  .vc-slide.is-active .vframe-tools{opacity:1;}
+  /* .au-sound-btn is absolutely positioned by default, for the frame it used
+     to live in. In here it is one of two chips in a flex row. */
+  .vframe-tools .au-sound-btn{
+    position:relative;
+    top:auto; right:auto;
+    width:36px; height:36px;
+  }
+  .vc-fs{
+    width:36px; height:36px;
+    display:grid; place-items:center;
+    padding:0;
+    border:1px solid rgba(255, 255, 255, 0.16);
+    border-radius:100px;
+    background:rgba(8, 12, 20, 0.78);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    color:#FFFFFF;
+    cursor:pointer;
+    box-shadow:0 8px 24px rgba(0, 0, 0, 0.4);
+    transition:all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .vc-fs svg{width:15px; height:15px;}
+  .vc-fs:hover,
+  .vc-fs:focus-visible{
+    background:var(--brand-emerald-deep);
+    border-color:var(--brand-emerald);
+    transform:translateY(-2px) scale(1.03);
+    box-shadow:0 12px 28px rgba(5, 150, 105, 0.45);
+  }
+  .vc-fs:focus-visible{outline:2px solid var(--brand-emerald); outline-offset:3px;}
+  /* 44px touch target without growing the visible chip. */
+  .vc-fs::after{
+    content:""; position:absolute;
+    top:50%; left:50%; transform:translate(-50%, -50%);
+    width:44px; height:44px;
+  }
+
+  /* ---- Carousel navigation ---- */
+  .vc-arrow{
+    position:absolute;
+    top:calc(50% - 8px);
+    z-index:4;
+    width:44px; height:44px;
+    display:grid; place-items:center;
+    padding:0;
+    transform:translateY(-50%);
+    border:1px solid rgba(4, 36, 27, 0.10);
+    border-radius:100px;
+    background:rgba(255, 255, 255, 0.94);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    color:#04241B;
+    cursor:pointer;
+    box-shadow:0 12px 30px -12px rgba(4, 26, 20, 0.45);
+    transition:transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, opacity 0.25s ease;
+  }
+  .vc-prev{left:-22px;}
+  .vc-next{right:-22px;}
+  .vc-arrow svg{width:18px; height:18px;}
+  .vc-arrow:hover{background:#FFFFFF; transform:translateY(-50%) scale(1.06);}
+  .vc-arrow:focus-visible{outline:2px solid var(--brand-emerald); outline-offset:3px;}
+  .vc-arrow[disabled]{opacity:0.34; cursor:default; transform:translateY(-50%);}
+
+  .vc-dots{
+    display:flex;
     align-items:center;
     justify-content:center;
-    pointer-events:none;
+    gap:9px;
+    margin-top:18px;
   }
-  .au-vol-thumb span{
-    width:24px;
-    height:24px;
+  .vc-dot{
+    width:9px; height:9px;
+    padding:0;
+    border:none;
     border-radius:100px;
-    background:#FFFFFF;
-    box-shadow:inset 0 2px 4px rgba(0, 0, 0, 0.06);
-  }
-  /* The real control: full-bleed, invisible, on top of everything. */
-  .au-vol-range{
-    position:absolute;
-    inset:0;
-    z-index:4;
-    writing-mode:vertical-lr;
-    direction:rtl;
-    -webkit-appearance:none;
-    appearance:none;
-    width:100%;
-    height:100%;
-    margin:0;
-    background:transparent;
-    opacity:0;
+    background:rgba(4, 36, 27, 0.22);
     cursor:pointer;
+    transition:width 0.35s cubic-bezier(0.16, 1, 0.3, 1), background 0.25s ease;
+  }
+  .vc-dot.is-on{width:26px; background:var(--brand-emerald-deep);}
+  .vc-dot:focus-visible{outline:2px solid var(--brand-emerald); outline-offset:3px;}
+  /* 44px touch target without growing the visible dot. */
+  .vc-dot{position:relative;}
+  .vc-dot::after{
+    content:""; position:absolute;
+    top:50%; left:50%; transform:translate(-50%, -50%);
+    width:44px; height:44px;
   }
 
-  @media (prefers-reduced-motion: reduce){
-    .au-vol-panel,
-    .au-vol-fill{ transition:none; }
+  @media (max-width:1040px){
+    /* No room outside the frame for the arrows, so they come inboard and sit
+       on the chrome rather than on the page. */
+    .vc-prev{left:8px;}
+    .vc-next{right:8px;}
   }
+  @media (max-width:700px){
+    .vc{margin-top:30px;}
+    .vc-viewport{padding:10px 0 20px; margin:-10px 0 -20px;}
+    .vc-slide{padding:0 3px;}
+    .vframe{border-radius:14px;}
+    .vframe-bar{height:28px; padding:0 11px; gap:6px;}
+    .vframe-dot{width:7px; height:7px;}
+    .vframe-idle span{font-size:12px;}
+    /* The arrows are redundant next to swipe and they cover the footage. */
+    .vc-arrow{display:none;}
+    .vc-dots{margin-top:14px;}
 
-  @media (max-width: 860px){
-    /* 210vh of track was 2.1 screens of scrolling for one reveal. */
-    .lt-track{ height:160vh; margin-top:24px; }
-    /* The closed lid is a ~108px sliver. Centring it in a full-height stage
-       parked roughly 300px of emptiness above it, which read as a large blank
-       gap after the hero copy. Anchor the rig near the top of the stage
-       instead - 13svh keeps it clear of the fixed header once pinned. */
-    .lt-viewport{ align-items:flex-start; padding-top:13svh; }
-    /* 62vw is inert below 484px, so the laptop sat at a fixed 300px on every
-       phone. Let it actually scale with the screen. */
-    .lt-stage{ --lw:clamp(300px, 86vw, 780px); }
-    /* No room beside the lid at this width - back to the corner. */
-    .lt-stage .au-vol{ right:18px; bottom:18px; }
-  }
+    /* ---- Portrait cuts get a phone-shaped frame ----
+       Slides 1 and 2 ship a portrait recording at this width. Played inside the
+       landscape window frame it would pillarbox down to a sliver, so the frame
+       itself changes shape: the window chrome goes, the corners round off, and
+       the well becomes 9:19.5 to match the footage. The result reads as a phone,
+       which is what a phone screen recording should sit inside.
 
-  /* No pin and no hold: an open laptop in the hero with the demo playing. */
-  @media (prefers-reduced-motion: reduce){
-    /* margin-top back to the card's original gap: with no pin to engage there is */
-    .lt-track{ height:auto; margin-top:48px; }
-    .lt-stage{ position:static; height:auto; text-align:center; }
-    .lt-viewport{ position:static; inset:auto; }
-    .lt-rig{ transform:rotateX(-6deg) scale(1); }
-    .laptop-lid{ transform:rotateX(0deg); }
-    .lt-stage .au-vol{
-      position:static;
-      right:auto;
-      bottom:auto;
-      opacity:1;
-      pointer-events:auto;
-      margin:22px auto 0;
-      flex-direction:column-reverse;
+       Height is what is constrained, not width: 62svh keeps the whole frame on
+       screen next to the hero copy on a short handset, and the width follows
+       from the aspect ratio rather than being guessed. */
+    .vframe.has-tall{
+      max-width:min(66vw, calc(62svh * 0.462));
+      margin:0 auto;
+      border-radius:30px;
     }
+    .vframe.has-tall .vframe-bar{display:none;}
+    .vframe.has-tall .vframe-screen{aspect-ratio:9 / 19.5;}
+    /* Slide 3 has no portrait cut, so it stays a 16:9 window and is shorter than
+       its neighbours. Centring the track keeps it from sticking to the top of
+       the taller slides' slot. Remove this once slide-3-mobile.mp4 exists. */
+    .vc-track{align-items:center;}
+    .vframe.has-tall .vframe-tools{right:10px; bottom:10px;}
+    /* The old phone frame was deliberately cropped at the viewport edge, so the
+       hero closed on it with no padding at all. The carousel is a complete
+       object and needs its own breathing room, but not the desktop 110px. */
+    .hero-editorial{padding-bottom:56px;}
+    .au-trust{padding-top:30px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .vc-track{transition:none;}
+    .vc-arrow:hover{transform:translateY(-50%);}
+    .vc-dot{transition:background 0.2s ease;}
   }
 
   /* Proximity side navigation (rareui.com/components/proximitysidebar)
@@ -3742,7 +3608,7 @@
      1. Grow the box (padding / min-height) where the element owns its space.
      2. Keep the visual box and expand only the hit area with a centred ::after
         overlay, where growing the box would break a tight layout - the icon
-        buttons sitting inside calculator rows and on the laptop chrome.
+        buttons sitting inside calculator rows and on the video frames.
 
      Desktop geometry is untouched: this whole block is behind pointer:coarse.
      ====================================================================== */
@@ -3883,125 +3749,6 @@
     .au-roi-peek.is-on{transform:none;}
   }
 
-  /* ============ MOBILE DEVICE FRAME =====================================
-     Below 700px the laptop rig is replaced by a cropped phone. The device is
-     deliberately cut off at the bottom: we only need enough of it to read as a
-     phone, and the crop is what buys back the ~930px the pinned rig was using.
-
-     The screen well is exactly 16:9 so the landscape demo fills it with no
-     letterbox bars, which is why the frame is shorter than a full handset.
-     Drawn in CSS rather than shipped as an image, matching the laptop above -
-     it stays sharp at any DPR and adds no bytes.
-     ==================================================================== */
-  .ph-wrap{display:none;}
-
-  @media (max-width:700px){
-    .ph-wrap{
-      display:block;
-      /* Used to break out of the page gutter to 10px to make the device as
-         large as possible, but that meant it sat closer to the screen edge
-         than everything else in the hero. Respects the standard margin now. */
-      margin:26px 0 0;
-      width:auto;
-      /* the device is cropped, so the frame's own bottom edge is the cut line */
-      filter:drop-shadow(0 26px 44px rgba(4, 26, 20, 0.30));
-    }
-    .ph{
-      position:relative;
-      border-radius:44px 44px 0 0;
-      /* the bezel is only this padding; everything inside is screen */
-      padding:9px 9px 0;
-      background:linear-gradient(168deg, #2C3240 0%, #14171F 44%, #0A0C11 100%);
-      /* the hairline highlight that reads as a machined edge */
-      box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.10),
-        inset 0 2px 0 rgba(255, 255, 255, 0.16);
-      overflow:hidden;
-    }
-    /* The display. The video is inset within this rather than butting against the
-       bezel, so the gap above and below it reads as screen - which is what makes
-       the frame feel like a real device instead of a picture in a border. */
-    .ph-display{
-      position:relative;
-      border-radius:36px 36px 0 0;
-      background:linear-gradient(178deg, #071410 0%, #04100C 60%, #030B08 100%);
-      /* Breathing room above the status bar. A real handset does not sit its
-         clock and island hard against the bezel. */
-      padding-top:14px;
-      padding-bottom:78px;
-      overflow:hidden;
-    }
-    .ph-top{
-      position:relative;
-      display:flex; align-items:center; justify-content:space-between;
-      height:34px; padding:0 14px 0 18px;
-      color:#FFFFFF;
-    }
-    .ph-time{
-      font-family:var(--font-body); font-size:13px; font-weight:700;
-      letter-spacing:0.01em; line-height:1;
-    }
-    .ph-island{
-      position:absolute; left:50%; top:2px; transform:translateX(-50%);
-      width:82px; height:26px; border-radius:999px;
-      background:#05070A;
-      box-shadow:inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-    }
-    .ph-ind{display:flex; align-items:center; gap:5px;}
-    .ph-ind svg{height:11px; width:auto; fill:currentColor;}
-
-    .ph-screen{
-      position:relative;
-      aspect-ratio:16 / 9;
-      width:calc(100% - 12px);
-      margin:18px auto 0;
-      border-radius:14px;
-      overflow:hidden;
-      background:#05100C;
-      /* the inner glass edge */
-      box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.07),
-        0 10px 24px -10px rgba(0, 0, 0, 0.7);
-    }
-    /* The single hero video, once JS has moved it in here. */
-    .ph-screen video{
-      display:block; width:100%; height:100%;
-      object-fit:cover;
-      border-radius:inherit;
-    }
-    .ph-fs{
-      position:absolute;
-      right:10px; bottom:10px;
-      width:40px; height:40px;
-      display:grid; place-items:center;
-      padding:0;
-      border:1px solid rgba(255, 255, 255, 0.22);
-      border-radius:12px;
-      background:rgba(6, 20, 16, 0.62);
-      backdrop-filter:blur(6px);
-      -webkit-backdrop-filter:blur(6px);
-      color:#FFFFFF;
-      cursor:pointer;
-      z-index:3;
-      transition:background .18s ease, border-color .18s ease;
-    }
-    .ph-fs svg{width:17px; height:17px;}
-    .ph-fs:active{background:rgba(6, 20, 16, 0.86); border-color:rgba(110, 231, 183, 0.6);}
-    /* 44px touch target without growing the visible chip */
-    .ph-fs::after{
-      content:""; position:absolute; top:50%; left:50%;
-      transform:translate(-50%, -50%);
-      width:44px; height:44px;
-    }
-
-    /* The rig and everything it drives is gone at this width. */
-    .lt-track{display:none;}
-    /* The device is the last thing in the hero and is cropped at its own bottom
-       edge, so the section ends exactly there and the sponsor carousel begins
-       immediately below it. */
-    .hero-editorial{padding-bottom:0;}
-    .au-trust{padding-top:26px;}
-  }
 
   /* While the platform player owns the video, the page's own chrome must not
      float above it. */
@@ -4241,102 +3988,145 @@
         <div class="au-form-note" id="auHeroPill"><strong>Free playbook</strong> &middot; 4 chapters </div>
       </form>
 
-      <!-- MOBILE DEVICE FRAME (< 700px, replaces the laptop rig entirely).
-           A cropped phone: the demo plays inline at its native 16:9 in the screen
-           well, and the fullscreen button hands off to the platform's own player
-           so it can be watched in landscape. The rig's 210vh of pinned scroll and
-           its per-frame 3D transform are simply not present at this width.
-           The <video> is NOT duplicated here - the single #auHeroVideo node is
-           moved into .ph-screen by JS, so it can never be fetched twice. -->
-      <div class="ph-wrap" id="auPhoneWrap">
-        <div class="ph">
-          <div class="ph-display">
-          <div class="ph-top">
-            <span class="ph-time">9:41</span>
-            <span class="ph-island" aria-hidden="true"></span>
-            <span class="ph-ind" aria-hidden="true">
-              <svg viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="5" width="3" height="7" rx="1"/><rect x="10" y="2.5" width="3" height="9.5" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
-              <svg viewBox="0 0 16 12" aria-hidden="true"><path d="M8 10.2a1.3 1.3 0 1 0 0 .1zM4.6 7.1a4.8 4.8 0 0 1 6.8 0M2.1 4.4a8.3 8.3 0 0 1 11.8 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-              <svg viewBox="0 0 26 12" aria-hidden="true"><rect x="0.6" y="0.6" width="21" height="10.8" rx="3" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.5"/><rect x="2.2" y="2.2" width="17.8" height="7.6" rx="1.8"/><path d="M23.2 4.2v3.6a2 2 0 0 0 0-3.6z" opacity="0.5"/></svg>
-            </span>
-          </div>
-          <div class="ph-screen" id="auPhoneScreen">
-            <button type="button" class="ph-fs" id="auPhoneFs" aria-label="Watch the demo fullscreen">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
-              </svg>
-            </button>
-          </div>
+      <!-- HERO VIDEO CAROUSEL. Three device frames, one at a time, swipeable.
+           This replaced the scroll-driven laptop rig. The rig, its 240vh of
+           pinned scroll and the separate mobile phone frame it needed have all
+           been lifted out into laptop-parallax-kit.zip, which is a standalone
+           plug-and-play copy for reuse elsewhere.
+
+           TWO CUTS PER SLIDE. data-src-wide is the landscape cut, played from
+           701px up in a window frame. data-src-tall is the portrait cut, played
+           at 700px and below in a phone-shaped frame. They are different
+           footage, not one video letterboxed two ways: wide is the booth, tall
+           is the LinkedIn feed the booth produces.
+
+           Slide 3 has no portrait cut yet, so it keeps its landscape one on
+           mobile. Drop /video/slide-3-mobile.mp4 in and add the two data-*-tall
+           attributes plus the has-tall class to make it match the other two.
+
+           No src and no poster in the markup, only data attributes, so the
+           browser cannot fetch anything on page load. The script attaches the
+           right cut for the active slide only: a visitor who never advances
+           downloads one video, not three. Until a file is attached the frame
+           shows its idle Wozku plate rather than a broken box. -->
+      <div class="vc" id="auHeroCarousel" role="region" aria-roledescription="carousel" aria-label="Product demo videos">
+        <div class="vc-viewport" id="auVcViewport">
+          <div class="vc-track" id="auVcTrack">
+            <div class="vc-slide" role="group" aria-roledescription="slide" aria-label="Video 1 of 3">
+              <div class="vframe has-tall">
+                <div class="vframe-bar" aria-hidden="true">
+                  <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
+                  <span class="vframe-pill"></span>
+                </div>
+                <div class="vframe-screen">
+                  <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
+                  <video class="vframe-video" loop muted playsinline preload="none"
+                         data-src-wide="/video/slide-1.mp4" data-poster-wide="/video/slide-1-poster.jpg"
+                         data-src-tall="/video/slide-1-mobile.mp4" data-poster-tall="/video/slide-1-mobile-poster.jpg"
+                         aria-label="Attendees at the Wozku booth, and the live leaderboard screen"></video>
+                  <div class="vframe-tools">
+                    <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
+                      <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                        <line x1="23" y1="9" x2="17" y2="15"/>
+                        <line x1="17" y1="9" x2="23" y2="15"/>
+                      </svg>
+                      <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                      </svg>
+                    </button>
+                    <button type="button" class="vc-fs" aria-label="Watch video 1 fullscreen" title="Fullscreen">
+                      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
           </div>
         </div>
-      </div>
-
-      <!-- LAPTOP REVEAL -->
-      <div class="lt-track" id="auLaptopTrack">
-        <div class="lt-stage" id="auLaptopStage">
-          <div class="lt-viewport">
-            <div class="lt-rig">
-          <div class="laptop">
-            <div class="laptop-shadow" aria-hidden="true"></div>
-
-            <div class="laptop-lid">
-              <!-- Front face: the screen. Paints only while it faces the camera. -->
-              <div class="laptop-face laptop-screen">
-                <div class="laptop-screen-inner">
-                  <div class="laptop-screen-idle" aria-hidden="true"><span>Wozku</span></div>
-                  <!-- preload="none" + data-src: the sources are attached by JS once the
-                       laptop track nears the viewport (see the reveal rig below). With
-                       preload="auto" the browser pulled ~2.8MB of this file during initial
-                       load, starving the CSS, fonts and hero image on a mobile connection. -->
-                  <video class="laptop-video" id="auHeroVideo" loop muted playsinline preload="none" poster="/video/laptop-demo-poster.jpg" aria-label="Wozku Platform Demo Video">
-                    <source data-src="/video/laptop-demo.mp4" type="video/mp4">
-                  </video>
-                </div>
-                <div class="laptop-bezel" aria-hidden="true"><span class="laptop-camera"></span></div>
-              </div>
-
-              <!-- Back face: the outer lid, which is what you see while it is shut. -->
-              <div class="laptop-face laptop-shell" aria-hidden="true">
-                <img src="/src/assets/wozku_logo-black.svg" alt="" class="laptop-shell-mark" onerror="this.src='/wozku_logo-black.svg'">
+        <div class="vc-slide" role="group" aria-roledescription="slide" aria-label="Video 2 of 3">
+          <div class="vframe has-tall">
+            <div class="vframe-bar" aria-hidden="true">
+              <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
+              <span class="vframe-pill"></span>
+            </div>
+            <div class="vframe-screen">
+              <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
+              <video class="vframe-video" loop muted playsinline preload="none"
+                     data-src-wide="/video/slide-2.mp4" data-poster-wide="/video/slide-2-poster.jpg"
+                     data-src-tall="/video/slide-2-mobile.mp4" data-poster-tall="/video/slide-2-mobile-poster.jpg"
+                     aria-label="Posts from the event appearing in the LinkedIn feed"></video>
+              <div class="vframe-tools">
+                <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
+            <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+              <line x1="23" y1="9" x2="17" y2="15"/>
+              <line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+            <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+                </button>
+                <button type="button" class="vc-fs" aria-label="Watch video 2 fullscreen" title="Fullscreen">
+                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
+                  </svg>
+                </button>
               </div>
             </div>
-
-            <div class="laptop-deck" aria-hidden="true">
-              <div class="laptop-keyboard">
-              <div class="laptop-key-row"><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span></div>
-              <div class="laptop-key-row"><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span></div>
-              <div class="laptop-key-row"><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span></div>
-              <div class="laptop-key-row"><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span></div>
-              <div class="laptop-key-row"><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span><span class="laptop-key"></span></div>
-              <div class="laptop-key-row"><span class="laptop-key laptop-key-wide"></span><span class="laptop-key laptop-key-space"></span><span class="laptop-key laptop-key-wide"></span></div>
+          </div>
+        </div>
+        <div class="vc-slide" role="group" aria-roledescription="slide" aria-label="Video 3 of 3">
+          <div class="vframe">
+            <div class="vframe-bar" aria-hidden="true">
+              <span class="vframe-dot"></span><span class="vframe-dot"></span><span class="vframe-dot"></span>
+              <span class="vframe-pill"></span>
+            </div>
+            <div class="vframe-screen">
+              <div class="vframe-idle" aria-hidden="true"><span>Wozku</span></div>
+              <video class="vframe-video" loop muted playsinline preload="none"
+                     data-src-wide="/video/slide-3.mp4" data-poster-wide="/video/slide-3-poster.jpg"
+                     aria-label="The Wozku stand in the exhibition hall"></video>
+              <div class="vframe-tools">
+                <button type="button" class="au-sound-btn vc-mute" aria-label="Unmute video" title="Unmute video">
+            <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+              <line x1="23" y1="9" x2="17" y2="15"/>
+              <line x1="17" y1="9" x2="23" y2="15"/>
+            </svg>
+            <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" aria-hidden="true">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            </svg>
+                </button>
+                <button type="button" class="vc-fs" aria-label="Watch video 3 fullscreen" title="Fullscreen">
+                  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M7.5 2.5H2.5v5M12.5 2.5h5v5M17.5 12.5v5h-5M7.5 17.5h-5v-5"/>
+                  </svg>
+                </button>
               </div>
-              <div class="laptop-trackpad"></div>
-              <div class="laptop-deck-edge"></div>
             </div>
           </div>
+        </div>
           </div>
+        </div>
 
-          <!-- Sound: the button mutes and unmutes, and hovering it reveals a -->
-          <div class="au-vol" id="auVolWrap">
-            <div class="au-vol-panel" id="auVolPanel">
-              <div class="au-vol-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-              <div class="au-vol-fill" id="auVolFill" aria-hidden="true"></div>
-              <div class="au-vol-thumb" id="auVolThumb" aria-hidden="true"><span></span></div>
-              <input class="au-vol-range" id="auVolRange" type="range" min="0" max="100" step="1" value="0" aria-label="Video volume">
-            </div>
-            <button type="button" class="au-sound-btn" id="auSoundBtn" aria-label="Unmute video" title="Unmute video">
-              <svg class="au-sound-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M11 5L6 9H2v6h4l5 4V5z"/>
-                <line x1="23" y1="9" x2="17" y2="15"/>
-                <line x1="17" y1="9" x2="23" y2="15"/>
-              </svg>
-              <svg class="au-sound-icon-unmuted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-              </svg>
-            </button>
-          </div>
+        <button type="button" class="vc-arrow vc-prev" id="auVcPrev" aria-label="Previous video">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 6 10l6 6"/></svg>
+        </button>
+        <button type="button" class="vc-arrow vc-next" id="auVcNext" aria-label="Next video">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 4 6 6-6 6"/></svg>
+        </button>
+
+        <div class="vc-dots" id="auVcDots">
+          <button type="button" class="vc-dot is-on" aria-label="Show video 1 of 3"></button>
+          <button type="button" class="vc-dot" aria-label="Show video 2 of 3"></button>
+          <button type="button" class="vc-dot" aria-label="Show video 3 of 3"></button>
         </div>
       </div>
 
@@ -5175,7 +4965,8 @@ Based on this, is Wozku a good fit for us? What would make it a strong fit, what
 
 <script type="module">
 import Lenis from 'lenis';
-import { animate, inView, stagger } from 'motion';
+// 'motion' was imported only for the volume pill's spring, which left with the
+// laptop rig. Nothing on the page uses it now, so the package is no longer bundled.
 
 // 1. LENIS LUXURY SMOOTH SCROLLING
 const lenis = new Lenis({
@@ -5271,138 +5062,6 @@ if (scrollToTopBtn) {
   });
 })();
 
-// 2D. MOBILE PHONE FRAME. Owns the hero demo below 700px, where the laptop rig
-// is display:none. Three jobs: host the one shared <video>, play it inline while
-// it is on screen, and hand off to the platform's fullscreen player on demand.
-(function phoneFrame() {
-  const wrap = document.getElementById('auPhoneWrap');
-  const screen_ = document.getElementById('auPhoneScreen');
-  const fsBtn = document.getElementById('auPhoneFs');
-  const video = document.getElementById('auHeroVideo');
-  if (!wrap || !screen_ || !video) return;
-
-  const mq = window.matchMedia('(max-width:700px)');
-  const laptopHome = video.parentElement;      // where the rig keeps it
-  let mounted = false;
-
-  // The same node is moved between the two frames rather than cloned. Moving a
-  // media element preserves its buffer and playback position, so this costs no
-  // extra network at all.
-  function mount(on) {
-    if (on === mounted) return;
-    mounted = on;
-    if (on) {
-      screen_.insertBefore(video, fsBtn || null);
-      video.dataset.gate = 'open';
-      // Deliberately NOT armed here: mount runs at page load, so arming would
-      // pull the demo down before anyone has scrolled to it. Arming belongs to
-      // the visibility gate below.
-    } else if (laptopHome) {
-      laptopHome.appendChild(video);
-    }
-  }
-
-  function play() {
-    if (!mounted) return;
-    armHeroVideo();
-    if (video.paused) video.play().catch(() => {});
-  }
-  function pause() {
-    if (mounted && !video.paused) video.pause();
-  }
-
-  // Inline playback only while the frame is actually on screen.
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) play(); else pause(); });
-    }, { threshold: 0.35 }).observe(wrap);
-  }
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) pause(); else play();
-  });
-
-  // ---- fullscreen -------------------------------------------------------
-  // Two genuinely different platforms:
-  //  - iPhone Safari has no Fullscreen API for elements. The only route is
-  //    video.webkitEnterFullscreen(), which opens the native iOS player - that
-  //    player rotates to landscape and brings its own controls, which is exactly
-  //    the behaviour we want. It must be called synchronously inside the tap and
-  //    needs metadata already loaded, which is why the video is armed on mount.
-  //  - Android/Chromium supports element fullscreen, but our <video> has no
-  //    controls attribute, so they have to be switched on for the duration or
-  //    there is no way to scrub, unmute or exit. Orientation lock is available
-  //    there and not on iOS.
-  let wasMuted = true;
-  let restoreControls = false;
-
-  function enterState() {
-    document.body.classList.add('au-fs-active');
-    wasMuted = video.muted;
-    // The tap is a valid user gesture, so audio is allowed to start here.
-    video.muted = false;
-    if (!video.hasAttribute('controls')) { video.setAttribute('controls', ''); restoreControls = true; }
-  }
-  function exitState() {
-    document.body.classList.remove('au-fs-active');
-    video.muted = wasMuted;
-    if (restoreControls) { video.removeAttribute('controls'); restoreControls = false; }
-    try {
-      if (window.screen && screen.orientation && typeof screen.orientation.unlock === 'function') {
-        screen.orientation.unlock();
-      }
-    } catch (err) { /* not supported, nothing to undo */ }
-  }
-
-  if (fsBtn) {
-    fsBtn.addEventListener('click', () => {
-      armHeroVideo();
-      enterState();
-
-      // iPhone route first: if the standard API is unavailable, this is the only one.
-      const iosNative = typeof video.webkitEnterFullscreen === 'function';
-      const standard = video.requestFullscreen || video.webkitRequestFullscreen;
-
-      if (!document.fullscreenEnabled && iosNative) {
-        try { video.webkitEnterFullscreen(); } catch (err) { exitState(); }
-        video.play().catch(() => {});
-        return;
-      }
-
-      if (standard) {
-        Promise.resolve(standard.call(video))
-          .then(() => {
-            video.play().catch(() => {});
-            // Best effort: unsupported on iOS, and rejects unless fullscreen is active.
-            if (screen.orientation && typeof screen.orientation.lock === 'function') {
-              screen.orientation.lock('landscape').catch(() => {});
-            }
-          })
-          .catch(() => {
-            // Blocked or unsupported - fall back to the native player if present.
-            if (iosNative) { try { video.webkitEnterFullscreen(); } catch (err) { exitState(); } }
-            else exitState();
-          });
-        return;
-      }
-
-      if (iosNative) { try { video.webkitEnterFullscreen(); } catch (err) { exitState(); } }
-      else exitState();
-    });
-  }
-
-  document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement) exitState();
-  });
-  // iOS fires these on the video element instead of the document.
-  video.addEventListener('webkitendfullscreen', exitState);
-
-  // ---- breakpoint ------------------------------------------------------
-  const sync = () => mount(mq.matches);
-  sync();
-  if (typeof mq.addEventListener === 'function') mq.addEventListener('change', sync);
-  else if (typeof mq.addListener === 'function') mq.addListener(sync);
-})();
-
 // 6B. LIVE ROI READOUT (mobile). The results panel sits below a 945px input
 // panel once the calculator stacks, so dragging a slider changes numbers that
 // are off screen. This mirrors the headline figures into a pinned bar that is
@@ -5486,354 +5145,345 @@ function applyNavTargets() {
 }
 applyNavTargets();
 
-// Hero video autoplay & scroll pause/resume
-const auVideo = document.getElementById('auHeroVideo');
+// 2C. HERO VIDEO CAROUSEL. Three device frames, one visible at a time.
+// Replaced the scroll-driven laptop rig and the separate mobile phone frame it
+// needed; the whole rig now lives in laptop-parallax-kit.zip for reuse.
+//
+// The one rule that matters here: only the ACTIVE slide's <video> ever gets a
+// src attached. Three autoplaying demos would be three parallel downloads on a
+// phone connection, which is exactly what the old data-src gating existed to
+// avoid. Advancing the carousel is what arms the next file.
+(function videoCarousel() {
+  const root = document.getElementById('auHeroCarousel');
+  const track = document.getElementById('auVcTrack');
+  if (!root || !track) return;
 
-// The deferred <source> is attached exactly once, by whichever surface asks
-// first: the desktop laptop rig or the mobile phone frame. Kept at module scope
-// so the two cannot race and start two downloads of the same 53MB file.
-let heroVideoArmed = false;
-function armHeroVideo() {
-  if (heroVideoArmed || !auVideo) return;
-  heroVideoArmed = true;
-  let attached = false;
-  auVideo.querySelectorAll('source[data-src]').forEach((sr) => {
-    sr.src = sr.dataset.src;
-    sr.removeAttribute('data-src');
-    attached = true;
-  });
-  if (attached) auVideo.load();
-}
-if (auVideo) {
-  // Ensure video is muted for policy compliance & looped
-  auVideo.muted = true;
-  auVideo.loop = true;
+  const slides = Array.from(track.querySelectorAll('.vc-slide'));
+  if (!slides.length) return;
 
-  const handlePlay = () => {
-    // The video now lives in the screen of the laptop in the hero, and its
-    if (auVideo.dataset.gate === 'closed') return;
-    const p = auVideo.play();
-    if (p !== undefined) {
-      p.catch(() => {
-        // Retry on first user gesture if browser restricts
-        const resumeOnInteraction = () => {
-          auVideo.play().catch(() => {});
-          window.removeEventListener('click', resumeOnInteraction);
-          window.removeEventListener('touchstart', resumeOnInteraction);
-          window.removeEventListener('scroll', resumeOnInteraction);
-        };
-        window.addEventListener('click', resumeOnInteraction, { once: true });
-        window.addEventListener('touchstart', resumeOnInteraction, { once: true });
-        window.addEventListener('scroll', resumeOnInteraction, { once: true });
-      });
-    }
-  };
-
-  // Observe when video is in focus (in viewport)
-  if ('IntersectionObserver' in window) {
-    const videoObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
-          // In focus -> resume video
-          handlePlay();
-        } else {
-          // Out of focus / scrolled away -> pause video
-          if (!auVideo.paused) {
-            auVideo.pause();
-          }
-        }
-      });
-    }, {
-      threshold: [0, 0.15, 0.5, 1.0]
-    });
-
-    videoObserver.observe(auVideo);
-  } else {
-    // Fallback if IntersectionObserver not supported
-    handlePlay();
-  }
-
-  // Handle tab visibility change
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      if (!auVideo.paused) auVideo.pause();
-    } else {
-      const rect = auVideo.getBoundingClientRect();
-      const inView = rect.top < window.innerHeight && rect.bottom > 0;
-      if (inView && auVideo.paused) {
-        handlePlay();
-      }
-    }
-  });
-
-  // Volume control. Hovering the button opens a vertical level slider instead of
-  const auSoundBtn = document.getElementById('auSoundBtn');
-  const auVolWrap = document.getElementById('auVolWrap');
-  const auVolPanel = document.getElementById('auVolPanel');
-  const auVolRange = document.getElementById('auVolRange');
-  const auVolFill = document.getElementById('auVolFill');
-  const auVolThumb = document.getElementById('auVolThumb');
-  const auSoundIconMuted = document.querySelector('.au-sound-icon-muted');
-  const auSoundIconUnmuted = document.querySelector('.au-sound-icon-unmuted');
-
-  if (auSoundBtn && auVolPanel && auVolRange && auVolFill && auVolThumb) {
-    // Their transition, verbatim: spring, stiffness 300, damping 30 (mass 1).
-    const VOL_SPRING = { type: 'spring', stiffness: 300, damping: 30 };
-    // The pill's two axes, read off the layout rather than restated here: the
-    const volAxes = () => {
-      const cross = auVolThumb.offsetWidth;
-      const track = auVolPanel.clientHeight;
-      return { cross, span: track - cross };
-    };
-    // Their three colour bands, at their thresholds, on an emerald ramp: the
-    const VOL_BANDS = [
-      { upTo: 0.5, a: '#6EE7B7', b: '#34D399' },
-      { upTo: 0.7, a: '#34D399', b: '#10B981' },
-      { upTo: Infinity, a: '#10B981', b: '#047857' },
-    ];
-    const volReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const auVolRender = (level, animated) => {
-      const ratio = level / 100;
-      const { cross, span } = volAxes();
-      // The fill spans `level * span + cross` so it always reaches through the
-      const height = ratio * span + cross;
-      const lift = -ratio * span;
-      const band = VOL_BANDS.find((entry) => ratio < entry.upTo);
-
-      auVolFill.style.setProperty('--vol-a', band.a);
-      auVolFill.style.setProperty('--vol-b', band.b);
-
-      if (animated && !volReduce.matches) {
-        animate(auVolFill, { height: height + 'px' }, VOL_SPRING);
-        animate(auVolThumb, { y: lift }, VOL_SPRING);
-      } else {
-        auVolFill.style.height = height + 'px';
-        auVolThumb.style.transform = 'translateY(' + lift + 'px)';
-      }
-    };
-
-    const syncIcons = () => {
-      const silent = auVideo.muted || auVideo.volume === 0;
-      if (auSoundIconMuted) auSoundIconMuted.style.display = silent ? 'inline' : 'none';
-      if (auSoundIconUnmuted) auSoundIconUnmuted.style.display = silent ? 'none' : 'inline';
-      // No visible text, so the label is the only thing naming the control.
-      const label = silent ? 'Unmute video' : 'Mute video';
-      auSoundBtn.setAttribute('aria-label', label);
-      auSoundBtn.setAttribute('title', label);
-    };
-
-    const setPanel = (open) => auVolWrap.classList.toggle('is-open', open);
-
-    // Level the slider returns to when unmuting, if it has never been set.
-    const VOL_DEFAULT = 60;
-    let volLast = VOL_DEFAULT;
-
-    const applyLevel = (level, animated) => {
-      auVolRange.value = String(level);
-      auVolRender(level, animated);
-      auVideo.volume = level / 100;
-      // Zero and muted are kept as the same state, so the pill always shows the
-      auVideo.muted = level === 0;
-      syncIcons();
-    };
-
-    // The button mutes; the slider sets the level. Muting collapses the track and
-    const toggleMute = () => {
-      const level = Number(auVolRange.value);
-      if (level > 0) {
-        volLast = level;
-        applyLevel(0, true);
-      } else {
-        applyLevel(volLast > 0 ? volLast : VOL_DEFAULT, true);
-        // Unmuting is a user gesture, so an audible play is allowed from here.
-        if (auVideo.paused) handlePlay();
-      }
-    };
-
-    // Hover reveals the slider. Pointer events only, and touch is excluded: on a
-    auVolWrap.addEventListener('pointerenter', (e) => {
-      if (e.pointerType !== 'touch') setPanel(true);
-    });
-    auVolWrap.addEventListener('pointerleave', (e) => {
-      // Keep it up if the slider is still focused, or the panel would vanish
-      if (e.pointerType !== 'touch' && !auVolWrap.contains(document.activeElement)) {
-        setPanel(false);
-      }
-    });
-    // Tabbing to the button reveals it too, so the slider is reachable by keyboard.
-    auVolWrap.addEventListener('focusin', () => setPanel(true));
-    auVolWrap.addEventListener('focusout', () => {
-      if (!auVolWrap.matches(':hover')) setPanel(false);
-    });
-
-    auSoundBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleMute();
-      // Touch has no hover, so the tap has to reveal the slider as well or a
-      setPanel(true);
-    });
-
-    auVolRange.addEventListener('input', () => {
-      const level = Number(auVolRange.value);
-      if (level > 0) volLast = level;
-      applyLevel(level, true);
-      // Raising the level is a user gesture, so this is the first point at which
-      if (level > 0 && auVideo.paused) handlePlay();
-    });
-
-    document.addEventListener('click', (e) => {
-      if (auVolWrap.classList.contains('is-open') && !auVolWrap.contains(e.target)) {
-        setPanel(false);
-      }
-    });
-    auVolWrap.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && auVolWrap.classList.contains('is-open')) {
-        setPanel(false);
-        auSoundBtn.focus();
-      }
-    });
-
-    auVolRender(Number(auVolRange.value), false);
-    syncIcons();
-  }
-}
-
-// 2C. LAPTOP REVEAL (scroll-driven lid, dolly and wipe)
-(function laptopReveal() {
-  const track = document.getElementById('auLaptopTrack');
-  const stage = document.getElementById('auLaptopStage');
-  if (!track || !stage) return;
-  // Under 700px the rig is display:none and the phone frame owns the demo, so
-  // none of this should run: no rAF loop, no per-frame 3D transform, no blur.
-  if (window.matchMedia('(max-width:700px)').matches) return;
-
-  const video = document.getElementById('auHeroVideo');
+  const dots = Array.from(document.querySelectorAll('#auVcDots .vc-dot'));
+  const prevBtn = document.getElementById('auVcPrev');
+  const nextBtn = document.getElementById('auVcNext');
+  const viewport = document.getElementById('auVcViewport');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  // The <source> carries data-src rather than src, so the browser cannot start
-  // buffering during initial page load. We attach it the first time the laptop
-  // section becomes live, which is well before the lid opens far enough to play.
-  const armVideo = armHeroVideo;
+  const videoOf = (slide) => slide.querySelector('.vframe-video');
+  const frameOf = (slide) => slide.querySelector('.vframe');
 
-  // Sample a [progress, value] keyframe curve. Linear between stops: the easing
-  function at(p, stops) {
-    if (p <= stops[0][0]) return stops[0][1];
-    for (let i = 1; i < stops.length; i++) {
-      if (p <= stops[i][0]) {
-        const a = stops[i - 1], b = stops[i];
-        const span = b[0] - a[0];
-        const t = span > 0 ? (p - a[0]) / span : 1;
-        return a[1] + (b[1] - a[1]) * t;
-      }
-    }
-    return stops[stops.length - 1][1];
+  let index = 0;
+  let onScreen = true;
+
+  // ---- lazy source attachment -------------------------------------------
+  // Each slide ships up to two cuts of its footage: a landscape one for the
+  // window frame and a portrait one for the phone frame. They are different
+  // footage, so this is a genuine art-direction swap rather than a resolution
+  // switch, which is exactly the case <picture> solves for images and <video>
+  // has no equivalent for. The `media` attribute on <source> was dropped from
+  // the spec for video, so the choice has to be made here.
+  const tallMq = window.matchMedia('(max-width:700px)');
+
+  function cutFor(video) {
+    const wantsTall = tallMq.matches && video.dataset.srcTall;
+    return {
+      src: wantsTall ? video.dataset.srcTall : video.dataset.srcWide,
+      poster: wantsTall ? video.dataset.posterTall : video.dataset.posterWide,
+    };
   }
 
-  const LID    = [[0, -90], [0.10, -90], [0.44, 8], [0.60, 0]];
-  // Shut, the camera looks down at the lid so it reads as a closed laptop on a
-  const TILT   = [[0, -52], [0.08, -46], [0.44, -10], [0.60, 0]];
-  // svh, not px, and both stops measured rather than guessed. Shut, the laptop's
-  const RISE   = [[0, -7.3], [0.32, -2.4]];
-  // A hair closer across the hold, so a long stretch of pinned scroll still has
-  const SCALE  = [[0, 0.94], [0.12, 1], [0.60, 1], [1, 1.05]];
+  // Idempotent per cut: re-arming with the same src is a no-op, so a slide
+  // revisited ten times still only ever kicks off one download.
+  function arm(video) {
+    if (!video) return;
+    const cut = cutFor(video);
+    if (!cut.src || video.dataset.armedSrc === cut.src) return;
+    video.dataset.armedSrc = cut.src;
+    // The poster is attached here rather than in the markup: a poster in the
+    // markup is fetched eagerly, which would pull three images on page load for
+    // slides nobody has looked at. The idle plate covers the gap until then.
+    if (cut.poster) video.poster = cut.poster;
+    video.src = cut.src;
+    video.load();
+  }
 
-  let last = -1;
+  // Crossing the breakpoint mid-session, by rotating a tablet or dragging a
+  // desktop window narrow, has to re-attach the other cut. Only videos that
+  // were already armed are touched: an untouched slide stays untouched.
+  const onBreakpoint = () => {
+    slides.forEach((slide) => {
+      const video = videoOf(slide);
+      if (!video || !video.dataset.armedSrc) return;
+      const cut = cutFor(video);
+      if (!cut.src || cut.src === video.dataset.armedSrc) return;
+      const wasPlaying = !video.paused;
+      arm(video);
+      if (wasPlaying) video.play().catch(() => {});
+    });
+  };
+  if (tallMq.addEventListener) tallMq.addEventListener('change', onBreakpoint);
+  else if (tallMq.addListener) tallMq.addListener(onBreakpoint);
 
+  // The idle plate stays up until the file can actually paint, so a slide whose
+  // video has not been uploaded yet reads as deliberate rather than broken.
+  slides.forEach((slide) => {
+    const video = videoOf(slide);
+    const frame = frameOf(slide);
+    if (!video || !frame) return;
+    const reveal = () => frame.classList.add('is-playing');
+    video.addEventListener('loadeddata', reveal);
+    video.addEventListener('playing', reveal);
+    video.addEventListener('error', () => frame.classList.remove('is-playing'));
+  });
+
+  // ---- playback ----------------------------------------------------------
+  function playActive() {
+    if (!onScreen) return;
+    const video = videoOf(slides[index]);
+    if (!video) return;
+    arm(video);
+    if (video.paused) video.play().catch(() => {});
+  }
+
+  function pauseAll(except) {
+    slides.forEach((slide) => {
+      const video = videoOf(slide);
+      if (!video || video === except) return;
+      if (!video.paused) video.pause();
+      // Leaving a slide should not leave its audio armed for the next visit.
+      if (!video.muted) { video.muted = true; syncMute(slide); }
+    });
+  }
+
+  // ---- position ----------------------------------------------------------
   function render() {
-    // Progress across the pin: 0 when the section's top hits the top of the
-    const span = track.offsetHeight - window.innerHeight;
-    const p = span > 0
-      ? Math.min(1, Math.max(0, -track.getBoundingClientRect().top / span))
-      : 0;
-    if (Math.abs(p - last) < 0.0004) return;
-    last = p;
+    track.style.transform = 'translate3d(' + (-index * 100) + '%, 0, 0)';
+    slides.forEach((slide, i) => {
+      const active = i === index;
+      slide.classList.toggle('is-active', active);
+      // Off-screen slides are out of the tab order: tabbing must not land on a
+      // control the visitor cannot see.
+      slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+      slide.querySelectorAll('button').forEach((b) => {
+        if (active) b.removeAttribute('tabindex');
+        else b.setAttribute('tabindex', '-1');
+      });
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('is-on', i === index);
+      dot.setAttribute('aria-current', i === index ? 'true' : 'false');
+    });
+    if (prevBtn) prevBtn.disabled = index === 0;
+    if (nextBtn) nextBtn.disabled = index === slides.length - 1;
+  }
 
-    const s = stage.style;
-    s.setProperty('--lt-lid', at(p, LID).toFixed(2) + 'deg');
-    s.setProperty('--lt-tilt', at(p, TILT).toFixed(2) + 'deg');
-    s.setProperty('--lt-y', at(p, RISE).toFixed(2) + 'svh');
-    s.setProperty('--lt-scale', at(p, SCALE).toFixed(4));
+  function goTo(next) {
+    const clamped = Math.max(0, Math.min(slides.length - 1, next));
+    if (clamped === index) return;
+    index = clamped;
+    render();
+    pauseAll(videoOf(slides[index]));
+    playActive();
+  }
 
-    // The volume control belongs to the whole stretch where the screen is facing
-    stage.classList.toggle('lt-ui-on', p > 0.48);
+  // ---- controls ----------------------------------------------------------
+  if (prevBtn) prevBtn.addEventListener('click', () => goTo(index - 1));
+  if (nextBtn) nextBtn.addEventListener('click', () => goTo(index + 1));
+  dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
 
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') { goTo(index - 1); e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { goTo(index + 1); e.preventDefault(); }
+  });
+
+  // ---- swipe -------------------------------------------------------------
+  // Pointer events, with the horizontal intent test that keeps a vertical drag
+  // scrolling the page instead of grabbing the carousel.
+  if (viewport) {
+    let startX = 0, startY = 0, dx = 0, dragging = false, decided = false;
+
+    viewport.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      startX = e.clientX; startY = e.clientY;
+      dx = 0; dragging = true; decided = false;
+    });
+
+    viewport.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      if (!decided) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        decided = true;
+        // Vertical intent: let go entirely so the page scrolls normally.
+        if (Math.abs(dy) > Math.abs(dx)) { dragging = false; return; }
+        track.classList.add('is-dragging');
+        try { viewport.setPointerCapture(e.pointerId); } catch (err) { /* not supported */ }
+      }
+      // Rubber-band at the two ends so the track cannot be dragged into space.
+      const atEdge = (dx > 0 && index === 0) || (dx < 0 && index === slides.length - 1);
+      const shift = atEdge ? dx * 0.28 : dx;
+      const pct = (shift / viewport.clientWidth) * 100;
+      track.style.transform = 'translate3d(' + (-index * 100 + pct) + '%, 0, 0)';
+    });
+
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      track.classList.remove('is-dragging');
+      const threshold = Math.max(42, viewport.clientWidth * 0.14);
+      if (dx <= -threshold) goTo(index + 1);
+      else if (dx >= threshold) goTo(index - 1);
+      else render();
+      dx = 0;
+    };
+    viewport.addEventListener('pointerup', endDrag);
+    viewport.addEventListener('pointercancel', endDrag);
+    viewport.addEventListener('pointerleave', endDrag);
+    // A completed swipe must not also fire the mute or fullscreen button under
+    // the finger.
+    viewport.addEventListener('click', (e) => {
+      if (Math.abs(dx) > 8) { e.stopPropagation(); e.preventDefault(); }
+    }, true);
+  }
+
+  // ---- mute --------------------------------------------------------------
+  function syncMute(slide) {
+    const video = videoOf(slide);
+    const btn = slide.querySelector('.vc-mute');
+    if (!video || !btn) return;
+    const silent = video.muted;
+    const muted = btn.querySelector('.au-sound-icon-muted');
+    const unmuted = btn.querySelector('.au-sound-icon-unmuted');
+    if (muted) muted.style.display = silent ? 'inline' : 'none';
+    if (unmuted) unmuted.style.display = silent ? 'none' : 'inline';
+    const label = silent ? 'Unmute video' : 'Mute video';
+    btn.setAttribute('aria-label', label);
+    btn.setAttribute('title', label);
+  }
+
+  slides.forEach((slide) => {
+    const btn = slide.querySelector('.vc-mute');
+    const video = videoOf(slide);
+    if (!btn || !video) return;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      video.muted = !video.muted;
+      // Unmuting is a user gesture, so an audible play is allowed from here.
+      if (!video.muted) { arm(video); if (video.paused) video.play().catch(() => {}); }
+      syncMute(slide);
+    });
+    syncMute(slide);
+  });
+
+  // ---- fullscreen --------------------------------------------------------
+  // Two genuinely different platforms, carried over from the old phone frame:
+  //  - iPhone Safari has no element Fullscreen API. The only route is
+  //    video.webkitEnterFullscreen(), which opens the native iOS player. That
+  //    player rotates to landscape and brings its own controls, which is the
+  //    behaviour we want. It must be called synchronously inside the tap.
+  //  - Android/Chromium supports element fullscreen, but these <video>s have no
+  //    controls attribute, so they are switched on for the duration or there is
+  //    no way to scrub, unmute or exit.
+  let fsVideo = null;
+  let fsWasMuted = true;
+  let fsRestoreControls = false;
+
+  function enterState(video) {
+    fsVideo = video;
+    document.body.classList.add('au-fs-active');
+    fsWasMuted = video.muted;
+    video.muted = false;
+    if (!video.hasAttribute('controls')) { video.setAttribute('controls', ''); fsRestoreControls = true; }
+  }
+  function exitState() {
+    const video = fsVideo;
+    document.body.classList.remove('au-fs-active');
     if (video) {
-      // The track starts in the hero, so an IntersectionObserver on it fires
-      // immediately and is useless as a defer signal. Scroll progress is the real
-      // one: arm at 0.12 so there is buffer headroom before playback at 0.34.
-      if (p > 0.12) armVideo();
-      const revealed = p > 0.34;
-      video.dataset.gate = revealed ? 'open' : 'closed';
-      if (revealed) {
-        armVideo();
-        if (video.paused) video.play().catch(() => {});
-      } else if (!video.paused) {
-        video.pause();
+      video.muted = fsWasMuted;
+      if (fsRestoreControls) { video.removeAttribute('controls'); fsRestoreControls = false; }
+      const slide = video.closest('.vc-slide');
+      if (slide) syncMute(slide);
+    }
+    fsVideo = null;
+    try {
+      if (window.screen && screen.orientation && typeof screen.orientation.unlock === 'function') {
+        screen.orientation.unlock();
       }
-    }
+    } catch (err) { /* not supported, nothing to undo */ }
   }
 
-  // Driven off frames rather than scroll events: Lenis animates the scroll on its
-  let frame = 0;
-  let live = false;
+  slides.forEach((slide) => {
+    const btn = slide.querySelector('.vc-fs');
+    const video = videoOf(slide);
+    if (!btn || !video) return;
 
-  function loop() {
-    render();
-    frame = live ? requestAnimationFrame(loop) : 0;
-  }
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      arm(video);
+      enterState(video);
 
-  function setLive(next) {
-    if (next === live) return;
-    live = next;
-    if (live && !frame) frame = requestAnimationFrame(loop);
-    if (!live) {
-      // One last pass so the section settles on its true end state rather than
-      render();
-      if (frame) cancelAnimationFrame(frame);
-      frame = 0;
-    }
-  }
+      const iosNative = typeof video.webkitEnterFullscreen === 'function';
+      const standard = video.requestFullscreen || video.webkitRequestFullscreen;
 
-  let observer = null;
-
-  function start() {
-    if (reduce.matches) {
-      // The stylesheet already renders the static open state; just let the demo
-      if (video) {
-        armVideo();
-        video.dataset.gate = 'open';
+      if (!document.fullscreenEnabled && iosNative) {
+        try { video.webkitEnterFullscreen(); } catch (err) { exitState(); }
         video.play().catch(() => {});
+        return;
       }
-      return;
-    }
-    render();
-    if ('IntersectionObserver' in window) {
-      observer = new IntersectionObserver(
-        (entries) => entries.forEach((entry) => setLive(entry.isIntersecting)),
-        { rootMargin: '15% 0px' },
-      );
-      observer.observe(track);
-    } else {
-      setLive(true);
-    }
+
+      if (standard) {
+        Promise.resolve(standard.call(video))
+          .then(() => {
+            video.play().catch(() => {});
+            // Best effort: unsupported on iOS, and rejects unless fullscreen is active.
+            if (screen.orientation && typeof screen.orientation.lock === 'function') {
+              screen.orientation.lock('landscape').catch(() => {});
+            }
+          })
+          .catch(() => {
+            if (iosNative) { try { video.webkitEnterFullscreen(); } catch (err) { exitState(); } }
+            else exitState();
+          });
+        return;
+      }
+
+      if (iosNative) { try { video.webkitEnterFullscreen(); } catch (err) { exitState(); } }
+      else exitState();
+    });
+
+    // iOS fires this on the video element instead of the document.
+    video.addEventListener('webkitendfullscreen', exitState);
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) exitState();
+  });
+
+  // ---- visibility --------------------------------------------------------
+  // Nothing plays while the carousel is off screen, and nothing is armed until
+  // it has been seen at least once: the hero renders without touching the
+  // network for video at all.
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        onScreen = entry.isIntersecting;
+        if (onScreen) playActive();
+        else pauseAll(null);
+      });
+    }, { threshold: 0.3 }).observe(root);
+  } else {
+    playActive();
   }
 
-  function stop() {
-    if (observer) { observer.disconnect(); observer = null; }
-    live = false;
-    if (frame) { cancelAnimationFrame(frame); frame = 0; }
-    last = -1;
-    stage.classList.remove('lt-ui-on');
-    ['--lt-lid', '--lt-tilt', '--lt-y', '--lt-scale']
-      .forEach((prop) => stage.style.removeProperty(prop));
-  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pauseAll(null);
+    else playActive();
+  });
 
-  start();
-  // Honour the preference changing mid-session rather than only at load.
-  const onPrefChange = () => { stop(); start(); };
-  if (reduce.addEventListener) reduce.addEventListener('change', onPrefChange);
-  else if (reduce.addListener) reduce.addListener(onPrefChange);
+  // With reduced motion the slides still change, they just do not slide: the
+  // transition is switched off in CSS, so there is nothing to do here.
+  void reduce;
+
+  render();
 })();
 
 // Floating island header
@@ -8351,10 +8001,10 @@ function fireConfetti() {
     if (!pointerInside) pulse(nextId);
 
     // Visibility gate, carried over: the rail stays out of the hero.
-    const laptopTrack = document.getElementById('auLaptopTrack');
+    const heroCarousel = document.getElementById('auHeroCarousel');
     let past;
-    if (laptopTrack) {
-      past = laptopTrack.getBoundingClientRect().bottom < window.innerHeight * 0.7;
+    if (heroCarousel) {
+      past = heroCarousel.getBoundingClientRect().bottom < window.innerHeight * 0.7;
     } else {
       past = window.scrollY > 400;
     }

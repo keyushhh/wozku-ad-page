@@ -36,3 +36,7 @@ wozku-artifact.html
 .gemini/
 *.zip
 
+
+# Camera masters for the hero carousel. Kept on disk so a re-encode is always
+# possible, but never deployed and never committed: they are 177MB together.
+video-originals
