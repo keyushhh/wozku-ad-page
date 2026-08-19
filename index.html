@@ -3143,10 +3143,15 @@
     .bs-particles{display:none;}
   }
   /* ============ HERO VIDEO CAROUSEL (#auHeroCarousel) ===================
-     ONE frame on screen at a time. The other four are still in the row, still
-     in order, but they are not shown and not playing: they arrive on the arrows
-     or a swipe. Five videos competing for attention in the hero was the whole
-     problem, so the row now presents exactly one thing to look at.
+     ONE frame to look at, with the next and previous ones showing as faded
+     ghosts in the corners and the arrows sitting on top of them. Only the frame
+     you are on is at full strength and only it is playing, so there is exactly
+     one thing competing for attention, but the row still reads as a row and the
+     controls sit on the thing they act on.
+
+     The ghosts are the frames' own idle plates, not their footage. That is
+     deliberate: a neutral ghost says "there is more this way" without becoming
+     a second thing to watch, and it costs no bytes at all.
 
      ORDER:  desktop 2 | phone 1 | DESKTOP MAIN | phone 2 | desktop 3
 
@@ -3185,12 +3190,25 @@
     /* browser height x (iphone width / iphone height) = matching total heights.
        784/1280 x 345/701 = 0.30137 */
     --phonew:calc(var(--winw) * 0.30137);
-    --vc-gap:30px;
+    /* Corner softening for the browser frame, tracking its width. */
+    --desk-r:calc(var(--winw) * 0.022);
+    --vc-gap:24px;
+    /* How much of each neighbouring frame shows past the main one. The arrows
+       are centred in the sliver this leaves, which is --vc-peek minus the gap. */
+    --vc-peek:96px;
+    --vc-fade:calc(var(--vc-peek) - var(--vc-gap));
 
     position:relative;
-    /* One frame wide, sized to the widest of them, which is the browser. The
-       phone is narrower and simply sits centred in the same box. */
-    width:var(--winw);
+    /* The main frame, plus a peek of a neighbour at each end. The main frame is
+       sized to the widest of them, the browser; a phone is narrower and simply
+       sits centred in the same box. */
+    /* FIXED, and deliberately so. An earlier pass narrowed this to the active
+       frame so the ghost sliver stayed the same width whichever frame you were
+       on, but that moved the arrows every time you stepped between a window and
+       a phone, and a control that walks about is worse than a ghost that changes
+       size. The row is one size: the widest frame plus a peek at each end. Only
+       the content inside it changes. */
+    width:calc(var(--winw) + 2 * var(--vc-peek));
     max-width:100%;
     /* Belt and braces against the shrink-to-fit problem noted on
        .hero-content-wrap: this must never report an intrinsic width. */
@@ -3202,6 +3220,13 @@
     /* Just enough room for a focus ring, which is 2px wide at 3px offset. */
     padding:6px 0;
     margin:-6px 0;
+    /* CONTENT box, against the page-wide border-box rule, and this matters: the
+       script sets this element's height to the frame's height. Under border-box
+       the 12px of padding above would be taken OUT of that height, leaving the
+       frame 12px taller than the box it sits in. Bottom aligned, the overflow
+       came off the TOP, which cropped the browser's title bar and cut its
+       rounded top corners clean off, so the window read as square. */
+    box-sizing:content-box;
     touch-action:pan-y;
     /* Bottom anchored, so when the row is taller than the viewport it is the
        TOP that gets clipped and every frame keeps standing on the same
@@ -3216,15 +3241,25 @@
     display:flex;
     align-items:flex-end;
     transition:height 0.5s cubic-bezier(0.22, 1, 0.28, 1);
-    /* No edge fade any more. It existed to dissolve the frames that used to
-       flank the centre one; with a single frame on screen there is nothing at
-       the edges to hide, and a fade here would only dim the frame's own sides. */
+
+    /* Dissolves the ghosts into the page edge, so they read as the row carrying
+       on rather than as frames sliced off against a border. The fade is exactly
+       the width of the visible sliver, so the main frame never touches it. The
+       arrows are siblings of this element, not children, so they stay at full
+       strength on top of the faded ghost. */
+    -webkit-mask-image:linear-gradient(90deg,
+      transparent 0, #000 var(--vc-fade),
+      #000 calc(100% - var(--vc-fade)), transparent 100%);
+    mask-image:linear-gradient(90deg,
+      transparent 0, #000 var(--vc-fade),
+      #000 calc(100% - var(--vc-fade)), transparent 100%);
   }
   .vc-track{flex:0 0 auto;}
 
-  /* One frame on screen. The rest of the row is laid out and positioned exactly
-     as before, so the slide still travels and still lands, but only the frame
-     you are on is drawn. */
+  /* Three states. The frame you are on is at full strength; its two neighbours
+     are faded ghosts sitting back a little; everything further out is not drawn
+     at all. Only the active frame takes pointer events, so a click on a ghost
+     cannot reach a mute or fullscreen button nobody can see. */
   /* The frame that lands in the centre sits forward; the two beside it sit
      back. Scaled from the bottom edge so every frame stays on the shared
      baseline, and scaled DOWN rather than up so nothing ever exceeds the
@@ -3233,8 +3268,9 @@
     transform-origin:50% 100%;
     transition:opacity 0.45s ease, transform 0.55s cubic-bezier(0.34, 1.36, 0.52, 1);
   }
-  .vc-slide:not(.is-active){transform:scale(0.96); opacity:0; pointer-events:none;}
-  .vc-slide.is-active{transform:scale(1); opacity:1;}
+  .vc-slide{opacity:0; transform:scale(0.94); pointer-events:none;}
+  .vc-slide.is-near{opacity:0.3;}
+  .vc-slide.is-active{opacity:1; transform:scale(1); pointer-events:auto;}
 
   /* Entrance, once the row is actually on screen. Staggered from the centre
      outwards so the main frame arrives first and the flanking ones follow. */
@@ -3269,6 +3305,13 @@
      image, so it is what gives .vframe its height and every frame keeps its
      asset's exact proportions at any size, with no ratio restated in CSS. */
   .vframe{position:relative;}
+  /* The mockup draws its own 10px corner, which at this scale is about 6px and
+     reads as square. Clipping the artwork a little rounder softens it without
+     touching the asset. */
+  .vc-slide--desk .vframe{
+    border-radius:var(--desk-r);
+    overflow:hidden;
+  }
   .vframe-shell{
     display:block;
     width:100%;
@@ -3295,9 +3338,9 @@
     top:6.7602%;
     width:100%;
     height:93.2398%;
-    /* The window is drawn with a 10px corner radius, so the foot of the screen
-       has to be rounded to match or the video squares off the corners. */
-    border-radius:0 0 calc(var(--winw) * 10 / 1280) calc(var(--winw) * 10 / 1280);
+    /* Matches the softened corner above, so the video's own square corners do
+       not poke back out through the foot of the window. */
+    border-radius:0 0 var(--desk-r) var(--desk-r);
   }
   /* iphone.svg: screen is 12.47 / 9.97 / 320.02 / 680.76 inside 345 x 701. */
   .vc-slide--phone .vframe-screen{
@@ -3413,8 +3456,10 @@
     box-shadow:0 12px 30px -12px rgba(4, 26, 20, 0.45);
     transition:transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, opacity 0.25s ease;
   }
-  .vc-prev{left:-22px;}
-  .vc-next{right:-22px;}
+  /* Centred in the visible sliver of the ghost frame, so each arrow sits on the
+     frame it takes you to. */
+  .vc-prev{left:calc((var(--vc-fade) - 44px) / 2);}
+  .vc-next{right:calc((var(--vc-fade) - 44px) / 2);}
   .vc-arrow svg{width:18px; height:18px;}
   .vc-arrow:hover{background:#FFFFFF; transform:translateY(-50%) scale(1.06);}
   /* The click itself, so the control answers before the row has finished moving. */
@@ -3449,12 +3494,6 @@
     width:44px; height:44px;
   }
 
-  @media (max-width:1100px){
-    /* No room outside the row for the arrows, so they come inboard and sit on
-       the frames rather than on the page. */
-    .vc-prev{left:8px;}
-    .vc-next{right:8px;}
-  }
   @media (max-width:700px){
     /* Only the two source measurements change. At this width the row cannot
        show three frames at a comfortable size, so it shows one centred with its
@@ -3462,7 +3501,11 @@
        own: the desktop across the viewport, the phone against the viewport
        height. Everything else derives exactly as it does above. */
     .vc{
-      --winw:min(88vw, 460px);
+      /* The peek has to come out of the width here, or the row would be wider
+         than the gutter and the main frame would lose the difference. */
+      --winw:calc(88vw - 60px);
+      --vc-peek:30px;
+      --vc-gap:12px;
       /* Off the viewport height rather than the window width here. Matching the
          browser's height keeps the viewport still on desktop, but at this size
          the browser frame is short and a height-matched phone would be a
@@ -5375,28 +5418,32 @@ applyNavTargets();
   }
 
   // ---- position ----------------------------------------------------------
-  // offsetLeft is a layout measurement and is not affected by the transform we
-  // are about to set, so this stays correct across repeated calls.
-  function offsetFor(i) {
-    const el = slides[i];
-    return (viewport.clientWidth / 2) - (el.offsetLeft + el.offsetWidth / 2);
-  }
-
-  // The viewport hugs the one frame on screen. On desktop the phone and the
-  // browser are the same height so this never moves; on mobile the phone is
-  // taller than the window and it animates between the two.
-  function sizeViewport() {
-    const next = slides[index].offsetHeight + 'px';
-    if (viewport.style.height !== next) viewport.style.height = next;
+  // The row's WIDTH is fixed by the stylesheet and is never touched here, so the
+  // arrows never move. Only the height is set, to the frame on screen. On desktop
+  // the phone and the browser are the same height, so even that never moves; on
+  // mobile a phone is much taller than a window and it animates between the two.
+  function sizeRow(current) {
+    const h = current.offsetHeight + 'px';
+    if (viewport.style.height !== h) viewport.style.height = h;
   }
 
   function render() {
-    base = offsetFor(index);
+    const current = slides[index];
+    sizeRow(current);
+
+    // offsetLeft and offsetWidth are layout measurements, unaffected by the
+    // transform below, so this stays correct across repeated calls. clientWidth is
+    // safe to read now that nothing animates the row's width.
+    base = (viewport.clientWidth / 2) - (current.offsetLeft + current.offsetWidth / 2);
     track.style.transform = 'translate3d(' + base.toFixed(2) + 'px, 0, 0)';
-    sizeViewport();
+
     slides.forEach((slide, i) => {
       const active = i === index;
       slide.classList.toggle('is-active', active);
+      // The two neighbours show as faded ghosts under the arrows. They are still
+      // aria-hidden: a ghost is a visual cue about the row, not content, and it
+      // is not playing.
+      slide.classList.toggle('is-near', !active && Math.abs(i - index) === 1);
       // Frames off screen are out of the tab order: tabbing must not land on a
       // control nobody can see.
       slide.setAttribute('aria-hidden', active ? 'false' : 'true');
@@ -5430,7 +5477,7 @@ applyNavTargets();
   }
   window.addEventListener('resize', scheduleReflow);
   window.addEventListener('orientationchange', scheduleReflow);
-  // Deliberately NOT the viewport: sizeViewport() writes its height, so
+  // Deliberately NOT the viewport: sizeRow() writes its height, so
   // observing it would feed the observer its own output. A slide tracks the same
   // CSS variables and is never written to.
   if ('ResizeObserver' in window) new ResizeObserver(scheduleReflow).observe(slides[0]);
