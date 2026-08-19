@@ -4130,7 +4130,7 @@
   @media (min-width:1000px){
     .au-shelf{
       display:flex; gap:10px; align-items:stretch; justify-content:flex-end;
-      height:196px; min-width:0;
+      height:176px; min-width:0;
     }
     .au-shelf-item{
       flex:0 0 52px; min-width:0; padding:16px 0 18px; margin:0;
@@ -4314,10 +4314,14 @@
     .is-wf .au-eyebrow{text-align:left;}
     .is-wf h1.hero-editorial-title{
       text-align:left; margin-left:0; margin-right:0;
-      font-size:clamp(40px, 4.4vw, 62px); line-height:1.05;
+      font-size:clamp(38px, 3.9vw, 55px); line-height:1.06;
     }
 
-    .hero-wf-rule{margin-top:64px;}
+    /* Everything above the divider is squeezed so the copy, the card and the
+       email field all sit inside a 700px viewport, which is roughly what a
+       14-inch laptop gives you once browser chrome is off. */
+    .hero-editorial{padding-top:96px;}
+    .hero-wf-rule{margin-top:40px;}
     /* Left column sits on the container inset; the grid runs to the page edge. */
     .hero-wf-lower{
       grid-template-columns:minmax(0, 46fr) minmax(0, 50fr);
@@ -4332,7 +4336,7 @@
       display:flex; flex-direction:column;
     }
     /* Pushes the ask to the bottom of the column, as in the wireframe. */
-    .hero-wf-ask{margin-top:auto; padding-top:44px;}
+    .hero-wf-ask{margin-top:auto; padding-top:26px;}
     /* The shelf in the headline band carries the figures above 1000px. */
     .hero-wf-lower .au-hero-chain{display:none;}
   }
