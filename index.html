@@ -1363,7 +1363,9 @@
 
   /* proof banner (Red Hat) */
   /* This plate is the proof of the section directly above it, so it sits close */
-  .au-interstitial{padding:0 0 40px; margin-top:-46px;}
+  /* Used to tuck up under the old bottleneck grid with a negative margin. The */
+  /* section above it is now prose, so it needs ordinary breathing room. */
+  .au-interstitial{padding:40px 0 56px; margin-top:0;}
 
   .au-pb-frame{
     border-radius:30px; padding:12px;
@@ -4011,29 +4013,253 @@
     margin-top:34px;
   }
 
-  /* ---- content-v3: hero funnel chain ---- */
+  /* ---- Hero Funnel Multiplier Card ---- */
+  .au-hero-funnel-card{
+    position:relative;
+    max-width:1080px;
+    width:100%;
+    margin:34px auto 0;
+    padding:24px 26px 20px;
+    background:rgba(4, 28, 22, 0.6);
+    border:1px solid rgba(255, 255, 255, 0.16);
+    border-radius:var(--radius-lg);
+    backdrop-filter:blur(24px) saturate(1.4);
+    -webkit-backdrop-filter:blur(24px) saturate(1.4);
+    box-shadow:
+      0 20px 48px -12px rgba(0, 0, 0, 0.45),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    z-index:2;
+    box-sizing:border-box;
+  }
   .au-hero-chain{
-    display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:center;
-    gap:10px; margin:28px 0 10px; max-width:920px;
+    display:flex;
+    align-items:stretch;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    margin:0;
   }
   .au-chain-node{
-    display:flex; flex-direction:column; align-items:center; text-align:center;
-    min-width:110px; max-width:150px;
+    position:relative;
+    flex:1 1 0;
+    min-width:140px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:16px 10px 14px;
+    background:rgba(255, 255, 255, 0.05);
+    border:1px solid rgba(255, 255, 255, 0.1);
+    border-radius:16px;
+    transition:transform .2s ease, border-color .2s ease, background .2s ease;
+    box-sizing:border-box;
+  }
+  .au-chain-node:hover{
+    background:rgba(255, 255, 255, 0.09);
+    border-color:rgba(255, 255, 255, 0.22);
+    transform:translateY(-2px);
+  }
+  .au-chain-step{
+    font-family:var(--font-mono);
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    color:rgba(255, 255, 255, 0.52);
+    margin-bottom:6px;
+    text-transform:uppercase;
   }
   .au-chain-node b{
-    font-family:var(--font-display); font-size:22px; font-weight:700;
-    letter-spacing:-0.02em; color:var(--ink); line-height:1.1;
+    font-family:var(--font-display);
+    font-size:clamp(19px, 1.9vw, 25px);
+    font-weight:700;
+    letter-spacing:-0.025em;
+    color:#FFFFFF;
+    line-height:1.1;
+    text-shadow:0 1px 8px rgba(0, 0, 0, 0.3);
   }
-  .au-chain-node.is-final b{color:var(--brand-emerald-deep);}
-  .au-chain-node span{font-size:13px; font-weight:600; color:var(--ink); margin-top:2px;}
-  .au-chain-node small{font-size:11px; line-height:1.35; color:var(--ink-dim); margin-top:3px;}
-  .au-chain-arrow{width:16px; height:16px; flex:none; color:var(--ink-dim); margin-top:8px;}
-  .au-hero-chain-note{font-size:14px; font-weight:600; color:var(--ink-dim); text-align:center; margin:0 0 22px;}
-  .au-hero-cta{display:inline-flex; align-items:center; gap:9px;}
-  @media (max-width:760px){
-    .au-hero-chain{gap:8px 6px;}
-    .au-chain-node{min-width:84px;}
-    .au-chain-arrow{display:none;}
+  .au-chain-node span{
+    font-size:13px;
+    font-weight:600;
+    color:rgba(255, 255, 255, 0.92);
+    margin-top:4px;
+    line-height:1.3;
+  }
+  .au-chain-node small{
+    font-size:11px;
+    line-height:1.35;
+    color:rgba(255, 255, 255, 0.68);
+    margin-top:auto;
+    padding-top:6px;
+  }
+  .au-chain-arrow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    width:20px;
+    color:rgba(16, 185, 129, 0.85);
+  }
+  .au-chain-arrow svg{
+    width:18px;
+    height:18px;
+  }
+  .au-chain-node.is-final{
+    background:linear-gradient(160deg, rgba(16, 185, 129, 0.22) 0%, rgba(5, 150, 105, 0.12) 100%);
+    border:1.5px solid rgba(16, 185, 129, 0.55);
+    box-shadow:0 0 24px -4px rgba(16, 185, 129, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  .au-chain-node.is-final:hover{
+    border-color:rgba(16, 185, 129, 0.75);
+    background:linear-gradient(160deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.18) 100%);
+  }
+  .au-chain-node.is-final .au-chain-step{
+    color:var(--brand-emerald);
+    font-weight:700;
+  }
+  .au-chain-node.is-final b{
+    color:#34D399;
+    text-shadow:0 0 16px rgba(16, 185, 129, 0.5);
+  }
+  .au-chain-node.is-final span{
+    color:#FFFFFF;
+    font-weight:700;
+  }
+  .au-chain-node.is-final small{
+    color:rgba(255, 255, 255, 0.88);
+  }
+  .au-hero-chain-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:16px;
+    padding:6px 16px;
+    background:rgba(16, 185, 129, 0.12);
+    border:1px solid rgba(16, 185, 129, 0.25);
+    border-radius:100px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.04em;
+    color:#34D399;
+  }
+  .au-hero-chain-pill .au-chain-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#34D399;
+    box-shadow:0 0 8px #34D399;
+  }
+
+  /* ---- Video Showcase Header (Above Video Carousel) ---- */
+  .au-hero-video-header{
+    position:relative;
+    z-index:2;
+    max-width:760px;
+    margin:56px auto 0;
+    text-align:center;
+    padding:0 16px;
+  }
+  .au-hero-video-header .au-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    margin-bottom:10px;
+  }
+  .au-hero-video-header .au-live-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--brand-emerald-deep);
+    box-shadow:0 0 6px rgba(16, 185, 129, 0.6);
+    animation:auDotPulse 2s infinite ease-in-out;
+  }
+  @keyframes auDotPulse{
+    0%, 100%{opacity:1; transform:scale(1);}
+    50%{opacity:0.4; transform:scale(0.85);}
+  }
+  .au-video-head-title{
+    font-family:var(--font-display);
+    font-size:clamp(26px, 3.2vw, 38px);
+    font-weight:700;
+    letter-spacing:-0.025em;
+    line-height:1.18;
+    color:var(--ink);
+    margin:0 0 12px;
+  }
+  .au-video-head-title em{
+    font-family:"Instrument Serif", Georgia, serif;
+    font-weight:400;
+    font-style:italic;
+    color:var(--brand-emerald-deep);
+    padding-right:2px;
+  }
+  .au-video-head-sub{
+    font-size:17px;
+    font-weight:500;
+    line-height:1.55;
+    color:var(--ink-dim);
+    max-width:620px;
+    margin:0 auto;
+  }
+  .au-video-hint{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-top:14px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    background:rgba(15, 23, 42, 0.04);
+    border:1px solid var(--line);
+    border-radius:100px;
+    padding:5px 14px;
+  }
+  .au-video-hint span{display:inline-flex; align-items:center; gap:5px;}
+
+  @media (max-width:960px){
+    .au-hero-funnel-card{
+      padding:20px 16px 18px;
+    }
+    .au-hero-chain{
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .au-chain-node{
+      min-width:calc(33.333% - 10px);
+    }
+    .au-chain-arrow{
+      display:none;
+    }
+  }
+  @media (max-width:640px){
+    .au-hero-funnel-card{
+      padding:16px 12px 16px;
+      margin-top:24px;
+    }
+    .au-chain-node{
+      min-width:calc(50% - 6px);
+      padding:12px 8px 10px;
+    }
+    .au-chain-node.is-final{
+      min-width:100%;
+    }
+    .au-hero-chain-pill{
+      font-size:11px;
+      padding:5px 12px;
+      text-align:center;
+    }
+    .au-hero-video-header{
+      margin-top:42px;
+    }
+    .au-video-head-sub{
+      font-size:15px;
+    }
   }
 
   /* ---- content-v3: how-it-works kicker + closing body line ---- */
@@ -4045,77 +4271,216 @@
   }
 
   /* ---- content-v3: before/after kicker line above H2 ---- */
+  /* .au-math .au-head is left-aligned by design, so this must not centre */
+  /* itself with `margin:0 auto` or it floats away from the headline. */
   .au-before-after-kicker{
-    max-width:640px; margin:0 auto 14px; font-size:15px; line-height:1.6; color:var(--ink-dim);
+    max-width:600px; margin:0 0 16px; font-size:15.5px; line-height:1.6; color:var(--ink-dim);
   }
-  .au-mfeatures-simple .au-mfeat-t{font-size:14px; font-weight:500; color:rgba(255,255,255,0.82); white-space:normal;}
-  .au-mcard.is-old .au-mfeatures-simple .au-mfeat-t{color:rgba(255,255,255,0.72);}
+  .au-mfeatures-simple{gap:12px;}
+  .au-mfeatures-simple .au-mfeat{align-items:flex-start; gap:10px;}
+  .au-mfeatures-simple .au-mfeat-t{
+    font-size:15px; font-weight:500; line-height:1.5;
+    color:rgba(255,255,255,0.86); white-space:normal;
+  }
+  /* Marker dot so the five outcomes read as a list, not a wrapped paragraph. */
+  .au-mfeatures-simple .au-mfeat::before{
+    content:""; flex:none; width:5px; height:5px; margin-top:8px; border-radius:50%;
+    background:#34D399;
+  }
+  .au-mcard.is-old .au-mfeatures-simple .au-mfeat::before{background:rgba(255,255,255,0.32);}
+  .au-mcard.is-old .au-mfeatures-simple .au-mfeat-t{color:rgba(255,255,255,0.75);}
+  /* The CTA belongs under the pair, not crowded against the last outcome. */
+  .au-math-cta{display:flex; justify-content:center; margin-top:30px;}
 
   /* ---- content-v3: "they play" attendee-proof story cards ---- */
-  .au-story-grid{display:grid; grid-template-columns:1fr; gap:20px; margin-bottom:28px;}
+  .au-problem .au-head{margin-bottom:40px;}
+  .au-story-grid{display:grid; grid-template-columns:1fr; gap:20px;}
   @media (min-width:760px){ .au-story-grid{grid-template-columns:1fr 1fr;} }
   .au-story-card{
-    padding:26px 24px; border-radius:var(--radius-lg); background:var(--bg-subtle);
+    padding:30px 28px; border-radius:var(--radius-lg); background:var(--bg-subtle);
     border:1px solid var(--line);
   }
   .au-story-kicker{
     font-family:var(--font-mono); font-size:11px; font-weight:600; letter-spacing:0.08em;
-    text-transform:uppercase; color:var(--brand-emerald-deep); margin-bottom:8px;
+    text-transform:uppercase; color:var(--brand-emerald-deep); margin-bottom:10px;
   }
-  .au-story-co{font-family:var(--font-display); font-size:20px; font-weight:700; margin-bottom:10px;}
-  .au-story-txt{font-size:15px; line-height:1.6; color:var(--ink-dim);}
+  .au-story-co{font-family:var(--font-display); font-size:22px; font-weight:700; letter-spacing:-0.02em; margin-bottom:12px;}
+  .au-story-txt{font-size:15px; line-height:1.65; color:var(--ink-dim);}
+
+  /* Sify result row: four figures, dividers between, label under each. */
   .au-story-stat-block{
-    display:flex; flex-wrap:wrap; justify-content:center; gap:12px 28px;
-    margin:0 0 24px; padding:20px 16px; border-radius:var(--radius-md);
+    display:grid; grid-template-columns:repeat(2, 1fr); gap:24px 0;
+    margin:28px 0 0; padding:30px 24px; border-radius:var(--radius-lg);
     background:var(--dark-pill); color:#FFFFFF;
-    font-family:var(--font-display); font-size:15px; font-weight:700; text-align:center;
   }
-  .au-story-who{max-width:680px; margin:0 auto 24px; text-align:center; font-size:15px; line-height:1.6; color:var(--ink-dim);}
-  .au-story-body{max-width:680px; margin:0 auto; display:flex; flex-direction:column; gap:14px;}
-  .au-story-body p{font-size:15px; line-height:1.65; color:var(--ink-dim); margin:0;}
+  @media (min-width:820px){ .au-story-stat-block{grid-template-columns:repeat(4, 1fr);} }
+  .au-story-stat{display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 14px; position:relative;}
+  .au-story-stat + .au-story-stat::before{
+    content:""; position:absolute; left:0; top:4px; bottom:4px; width:1px;
+    background:rgba(255,255,255,0.14);
+  }
+  @media (max-width:819px){
+    .au-story-stat:nth-child(odd)::before{display:none;}
+  }
+  .au-story-stat b{
+    font-family:var(--font-display); font-size:clamp(24px, 3vw, 32px); font-weight:700;
+    letter-spacing:-0.03em; line-height:1.05; color:#FFFFFF;
+  }
+  .au-story-stat span{
+    margin-top:7px; font-family:var(--font-mono); font-size:10.5px; font-weight:500;
+    letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.58); line-height:1.4;
+  }
+
+  /* "Who posted" reads as a caption on the stat row, not a stray paragraph. */
+  .au-story-who{
+    max-width:640px; margin:20px auto 0; text-align:center;
+    font-size:14.5px; line-height:1.6; color:var(--ink-dim);
+  }
+  .au-story-who strong{color:var(--ink); font-weight:600;}
+
+  /* ---- content-v3: shared prose column ---- */
+  /* Centred by default so it sits with the centred heading, quote and callout */
+  /* around it. Only the long five-paragraph block opts into a left-aligned */
+  /* reading column, where a ragged right edge genuinely helps. */
+  .au-story-body{
+    max-width:58ch; margin:40px auto 0; display:flex; flex-direction:column; gap:18px;
+    text-align:center;
+  }
+  .au-story-body p{font-size:16.5px; line-height:1.7; color:var(--ink-dim); margin:0;}
+  .au-story-body p strong{color:var(--ink); font-weight:600;}
+  .au-story-body.is-long{max-width:64ch; text-align:left;}
+  .au-story-body.is-long p:first-child{
+    font-size:18px; font-weight:500; color:var(--ink);
+  }
 
   /* ---- content-v3: outperform / lead-source sections ---- */
-  .au-outperform .au-head, .au-leadsource .au-head{margin-bottom:30px;}
+  /* These are short prose sections: they do not need the full 96px band top */
+  /* and bottom that the card-heavy sections use. */
+  .au-outperform, .au-leadsource, .au-commercials{padding:72px 0;}
+  .au-outperform .au-head, .au-leadsource .au-head, .au-commercials .au-head{margin-bottom:0;}
+
+  /* Pull-quote: deliberately a different voice from the H2 (serif italic, */
+  /* emerald) so the two never read as competing headlines. */
   .au-pb-quote{
-    max-width:720px; margin:0 auto 26px; padding:0 12px; text-align:center;
-    font-family:var(--font-display); font-size:20px; font-weight:600; line-height:1.4;
-    color:var(--ink); border-left:none;
+    max-width:760px; margin:46px auto 0; padding:0 12px; text-align:center;
+    font-family:"Instrument Serif", Georgia, serif;
+    font-size:clamp(22px, 2.6vw, 30px); font-weight:400; font-style:italic;
+    line-height:1.32; letter-spacing:-0.01em; color:var(--brand-emerald-deep);
+    border-left:none;
   }
-  .au-pb-quote.is-large{font-size:clamp(24px, 3.2vw, 32px); margin-bottom:32px;}
+  .au-pb-quote.is-large{font-size:clamp(24px, 3vw, 34px);}
+  /* This quote sits on the white .au-pb-frame, not on the dark plate, so it */
+  /* keeps the dark emerald. */
+  .au-interstitial .au-pb-quote{margin:30px auto 0;}
+
+  /* Red Hat funnel: four rows stepping down to the registrations figure. */
+  /* Replaced a ring-badge stack that could not hold a six-digit number. */
+  .au-pb-funnel{
+    list-style:none; margin:0; padding:0;
+    display:flex; flex-direction:column; gap:9px;
+  }
+  .au-pb-funnel li{
+    display:flex; align-items:baseline; gap:14px;
+    padding:14px 18px; border-radius:14px;
+    border:1px solid rgba(255,255,255,0.11);
+    background:linear-gradient(160deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.03) 100%);
+  }
+  .au-pb-funnel li b{
+    flex:none; min-width:104px;
+    font-family:var(--font-display); font-size:clamp(20px, 2.2vw, 26px); font-weight:700;
+    letter-spacing:-0.03em; line-height:1.1; color:#FFFFFF;
+    font-variant-numeric:tabular-nums;
+  }
+  .au-pb-funnel li span{
+    font-size:14px; line-height:1.4; color:rgba(255,255,255,0.72);
+  }
+  .au-pb-funnel li.is-final{
+    border-color:rgba(110,231,183,0.4);
+    background:linear-gradient(160deg, rgba(16,185,129,0.24) 0%, rgba(5,150,105,0.12) 100%);
+    box-shadow:0 0 26px -8px rgba(16,185,129,0.45);
+  }
+  .au-pb-funnel li.is-final b{color:#6EE7B7; text-shadow:0 0 18px rgba(52,211,153,0.45);}
+  .au-pb-funnel li.is-final span{color:#FFFFFF; font-weight:600;}
+  @media (max-width:520px){
+    .au-pb-funnel li{flex-direction:column; gap:2px;}
+    .au-pb-funnel li b{min-width:0;}
+  }
+
   .au-callout{
-    max-width:640px; margin:26px auto 0; text-align:center; font-size:15px; font-weight:600;
+    max-width:560px; margin:44px auto 0; padding:20px 26px;
+    border-radius:var(--radius-md);
+    background:var(--terracotta-soft); border:1px solid rgba(16,185,129,0.22);
+    text-align:center; font-size:15.5px; font-weight:600; line-height:1.55;
     color:var(--brand-emerald-deep);
   }
 
   /* ---- content-v3: FAQ accordion ---- */
   .au-faq-list{max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:10px;}
   .au-faq-item{
-    border:1px solid var(--line); border-radius:var(--radius-sm); padding:16px 20px;
-    background:var(--bg-card);
+    border:1px solid var(--line); border-radius:var(--radius-md); padding:20px 24px;
+    background:var(--bg-card); transition:border-color .2s ease, box-shadow .2s ease;
   }
+  .au-faq-item:hover{border-color:rgba(15,23,42,0.16);}
+  .au-faq-item[open]{border-color:rgba(16,185,129,0.3); box-shadow:var(--shadow);}
   .au-faq-item summary{
-    cursor:pointer; font-family:var(--font-display); font-size:16px; font-weight:600;
-    color:var(--ink); list-style:none; display:flex; align-items:center; justify-content:space-between; gap:12px;
+    cursor:pointer; font-family:var(--font-display); font-size:16.5px; font-weight:600;
+    letter-spacing:-0.015em; color:var(--ink); list-style:none;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
   }
   .au-faq-item summary::-webkit-details-marker{display:none;}
   .au-faq-item summary::after{
-    content:"+"; font-size:20px; font-weight:400; color:var(--ink-dim); flex:none; transition:transform .2s ease;
+    content:""; flex:none; width:11px; height:11px;
+    border-right:2px solid var(--ink-dim); border-bottom:2px solid var(--ink-dim);
+    transform:rotate(45deg); margin-top:-4px; transition:transform .2s ease;
   }
-  .au-faq-item[open] summary::after{transform:rotate(45deg);}
-  .au-faq-a{margin-top:10px;}
-  .au-faq-a p{font-size:14.5px; line-height:1.6; color:var(--ink-dim); margin:0;}
+  .au-faq-item[open] summary::after{transform:rotate(225deg); margin-top:2px;}
+  .au-faq-a{margin-top:14px;}
+  .au-faq-a p{font-size:15px; line-height:1.7; color:var(--ink-dim); margin:0; max-width:64ch;}
 
   /* ---- content-v3: commercials ---- */
-  .au-commercials .au-story-body{text-align:center;}
+  .au-commercials .au-story-body{text-align:center; max-width:56ch;}
+  .au-commercials .au-story-body p{font-size:17px; line-height:1.65;}
 
-  /* ---- content-v3: Red Hat CTA form + simulation form ---- */
-  .au-form-pb{margin-top:26px; max-width:420px;}
-  .au-form-lead{font-size:15px; font-weight:600; color:#FFFFFF; margin-bottom:10px;}
-  .au-form-sim{margin-top:22px; max-width:520px; margin-left:auto; margin-right:auto; text-align:center;}
-  .au-sim-grid{display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:12px;}
+  /* ---- content-v3: Red Hat CTA form ---- */
+  /* This form sits on the white .au-pb-frame below the dark plate, so its */
+  /* label and note are dark, not the inverted treatment used inside the plate. */
+  .au-form-pb{margin:26px auto 4px; max-width:470px; padding-bottom:8px;}
+  .au-form-lead{
+    font-family:var(--font-display); font-size:17.5px; font-weight:600; letter-spacing:-0.02em;
+    color:var(--ink); margin-bottom:14px; text-align:center;
+  }
+  .au-interstitial .au-form-note{color:var(--ink-dim); text-align:center;}
+
+  /* ---- content-v3: calculator "dedicated simulation" form ---- */
+  .au-form-sim{
+    margin:44px auto 0; max-width:600px; padding:32px 30px;
+    border-radius:var(--radius-lg); background:var(--bg-subtle); border:1px solid var(--line);
+  }
+  .au-form-sim .au-form-lead{
+    color:var(--ink); font-size:19px; margin-bottom:6px;
+  }
+  .au-sim-note{
+    text-align:center; font-size:14.5px; line-height:1.55; color:var(--ink-dim); margin-bottom:22px;
+  }
+  .au-sim-grid{display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:16px;}
   @media (min-width:600px){ .au-sim-grid{grid-template-columns:1fr 1fr;} }
-  .au-sim-submit{width:100%; justify-content:center;}
-  .au-cta-closing{margin-top:10px;}
+  /* .au-form-input is borderless by design (it lives inside .au-form-bar), so */
+  /* the standalone fields here get their own box. */
+  .au-sim-grid .au-form-input{
+    border:1px solid var(--line); border-radius:12px; background:#FFFFFF;
+    padding:13px 15px; font-size:15px; width:100%;
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .au-sim-grid .au-form-input:focus{
+    border-color:var(--brand-emerald);
+    box-shadow:0 0 0 3px rgba(16,185,129,0.14);
+  }
+  /* .au-form-btn is inline-flex, so it needs to become a block-level flex box */
+  /* before `margin:0 auto` will actually centre it. */
+  .au-sim-submit{display:flex; width:auto; min-width:210px; margin:0 auto; justify-content:center;}
+  .au-form-sim .au-form-err{text-align:center; margin-top:10px;}
+
+  .au-cta-closing{margin-top:12px;}
 </style>
 </head>
 <body>
@@ -4220,44 +4585,72 @@
       <p class="hero-editorial-sub" id="auHeroSub">You already gamify the booth. Spin the wheel - scan the badge - take the swag. It ends with a set of data in a spreadsheet.</p>
       <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn. One scan, one tap, and a post you already wrote goes out on LinkedIn. Your Product messaging reaches their network from their profile.</p>
 
-      <!-- Funnel chain: what 400 paid-for booth visitors turn into. Numbers -->
-      <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
-        <div class="au-chain-node">
-          <b>400</b>
-          <span>booth visitors</span>
-          <small>the ones you already paid to meet</small>
+      <!-- Funnel multiplier card: what 400 paid-for booth visitors turn into -->
+      <div class="au-hero-funnel-card" id="auHeroFunnelCard">
+        <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
+          <div class="au-chain-node">
+            <span class="au-chain-step">01 &bull; BOOTH</span>
+            <b>400</b>
+            <span>booth visitors</span>
+            <small>the ones you already paid to meet</small>
+          </div>
+          <div class="au-chain-arrow" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+          </div>
+          <div class="au-chain-node">
+            <span class="au-chain-step">02 &bull; TAP</span>
+            <b>200</b>
+            <span>posts to LinkedIn</span>
+            <small>one scan, one tap, no app</small>
+          </div>
+          <div class="au-chain-arrow" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+          </div>
+          <div class="au-chain-node">
+            <span class="au-chain-step">03 &bull; REACH</span>
+            <b>240,000</b>
+            <span>potential reach</span>
+            <small>1,200 per sharer across campaigns</small>
+          </div>
+          <div class="au-chain-arrow" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+          </div>
+          <div class="au-chain-node">
+            <span class="au-chain-step">04 &bull; TRAFFIC</span>
+            <b>500</b>
+            <span>clicks to your page</span>
+            <small>observed across multiple campaigns</small>
+          </div>
+          <div class="au-chain-arrow" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+          </div>
+          <div class="au-chain-node is-final">
+            <span class="au-chain-step">&#9733; NET RESULT</span>
+            <b>200-250</b>
+            <span>net-new leads</span>
+            <small>people who were never at your event</small>
+          </div>
         </div>
-        <svg class="au-chain-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        <div class="au-chain-node">
-          <b>200</b>
-          <span>posts to LinkedIn</span>
-          <small>one scan, one tap, no app</small>
-        </div>
-        <svg class="au-chain-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        <div class="au-chain-node">
-          <b>240,000</b>
-          <span>potential reach</span>
-          <small>1,200 per sharer, observed across multiple campaigns</small>
-        </div>
-        <svg class="au-chain-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        <div class="au-chain-node">
-          <b>500</b>
-          <span>clicks to your page</span>
-          <small>observed across multiple campaigns</small>
-        </div>
-        <svg class="au-chain-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        <div class="au-chain-node is-final">
-          <b>200-250</b>
-          <span>net-new leads</span>
-          <small>people who were never at your event</small>
+        <div class="au-hero-chain-pill">
+          <span class="au-chain-dot"></span>
+          <span>Same booth. Same swag budget. Zero ad spend.</span>
         </div>
       </div>
-      <p class="au-hero-chain-note">Same booth. Same swag budget. Zero ad spend.</p>
 
-      <a href="#auProofBanner" class="btn btn-primary btn-lg au-hero-cta">
-        See what it did at a real event
-        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h11M11 6l4 4-4 4"/></svg>
-      </a>
+      <!-- Video Showcase Header Section (introduces the live event video carousel) -->
+      <div class="au-hero-video-header" id="auHeroVideoHeader">
+        <span class="au-tag">
+          <span class="au-live-dot"></span>
+          Live Event Footage
+        </span>
+        <h2 class="au-video-head-title">See what happens at a <em>live event</em>.</h2>
+        <p class="au-video-head-sub">Attendees scan, tap once, and share pre-written posts from their own LinkedIn. Watch real footage recorded on the exhibition floor.</p>
+        <div class="au-video-hint">
+          <span>5 interactive views</span>
+          <span>&bull;</span>
+          <span>Click any screen to unmute</span>
+        </div>
+      </div>
 
       <!-- HERO VIDEO CAROUSEL. Five frames in one row, centred on the middle one.
            Three are visible at rest and the outer two are clipped by the
@@ -4481,12 +4874,14 @@
       </div>
 
       <div class="au-math-grid reveal">
-        <!-- Before -->
+        <!-- Before. One line of outcome, set as the headline figure so the card -->
+        <!-- carries weight against the five-line card beside it. -->
         <article class="au-mcard is-old">
           <span class="au-mkicker">Before</span>
-          <ul class="au-mfeatures au-mfeatures-simple">
-            <li class="au-mfeat"><span class="au-mfeat-t">400 badge scans</span></li>
-          </ul>
+          <p class="au-mprice">
+            <b data-mcount="400">400</b>
+            <span class="au-mprice-unit"><b>badge scans</b>and that is the end of it</span>
+          </p>
           <p class="au-mqual">Your sales team calls the raffle winner. The raffle winner doesn't remember entering.</p>
         </article>
 
@@ -4500,11 +4895,14 @@
             <li class="au-mfeat"><span class="au-mfeat-t">600 to 800 clicks back to your page</span></li>
             <li class="au-mfeat"><span class="au-mfeat-t">200 to 250 net-new leads who were never at the event</span></li>
           </ul>
-          <a class="au-mpill is-live" href="#auRoi">
-            Run your own numbers
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-          </a>
         </article>
+      </div>
+
+      <div class="au-math-cta reveal">
+        <a class="btn btn-primary" href="#auRoi">
+          Run your own numbers
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
       </div>
     </div>
   </section>
@@ -4641,11 +5039,12 @@
   <section class="au-section au-problem" id="auProblem">
     <div class="wrap">
       <div class="au-head reveal">
+        <span class="au-tag">Proof that attendees do it</span>
         <h2 class="au-h2">They play.</h2>
         <p class="au-sub">Two example events where attendees went looking for the QR codes instead of walking past them.</p>
       </div>
 
-      <div class="au-story-grid">
+      <div class="au-story-grid reveal">
 
         <article class="au-story-card">
           <div class="au-story-kicker">Treasure Hunt, Singapore</div>
@@ -4661,16 +5060,16 @@
 
       </div>
 
-      <div class="au-story-stat-block">
-        <span>98 shares</span>
-        <span>141,034 potential reach</span>
-        <span>1,697 likes</span>
-        <span>18.3x return on earned media value</span>
+      <div class="au-story-stat-block reveal">
+        <div class="au-story-stat"><b>98</b><span>shares</span></div>
+        <div class="au-story-stat"><b>141,034</b><span>potential reach</span></div>
+        <div class="au-story-stat"><b>1,697</b><span>likes</span></div>
+        <div class="au-story-stat"><b>18.3x</b><span>return on earned media value</span></div>
       </div>
 
-      <p class="au-story-who"><strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.</p>
+      <p class="au-story-who reveal"><strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.</p>
 
-      <div class="au-story-body">
+      <div class="au-story-body is-long reveal">
         <p>It is worth sitting with that for a second.</p>
         <p>Think about what it normally takes to get a CISO to say your product name in public. Not a reply to an email. Not a meeting. A post on their own profile, under their own name, where their board and their peers can see it.</p>
         <p>There is no ad unit you can buy that produces that. There is no sequence that produces it. It is usually the output of a customer relationship measured in years, and you cannot manufacture it on a normal Tuesday for any amount of money.</p>
@@ -4708,24 +5107,26 @@
             </a>
           </div>
 
-          <div class="au-pb-stack">
-            <div class="au-pb-card is-1">
-              <span class="au-pb-ring" style="--p:0"><b>499</b></span>
-              <span class="au-pb-ctext"><b>LinkedIn shares</b></span>
-            </div>
-            <div class="au-pb-card is-2">
-              <span class="au-pb-ring" style="--p:100"><b>556,756</b></span>
-              <span class="au-pb-ctext"><b>potential reach</b></span>
-            </div>
-            <div class="au-pb-card is-3">
-              <span class="au-pb-ring" style="--p:100"><b>1,160</b></span>
-              <span class="au-pb-ctext"><b>clicks from delegates' networks</b></span>
-            </div>
-            <div class="au-pb-card is-4">
-              <span class="au-pb-ring" style="--p:100"><b>987</b></span>
-              <span class="au-pb-ctext"><b>net-new registrations to the livestream</b></span>
-            </div>
-          </div>
+          <!-- The funnel, exactly as it ran. Four figures that step down to the -->
+          <!-- registrations, so the last row is the one that carries the claim. -->
+          <ol class="au-pb-funnel">
+            <li>
+              <b>499</b>
+              <span>LinkedIn shares</span>
+            </li>
+            <li>
+              <b>556,756</b>
+              <span>potential reach</span>
+            </li>
+            <li>
+              <b>1,160</b>
+              <span>clicks from delegates' networks</span>
+            </li>
+            <li class="is-final">
+              <b>987</b>
+              <span>net-new registrations to the livestream</span>
+            </li>
+          </ol>
 
         </article>
 
@@ -4755,6 +5156,7 @@
   <section class="au-section au-outperform" id="auOutperform">
     <div class="wrap">
       <div class="au-head reveal">
+        <span class="au-tag">Why it travels</span>
         <h2 class="au-h2">The same message, from a person instead of a page.</h2>
       </div>
       <blockquote class="au-pb-quote is-large reveal">Your CEO's keynote deserves better than 40 likes from people who already report to her.</blockquote>
@@ -4770,6 +5172,7 @@
   <section class="au-section au-leadsource" id="auLeadSource">
     <div class="wrap">
       <div class="au-head reveal">
+        <span class="au-tag">Attribution</span>
         <h2 class="au-h2">Posts are not the outcome. Leads are.</h2>
       </div>
       <div class="au-story-body reveal">
@@ -4852,7 +5255,7 @@
 
         <form class="au-form au-form-sim" id="auSimForm" novalidate>
           <p class="au-form-lead">Need a dedicated simulation for your upcoming event?</p>
-          <p class="au-sub" style="font-size:15px; margin-bottom:16px;">Share the details - Name, email Phone, Event Link or details - submit</p>
+          <p class="au-sim-note">Share the details - Name, email Phone, Event Link or details - submit</p>
           <div class="au-sim-grid">
             <label for="auSimName" class="sr-only">Name</label>
             <input type="text" id="auSimName" name="name" class="au-form-input" placeholder="Name" required>
@@ -4876,6 +5279,7 @@
   <section class="au-section au-faq" id="auFaq">
     <div class="wrap">
       <div class="au-head reveal">
+        <span class="au-tag">Questions</span>
         <h2 class="au-h2">The common questions:</h2>
       </div>
       <div class="au-faq-list reveal">
@@ -4923,6 +5327,7 @@
   <section class="au-section au-commercials" id="auCommercials">
     <div class="wrap">
       <div class="au-head reveal">
+        <span class="au-tag">Commercials</span>
         <h2 class="au-h2">You pay for shares. Nothing else.</h2>
       </div>
       <div class="au-story-body reveal">
@@ -7009,25 +7414,32 @@ initBookingCalendar();
   if (!hero) return;
 
   function apply() {
-    const sub = hero.querySelector('.hero-editorial-sub');
-    const form = hero.querySelector('.au-form-bar');
+    const funnelCard = hero.querySelector('.au-hero-funnel-card') || hero.querySelector('.au-hero-chain');
+    const videoHead = hero.querySelector('.au-hero-video-header');
     const hr = hero.getBoundingClientRect();
     if (!hr.height) return;                 // still inside a display:none view
 
-    // Bottom of the band: past the last thing in the hero, not at its top edge.
-    const tail = hero.querySelector('.au-form-note') || form;
-    const tailRect = tail && tail.getBoundingClientRect();
-    const band = tailRect && tailRect.height
-      ? Math.min(tailRect.bottom - hr.top + 96, hr.height - 40)
-      : Math.round(window.innerHeight * 0.9);
+    // Bottom of the band: encompass the funnel card so it sits nicely inside the emerald glow
+    const cardRect = funnelCard && funnelCard.getBoundingClientRect();
+    const vhRect = videoHead && videoHead.getBoundingClientRect();
 
-    // Start of the dissolve: below the sub-headline, and never later than just
-    const subBottom = sub ? sub.getBoundingClientRect().bottom - hr.top : band * 0.5;
-    const formTop = form ? form.getBoundingClientRect().top - hr.top : band * 0.7;
-    const fadeTop = Math.max(0, Math.min(subBottom, formTop - 16));
+    let band;
+    if (cardRect && cardRect.height) {
+      band = cardRect.bottom - hr.top + 50;
+    } else {
+      band = Math.round(window.innerHeight * 0.85);
+    }
+
+    // Start of the dissolve: right at the bottom edge of the funnel card
+    let fadeTop;
+    if (cardRect && cardRect.height) {
+      fadeTop = Math.max(0, cardRect.bottom - hr.top - 20);
+    } else {
+      fadeTop = band * 0.65;
+    }
 
     hero.style.setProperty('--hero-band', Math.round(band) + 'px');
-    hero.style.setProperty('--hero-fade-top', Math.round(Math.min(fadeTop, band - 80)) + 'px');
+    hero.style.setProperty('--hero-fade-top', Math.round(Math.min(fadeTop, band - 50)) + 'px');
     hero.classList.add('hero-band-ready');
     // The shader paints the dissolve, so it needs to know when these move.
     window.dispatchEvent(new Event('hero:band'));
