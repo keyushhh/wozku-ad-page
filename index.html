@@ -1622,147 +1622,161 @@
   /* 1000px, not 760: the second line is one sentence set on one line, and at
      the 42px cap it measures 940px. The .wrap is 1120px so this still has
      room, and below ~1100px the font's own clamp shrinks the line with it. */
-  .au-math .au-head{max-width:1000px; margin-left:0; margin-right:0; text-align:left;}
+  .au-math .au-head{max-width:1000px; margin-left:0; margin-right:0; text-align:left; margin-bottom:34px;}
 
   .au-mcard{
     position:relative; isolation:isolate; overflow:hidden;
-    border-radius:32px; padding:38px 36px 36px;
-    display:flex; flex-direction:column; align-items:flex-start;
-    color:#FFFFFF; text-align:left;
+    border-radius:28px; padding:38px 36px 36px;
+    display:flex; flex-direction:column; justify-content:space-between; align-items:stretch;
+    color:#FFFFFF; text-align:left; box-sizing:border-box;
+    min-height:100%;
   }
-  /* A border on the panel itself gets eaten by the fill's own antialiasing at */
   .au-mcard::after{
-    content:""; position:absolute; inset:0; border-radius:32px; pointer-events:none;
-    border:1px solid rgba(255, 255, 255, 0.14);
+    content:""; position:absolute; inset:0; border-radius:28px; pointer-events:none;
+    border:1px solid rgba(255, 255, 255, 0.12);
   }
+
+  /* Left Card: Without Wozku (Deep obsidian with subtle coral ambient warmth) */
   .au-mcard.is-old{
     background:
-      radial-gradient(130% 90% at 50% -14%, rgba(148, 163, 184, 0.17) 0%, rgba(148, 163, 184, 0) 62%),
-      linear-gradient(168deg, #1A1F33 0%, #0C1122 58%, #080B16 100%);
+      radial-gradient(120% 80% at 30% 0%, rgba(244, 63, 94, 0.08) 0%, rgba(244, 63, 94, 0) 65%),
+      linear-gradient(168deg, #151A2C 0%, #0D1220 50%, #080C16 100%);
+    box-shadow:0 20px 40px -15px rgba(0, 0, 0, 0.4);
+    border:1px solid rgba(255, 255, 255, 0.07);
   }
-  /* The winning panel is fed the hero's plate, so the section closes the loop */
+  .au-mcard.is-old::after{
+    border-color:rgba(255, 255, 255, 0.08);
+  }
+
+  /* Right Card: With Wozku (Deep Emerald Luxury Glass) */
   .au-mcard.is-new{
     background:
-      linear-gradient(178deg, rgba(2, 22, 17, 0.52) 0%, rgba(2, 20, 16, 0.74) 58%, rgba(2, 16, 13, 0.90) 100%),
-      var(--plate) center/cover no-repeat,
-      #04211A;
-    box-shadow:0 34px 76px -38px rgba(4, 120, 87, 0.5);
+      radial-gradient(120% 90% at 75% 0%, rgba(52, 211, 153, 0.18) 0%, rgba(16, 185, 129, 0) 70%),
+      linear-gradient(168deg, #063428 0%, #03241B 45%, #021611 100%);
+    box-shadow:0 24px 60px -20px rgba(4, 120, 87, 0.45), inset 0 1px 1px rgba(110, 231, 183, 0.25);
+    border:1px solid rgba(52, 211, 153, 0.25);
+  }
+  .au-mcard.is-new::after{
+    border-color:rgba(52, 211, 153, 0.28);
   }
 
+  /* Enhanced Kickers */
   .au-mkicker{
-    display:inline-flex; align-items:center; gap:6px;
+    display:inline-flex; align-items:center; gap:8px;
     padding:6px 14px; border-radius:100px;
-    font-family:var(--font-mono); font-size:11px; font-weight:700;
-    letter-spacing:0.09em; text-transform:uppercase; margin-bottom:24px;
+    font-family:var(--font-mono); font-size:11.5px; font-weight:700;
+    letter-spacing:0.08em; text-transform:uppercase; margin-bottom:24px;
     width:fit-content;
   }
-  .au-mcard.is-old .au-mkicker{
-    background:rgba(244, 63, 94, 0.14);
+  .au-kicker-dot{
+    width:6px; height:6px; border-radius:50%; display:inline-block;
+  }
+  .au-mkicker.is-without{
+    background:rgba(244, 63, 94, 0.12);
     border:1px solid rgba(244, 63, 94, 0.32);
     color:#FDA4AF;
-    box-shadow:0 0 16px rgba(244, 63, 94, 0.15);
+    box-shadow:0 0 14px rgba(244, 63, 94, 0.15);
   }
-  .au-mcard.is-new .au-mkicker{
-    background:rgba(52, 211, 153, 0.16);
-    border:1px solid rgba(52, 211, 153, 0.38);
+  .au-mkicker.is-without .au-kicker-dot{
+    background:#FB7185;
+    box-shadow:0 0 6px #FB7185;
+  }
+  .au-mkicker.is-with{
+    background:rgba(16, 185, 129, 0.16);
+    border:1px solid rgba(52, 211, 153, 0.4);
     color:#6EE7B7;
-    box-shadow:0 0 18px rgba(16, 185, 129, 0.28);
+    box-shadow:0 0 18px rgba(16, 185, 129, 0.3);
+  }
+  .au-mkicker.is-with .au-kicker-dot{
+    background:#34D399;
+    box-shadow:0 0 8px #34D399;
   }
 
-  /* The figure carries the argument, so it is the only large thing in the card */
-  /* The unit stack is centred against the figure, not baseline-aligned to it. */
+  /* Left Card: Stat & Dead-end box */
+  .au-mcard-top{
+    display:flex; flex-direction:column; align-items:flex-start;
+  }
   .au-mprice{
-    display:flex; align-items:center; gap:10px; margin:0 0 9px;
+    display:flex; align-items:center; gap:14px; margin:0 0 12px;
   }
   .au-mprice b{
-    font-family:var(--font-display); font-size:clamp(30px, 3.1vw, 38px);
+    font-family:var(--font-display); font-size:clamp(36px, 3.8vw, 48px);
     font-weight:700; letter-spacing:-0.04em; line-height:1;
-    font-variant-numeric:tabular-nums;
-  }
-  .au-mcard.is-old .au-mprice b{color:#FDA4AF;}
-  .au-mcard.is-new .au-mprice b{
-    color:#6EE7B7;
-    text-shadow:0 0 26px rgba(52, 211, 153, 0.40);
+    font-variant-numeric:tabular-nums; color:#FDA4AF;
   }
   .au-mprice-unit{
-    display:block; line-height:1.25;
-    font-size:12px; color:rgba(255, 255, 255, 0.74);
+    display:flex; flex-direction:column; gap:2px;
   }
-  .au-mprice-unit b{
-    display:block;
-    font-family:inherit; font-size:12px; font-weight:600; letter-spacing:0;
-    line-height:1.25; color:#FFFFFF; text-shadow:none;
+  .au-mprice-label{
+    font-family:var(--font-display); font-size:16px; font-weight:700;
+    color:#FFFFFF; letter-spacing:-0.01em; line-height:1.2;
+  }
+  .au-mprice-sub{
+    font-size:13px; color:rgba(255, 255, 255, 0.52); line-height:1.3;
   }
 
-  /* The two explanations run to different lengths, and with nothing under them */
+  .au-mcard-deadend{
+    display:flex; align-items:flex-start; gap:14px;
+    background:rgba(255, 255, 255, 0.04);
+    border:1px solid rgba(255, 255, 255, 0.08);
+    border-radius:18px; padding:20px 22px; margin-top:32px;
+    width:100%; box-sizing:border-box;
+  }
+  .au-deadend-icon{
+    flex:none; width:20px; height:20px; color:rgba(255, 255, 255, 0.4);
+    margin-top:2px; display:flex; align-items:center; justify-content:center;
+  }
+  .au-deadend-icon svg{width:18px; height:18px; display:block;}
   .au-mqual{
-    margin:0 0 18px; width:100%; min-height:calc(14px * 1.6 * 2);
-    font-size:14px; line-height:1.6; color:rgba(255, 255, 255, 0.84);
+    margin:0; flex:1; font-size:14.5px; line-height:1.6;
+    color:rgba(255, 255, 255, 0.78);
   }
 
-  .au-mpill{
-    display:inline-flex; align-items:center; gap:7px;
-    padding:10px 18px; border-radius:200px; border:1px solid transparent;
-    font-family:var(--font-display); font-size:14px; font-weight:700;
-    letter-spacing:-0.015em; text-decoration:none; white-space:nowrap;
-  }
-  .au-mpill.is-live{
-    background:#FFFFFF; color:#030611;
-    transition:transform .2s ease, box-shadow .2s ease;
-  }
-  .au-mpill.is-live:hover{
-    transform:translateY(-1px);
-    box-shadow:0 10px 26px -10px rgba(0, 0, 0, 0.45);
-  }
-  .au-mpill svg{width:14px; height:14px; flex:none;}
-
-  /* The list is ruled off from the pitch above it and captioned, so it reads as */
-  .au-mspec{
-    width:100%; margin-top:24px; padding-top:18px;
-    border-top:1px solid rgba(255, 255, 255, 0.11);
-  }
-  .au-mspec-label{
-    display:block; margin-bottom:13px;
-    font-family:var(--font-mono); font-size:9.5px; font-weight:600;
-    letter-spacing:0.14em; text-transform:uppercase;
-    color:rgba(255, 255, 255, 0.56);
-  }
-  .au-mfeatures{
+  /* Right Card: 5 Outcome Rows with Checkmarks */
+  .au-mfeatures-simple{
     list-style:none; margin:0; padding:0;
-    display:flex; flex-direction:column; gap:11px;
+    display:flex; flex-direction:column; gap:15px; width:100%;
   }
-  .au-mfeat{display:flex; align-items:baseline; gap:11px;}
-  .au-mfeat-ico{
-    flex:none; width:14px; height:14px; display:block; transform:translateY(2px);
+  .au-mfeat{
+    display:flex; align-items:flex-start; gap:13px;
   }
-  .au-mfeat-ico svg{width:14px; height:14px; display:block;}
-  .au-mcard.is-old .au-mfeat-ico{color:#FDA4AF;}
-  .au-mcard.is-new .au-mfeat-ico{color:#34D399;}
+  .au-mfeat-check{
+    flex:none; width:20px; height:20px; border-radius:50%;
+    background:rgba(16, 185, 129, 0.18); border:1px solid rgba(52, 211, 153, 0.45);
+    color:#34D399; display:flex; align-items:center; justify-content:center;
+    margin-top:2px; box-shadow:0 0 10px rgba(16, 185, 129, 0.25);
+  }
+  .au-mfeat-check svg{width:12px; height:12px; display:block;}
   .au-mfeat-t{
-    flex:1; min-width:0; font-size:14px; line-height:1.4;
-    color:rgba(255, 255, 255, 0.88);
+    flex:1; font-size:15px; font-weight:500; line-height:1.55;
+    color:rgba(255, 255, 255, 0.92);
   }
-  .au-mfeat-v{
-    flex:none; font-family:var(--font-display); font-size:14px; font-weight:700;
-    letter-spacing:-0.015em; font-variant-numeric:tabular-nums; color:#FFFFFF;
-  }
-  .au-mcard.is-old .au-mfeat-v{color:rgba(255, 255, 255, 0.74);}
 
-  /* The plate keeps some light passages even under the scrim, so white copy on */
-  .au-mcard.is-new .au-mqual,
-  .au-mcard.is-new .au-mprice-unit,
-  .au-mcard.is-new .au-mspec-label,
-  .au-mcard.is-new .au-mfeat-t,
-  .au-mcard.is-new .au-mfeat-v,
-  .au-mcard.is-new .au-mkicker{
-    text-shadow:0 1px 2px rgba(0, 20, 14, 0.45);
+  /* Final Highlight Payoff Box (Net-new leads) */
+  .au-mfeat.is-hero{
+    margin-top:6px;
+  }
+  .au-mfeat-hero-inner{
+    display:flex; align-items:center; gap:13px; width:100%;
+    background:linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(5, 150, 105, 0.1) 100%);
+    border:1.5px solid rgba(52, 211, 153, 0.5);
+    border-radius:18px; padding:14px 18px;
+    box-shadow:0 8px 24px -6px rgba(16, 185, 129, 0.35);
+    box-sizing:border-box;
+  }
+  .au-mfeat-check.is-hero{
+    background:#10B981; border-color:#34D399; color:#03241B;
+    box-shadow:0 0 12px rgba(52, 211, 153, 0.7);
+  }
+  .au-mfeat.is-hero .au-mfeat-t{
+    font-size:16px; font-weight:700; color:#FFFFFF; line-height:1.4;
   }
 
   @media (max-width:600px){
-    .au-mcard{padding:26px 22px 24px; border-radius:26px;}
-    .au-mcard::after{border-radius:26px;}
-    /* stacked, so there is no row left to line up with */
-    .au-mqual{min-height:0;}
+    .au-mcard{padding:28px 22px 26px; border-radius:24px;}
+    .au-mcard::after{border-radius:24px;}
+    .au-mcard-deadend{margin-top:24px; padding:16px 16px;}
+    .au-mfeat-hero-inner{padding:12px 14px;}
   }
 
   /* HOW IT WORKS (NORMA STYLE 3-CARDS) */
@@ -4611,42 +4625,6 @@
   .au-before-after-kicker{
     max-width:600px; margin:0 0 16px; font-size:15.5px; line-height:1.6; color:var(--ink-dim);
   }
-  .au-mfeatures-simple{
-    list-style:none; margin:0; padding:0;
-    display:flex; flex-direction:column; gap:16px; width:100%;
-  }
-  .au-mfeatures-simple .au-mfeat{
-    display:flex; align-items:flex-start; gap:13px;
-  }
-  .au-mfeatures-simple .au-mfeat-t{
-    font-size:15px; font-weight:500; line-height:1.55;
-    color:rgba(255,255,255,0.92); white-space:normal;
-  }
-  /* Checkmarks, not dots. Roy's point on the call: each line is something you
-     get, so the marker should say "yes, this too", not just separate the rows. */
-  .au-mfeatures-simple .au-mfeat::before{
-    content:""; flex:none; width:16px; height:16px; margin-top:3.5px;
-    background-color:#34D399;
-    -webkit-mask:var(--tick) center / contain no-repeat;
-    mask:var(--tick) center / contain no-repeat;
-    --tick:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' d='M4 10.5l4 4 8-9'/%3E%3C/svg%3E");
-    filter:drop-shadow(0 0 4px rgba(52, 211, 153, 0.45));
-  }
-  .au-mcard.is-old .au-mfeatures-simple .au-mfeat::before{background-color:rgba(255,255,255,0.32);}
-  /* Biradhwaj on the call: "the highlight would be this net new leads." It is
-     the only outcome the buyer did not already have, so it carries the card. */
-  .au-mfeatures-simple .au-mfeat.is-hero{
-    margin-top:6px; padding-top:16px;
-    border-top:1px solid rgba(110,231,183,0.22);
-  }
-  .au-mfeatures-simple .au-mfeat.is-hero .au-mfeat-t{
-    font-size:16.5px; font-weight:700; color:#FFFFFF; line-height:1.45;
-  }
-  .au-mfeatures-simple .au-mfeat.is-hero::before{
-    background-color:#6EE7B7; width:18px; height:18px; margin-top:3.5px;
-    filter:drop-shadow(0 0 6px rgba(110, 231, 183, 0.65));
-  }
-  .au-mcard.is-old .au-mfeatures-simple .au-mfeat-t{color:rgba(255,255,255,0.75);}
   /* The CTA belongs under the pair, not crowded against the last outcome. */
   .au-math-cta{display:flex; justify-content:center; margin-top:30px;}
 
@@ -5654,26 +5632,64 @@
       </div>
 
       <div class="au-math-grid reveal">
-        <!-- Before. One line of outcome, set as the headline figure so the card -->
-        <!-- carries weight against the five-line card beside it. -->
+        <!-- Before -->
         <article class="au-mcard is-old">
-          <span class="au-mkicker">Without Wozku</span>
-          <p class="au-mprice">
-            <b data-mcount="400">400</b>
-            <span class="au-mprice-unit"><b>badge scans</b>and that is the end of it</span>
-          </p>
-          <p class="au-mqual">Your sales team calls the raffle winner. The raffle winner doesn't remember entering.</p>
+          <div class="au-mcard-top">
+            <span class="au-mkicker is-without"><span class="au-kicker-dot"></span>Without Wozku</span>
+            <div class="au-mprice">
+              <b data-mcount="400">400</b>
+              <div class="au-mprice-unit">
+                <span class="au-mprice-label">badge scans</span>
+                <span class="au-mprice-sub">and that is the end of it</span>
+              </div>
+            </div>
+          </div>
+          <div class="au-mcard-deadend">
+            <div class="au-deadend-icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="8"/><path d="M7 10h6"/></svg>
+            </div>
+            <p class="au-mqual">Your sales team calls the raffle winner. The raffle winner doesn't remember entering.</p>
+          </div>
         </article>
 
         <!-- After -->
         <article class="au-mcard is-new">
-          <span class="au-mkicker">With Wozku</span>
+          <div class="au-mcard-top">
+            <span class="au-mkicker is-with"><span class="au-kicker-dot"></span>With Wozku</span>
+          </div>
           <ul class="au-mfeatures au-mfeatures-simple">
-            <li class="au-mfeat"><span class="au-mfeat-t">400 badge scans into the CRM. Unchanged.</span></li>
-            <li class="au-mfeat"><span class="au-mfeat-t">200 of those visitors post about your product from their own profile</span></li>
-            <li class="au-mfeat"><span class="au-mfeat-t">300,000 potential reach across their networks, all in your industry</span></li>
-            <li class="au-mfeat"><span class="au-mfeat-t">600 to 800 clicks back to your page</span></li>
-            <li class="au-mfeat is-hero"><span class="au-mfeat-t">200 to 250 net-new leads who were never at the event</span></li>
+            <li class="au-mfeat">
+              <span class="au-mfeat-check" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+              </span>
+              <span class="au-mfeat-t">400 badge scans into the CRM. Unchanged.</span>
+            </li>
+            <li class="au-mfeat">
+              <span class="au-mfeat-check" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+              </span>
+              <span class="au-mfeat-t">200 of those visitors post about your product from their own profile</span>
+            </li>
+            <li class="au-mfeat">
+              <span class="au-mfeat-check" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+              </span>
+              <span class="au-mfeat-t">300,000 potential reach across their networks, all in your industry</span>
+            </li>
+            <li class="au-mfeat">
+              <span class="au-mfeat-check" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+              </span>
+              <span class="au-mfeat-t">600 to 800 clicks back to your page</span>
+            </li>
+            <li class="au-mfeat is-hero">
+              <div class="au-mfeat-hero-inner">
+                <span class="au-mfeat-check is-hero" aria-hidden="true">
+                  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 7.5L5.5 10.5L11.5 3.5"/></svg>
+                </span>
+                <span class="au-mfeat-t">200 to 250 net-new leads who were never at the event</span>
+              </div>
+            </li>
           </ul>
         </article>
       </div>
