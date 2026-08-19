@@ -4163,7 +4163,13 @@
       margin-left:-10px; pointer-events:none; overflow:hidden;
     }
 
-    .au-step-cards{display:block; position:relative; align-self:center;}
+    /* Same hinge as the playbook book at the foot of the page: left-edge
+       transform-origin, 1.05s, cubic-bezier(.55, 0, .18, 1). The card drops from
+       the shelf and swings open on its spine. */
+    .au-step-cards{
+      display:block; position:relative; align-self:center;
+      perspective:1700px;
+    }
     .au-step-card{
       display:none;
       padding:26px 28px; border-radius:16px;
@@ -4171,8 +4177,19 @@
       box-shadow:0 18px 40px -26px rgba(15,23,42,0.32);
       text-align:left;
     }
-    .au-step-card.is-open{display:block; animation:auStepIn .45s cubic-bezier(0.22, 1, 0.28, 1);}
-    @keyframes auStepIn{from{opacity:0; transform:translateY(-8px);} to{opacity:1; transform:none;}}
+    .au-step-card.is-open{
+      display:block;
+      transform-origin:left center; transform-style:preserve-3d;
+      backface-visibility:hidden; -webkit-backface-visibility:hidden;
+      animation:auStepOpen 1.05s cubic-bezier(.55, 0, .18, 1);
+    }
+    /* Only one card is display:block at a time, so going block re-runs this on
+       every open without needing to restart it by hand. */
+    @keyframes auStepOpen{
+      from{opacity:0; transform:translateY(-30px) rotateY(-104deg);}
+      55%{opacity:1;}
+      to{opacity:1; transform:translateY(0) rotateY(0deg);}
+    }
     .au-step-card-n{
       display:block; margin-bottom:12px;
       font-family:var(--font-mono), monospace;
@@ -4198,6 +4215,10 @@
   @media (prefers-reduced-motion: reduce){
     .au-shelf-item{transition:none;}
     .au-step-card.is-open{animation:none;}
+  }
+  /* The spines are the control, so they have to look like one. */
+  @media (min-width:1000px){
+    .au-shelf-item:hover .au-shelf-word{color:var(--brand-emerald-deep);}
   }
 
   /* The journey rail. One step per row, numbered 01 to 05, hung off a single
@@ -6921,45 +6942,30 @@ function wireCaptureForm(formId, inputId, errId) {
   const panels = Array.from(cards.querySelectorAll('.au-step-card'));
   if (items.length !== panels.length || !items.length) return;
 
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let i = 0;
-  let timer = null;
-  let held = false;
-
+  // No timer. A step opens because someone asked for it, and stays open until
+  // they ask for another. Step 1 is open on load so the band is never empty.
   function open(n) {
-    i = (n + items.length) % items.length;
     items.forEach((el, k) => {
-      const on = k === i;
+      const on = k === n;
       el.classList.toggle('is-open', on);
       el.setAttribute('aria-expanded', on ? 'true' : 'false');
     });
-    panels.forEach((el, k) => el.classList.toggle('is-open', k === i));
-  }
-
-  function stop() { if (timer) { clearInterval(timer); timer = null; } }
-
-  function start() {
-    stop();
-    // Below 1000px the shelf is display:none and the rail under the divider
-    // carries the figures, so there is nothing to advance.
-    if (held || reduced.matches || !shelf.offsetParent) return;
-    timer = setInterval(() => open(i + 1), 3600);
+    panels.forEach((el, k) => el.classList.toggle('is-open', k === n));
   }
 
   items.forEach((el, k) => {
-    el.addEventListener('click', () => { open(k); start(); });
-    el.addEventListener('focus', () => { open(k); });
+    el.addEventListener('click', () => open(k));
+    el.addEventListener('keydown', (e) => {
+      // Left and right walk the shelf, which is what a tablist-like row should do.
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      const next = (k + (e.key === 'ArrowRight' ? 1 : -1) + items.length) % items.length;
+      open(next);
+      items[next].focus();
+    });
   });
 
-  ['pointerenter', 'focusin'].forEach((e) => shelf.addEventListener(e, () => { held = true; stop(); }));
-  ['pointerleave', 'focusout'].forEach((e) => shelf.addEventListener(e, () => { held = false; start(); }));
-
-  window.addEventListener('resize', start, { passive: true });
-  document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-  if (reduced.addEventListener) reduced.addEventListener('change', start);
-
   open(0);
-  start();
 })();
 
 wireCaptureForm('auHeroForm', 'auHeroEmail', 'auHeroErr');
