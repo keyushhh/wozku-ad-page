@@ -4559,7 +4559,7 @@
     font-family:var(--font-body), system-ui, sans-serif;
     font-style:normal; font-weight:400;
     font-size:clamp(18px, 1.9vw, 21px); line-height:1.5; letter-spacing:0;
-    color:var(--ink); max-width:640px;
+    color:var(--ink); max-width:820px;
   }
 
   /* Red Hat funnel: four rows stepping down to the registrations figure. */
@@ -4641,13 +4641,44 @@
   .au-faq-a p{font-size:15.5px; line-height:1.7; color:var(--ink-dim); margin:0; max-width:62ch;}
 
   /* ---- content-v3: commercials ---- */
-  .au-commercials .au-story-body{text-align:center; max-width:56ch;}
-  .au-commercials .au-story-body p{font-size:17px; line-height:1.65;}
+  /* Commercials reads as one short statement, not a section, so it is set as a
+     horizontal banner: headline left, the terms beside it. A pale emerald wash
+     rather than another dark plate, because .au-simband-plate directly above is
+     already dark and two dark blocks back to back read as one. */
+  .au-comm-banner{
+    display:grid; grid-template-columns:1fr; gap:18px; align-items:center;
+    padding:34px 32px; border-radius:var(--radius-lg);
+    border:1px solid rgba(16,185,129,0.22);
+    background:linear-gradient(120deg, rgba(16,185,129,0.09) 0%, rgba(16,185,129,0.035) 58%, rgba(16,185,129,0.015) 100%);
+  }
+  .au-comm-h{
+    margin:0; font-family:var(--font-display);
+    font-size:clamp(24px, 2.6vw, 33px); font-weight:700;
+    letter-spacing:-0.035em; line-height:1.12; color:var(--ink);
+  }
+  .au-comm-p{
+    margin:0; font-size:16.5px; line-height:1.65; color:var(--ink-dim);
+  }
+  @media (min-width:860px){
+    .au-comm-banner{
+      grid-template-columns:minmax(0,0.9fr) minmax(0,1fr);
+      gap:48px; padding:38px 44px;
+    }
+    /* The hairline is the only thing separating the two halves, in the same
+       language the hero grid uses. */
+    .au-comm-p{
+      padding-left:48px; margin-left:-48px;
+      border-left:1px solid rgba(16,185,129,0.28);
+    }
+  }
 
   /* ---- content-v3: Red Hat CTA form ---- */
   /* This form sits on the white .au-pb-frame below the dark plate, so its */
   /* label and note are dark, not the inverted treatment used inside the plate. */
-  .au-form-pb{margin:26px auto 4px; max-width:470px; padding-bottom:8px;}
+  .au-form-pb{margin:26px auto 4px; max-width:820px; width:100%; padding-bottom:8px;}
+  .au-form-pb .au-form-bar{max-width:490px; margin:0 auto;}
+  .au-form-pb .au-form-err{max-width:490px; margin-left:auto; margin-right:auto;}
+  .au-form-pb .au-form-note{max-width:490px; margin-left:auto; margin-right:auto;}
   .au-form-lead{
     font-family:var(--font-display); font-size:17.5px; font-weight:600; letter-spacing:-0.02em;
     color:var(--ink); margin-bottom:14px; text-align:center;
@@ -4656,9 +4687,16 @@
   /* The other half of the swap described at .au-pb-quote above. */
   .au-interstitial .au-form-lead{
     font-family:"Instrument Serif", Georgia, serif;
-    font-size:clamp(22px, 2.6vw, 30px); font-weight:400; font-style:italic;
+    font-size:clamp(20px, 2.4vw, 30px); font-weight:400; font-style:italic;
     line-height:1.32; letter-spacing:-0.01em;
     color:var(--brand-emerald-deep); margin-bottom:18px;
+    white-space:nowrap;
+  }
+  @media (max-width:680px){
+    .au-interstitial .au-form-lead{
+      white-space:normal;
+      font-size:clamp(19px, 5.2vw, 24px);
+    }
   }
 
   /* ---- content-v3: dedicated simulation band ---- */
@@ -5565,11 +5603,9 @@
   <!-- COMMERCIALS -->
   <section class="au-section au-commercials" id="auCommercials">
     <div class="wrap">
-      <div class="au-head reveal">
-        <h2 class="au-h2">You pay for shares. Nothing else.</h2>
-      </div>
-      <div class="au-story-body reveal">
-        <p>No per-seat fees. No per-campaign fees. No platform minimum before you can run your first event. You pay for the LinkedIn shares your attendees actually make.</p>
+      <div class="au-comm-banner reveal">
+        <h2 class="au-comm-h">You pay for shares. Nothing else.</h2>
+        <p class="au-comm-p">No per-seat fees. No per-campaign fees. No platform minimum before you can run your first event. You pay for the LinkedIn shares your attendees actually make.</p>
       </div>
     </div>
   </section>
