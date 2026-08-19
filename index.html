@@ -4064,77 +4064,116 @@
     margin-top:34px;
   }
 
-  /* ================= EXPERIMENT: split hero ==================================
-     Copy runs full width at the top, a hairline under it, then two columns:
-     the playbook ask on the left, and what that ask produces on the right as a
-     five-cell grid ruled by hairlines. Self-contained: delete this block, the
-     `is-split` class on .hero-content-wrap and the .hero-split-copy /
-     .hero-split-row / .hero-split-cta wrappers to go back.
+  /* ================= EXPERIMENT: wireframe hero ==============================
+     Headline band, a full-bleed hairline under it, then two columns: copy and
+     the ask on the left, the five figures as a 3x2 ruled grid running flush to
+     the right edge of the page. Self-contained: delete this block and the
+     hero-wf-* wrappers in the markup to go back.
      ------------------------------------------------------------------------ */
+  /* Aligns the lower band's left edge to the same inset as .hero-content-wrap
+     (max-width 1200, 24px gutter) while letting the grid bleed off the right. */
+  .hero-wf-rule, .hero-wf-lower{
+    --wf-inset:max(24px, calc((100% - 1200px) / 2 + 24px));
+    position:relative; z-index:2;
+  }
+  .hero-wf-rule{
+    height:1px; width:100%; margin-top:44px;
+    background:rgba(15,23,42,0.12);
+  }
+  /* .hero-editorial is a centred flex column, so without width:100% this
+     shrink-to-fits and the grid never reaches the right edge. */
+  .hero-wf-lower{
+    width:100%; box-sizing:border-box;
+    display:grid; grid-template-columns:1fr;
+    padding:0 24px;
+  }
+  .hero-wf-left{padding-top:36px;}
+  .hero-wf-left .hero-editorial-sub{
+    text-align:left; margin-left:0; margin-right:0;
+    max-width:46ch; font-size:16px; line-height:1.6; color:var(--ink-dim);
+    margin-bottom:14px;
+  }
+  .hero-wf-ask{margin-top:30px;}
+  .hero-wf-ask .au-hero-chain-note{
+    text-align:left; margin:0 0 14px; color:var(--ink-dim); font-size:14px;
+  }
+  .hero-wf-ask .au-form-hero{margin:0; max-width:520px;}
+  .hero-wf-ask .au-form-hero .au-form-note{
+    text-align:left; color:var(--ink-dim); font-weight:500; text-shadow:none;
+  }
+  .hero-wf-ask .au-form-hero .au-form-note strong{color:var(--ink-dim);}
+
+  /* The ruled grid. Verticals are absolute so they can run past the last row. */
+  .is-wf ~ .hero-wf-lower .au-hero-chain,
+  .hero-wf-lower .au-hero-chain{
+    position:relative;
+    display:grid; grid-template-columns:repeat(3, 1fr);
+    max-width:none; width:100%; margin:36px 0 0; padding:0 0 40px;
+  }
+  .hero-wf-lower .au-hero-chain::before{display:none;}
+  .wf-vrule{
+    position:absolute; top:0; bottom:0; width:1px;
+    background:rgba(15,23,42,0.12); pointer-events:none;
+  }
+  .hero-wf-lower .au-chain-node{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:26px 16px 28px; min-height:118px;
+  }
+  .hero-wf-lower .au-chain-node + .au-chain-node::before{display:none;}
+  /* Row rule under the first three cells only, so the grid stays open below.
+     Counted with nth-of-type because the vertical rules are earlier children. */
+  .hero-wf-lower .au-chain-node:nth-of-type(-n+3){
+    border-bottom:1px solid rgba(15,23,42,0.12);
+  }
+  /* Neutralise the stacked layout's chain rules, which still span the last
+     cell across every column and draw their own dividers. */
+  .hero-wf-lower .au-chain-node.is-final{grid-column:auto;}
+  .hero-wf-lower .au-chain-node::before,
+  .hero-wf-lower .au-chain-node:nth-child(even)::before{display:none;}
+  .hero-wf-lower .au-chain-node.is-empty{min-height:0; padding:0; border-bottom:0;}
+  .hero-wf-lower .au-chain-node b{
+    font-family:var(--font-display); font-size:clamp(24px, 2.4vw, 34px);
+    font-weight:700; letter-spacing:-0.035em; line-height:1;
+    color:var(--ink); font-variant-numeric:tabular-nums;
+  }
+  .hero-wf-lower .au-chain-node span{
+    margin-top:8px; font-size:13px; line-height:1.35; color:var(--ink-dim);
+  }
+  .hero-wf-lower .au-chain-node.is-final b{color:var(--brand-emerald-deep);}
+  .hero-wf-lower .au-chain-node.is-final span{color:var(--ink);}
+
   @media (min-width:1000px){
-    .hero-content-wrap.is-split{max-width:1220px;}
-
-    /* Copy sits smaller here: it shares the band with the row beneath it. */
-    .is-split .hero-split-copy{max-width:960px; margin:0 auto;}
-    .is-split h1.hero-editorial-title{
-      font-size:clamp(38px, 4.1vw, 58px); line-height:1.06; margin-bottom:20px;
-    }
-    .is-split .hero-editorial-sub{
-      font-size:16.5px; line-height:1.55; max-width:74ch; margin-bottom:12px;
-    }
-    .is-split .hero-editorial-sub:last-child{margin-bottom:0;}
-
-    /* The hairline, and the two columns under it. */
-    .is-split .hero-split-row{
-      display:grid;
-      grid-template-columns:minmax(0, 0.78fr) minmax(0, 1.22fr);
-      column-gap:56px; align-items:start;
-      margin-top:40px; padding-top:40px;
-      border-top:1px solid rgba(255,255,255,0.18);
-      text-align:left;
+    .hero-content-wrap.is-wf{max-width:1200px;}
+    .is-wf .hero-wf-head{text-align:left; max-width:66%;}
+    .is-wf .au-hero-lockup{align-items:flex-start; margin-bottom:24px;}
+    .is-wf .au-eyebrow{text-align:left;}
+    .is-wf h1.hero-editorial-title{
+      text-align:left; margin-left:0; margin-right:0;
+      font-size:clamp(40px, 4.4vw, 62px); line-height:1.05;
     }
 
-    /* Left: the ask. */
-    .is-split .hero-split-cta{display:flex; flex-direction:column; justify-content:center; min-height:100%;}
-    .is-split .au-form-hero{margin:0; max-width:none;}
-    .is-split .au-form-hero .au-form-note{
-      text-align:left; color:rgba(255,255,255,0.62); font-weight:500; text-shadow:none;
+    .hero-wf-rule{margin-top:64px;}
+    /* Left column sits on the container inset; the grid runs to the page edge. */
+    .hero-wf-lower{
+      grid-template-columns:minmax(0, 44fr) minmax(0, 52fr);
+      column-gap:4%;
+      padding:0 0 0 var(--wf-inset);
     }
-    .is-split .au-form-hero .au-form-note strong{color:rgba(255,255,255,0.62);}
-
-    /* Right: five cells, ruled. Three across, the outcome taking the second
-       row across the remaining two so no cell is left empty. */
-    .is-split .au-hero-chain-wrap{margin:0;}
-    .is-split .au-hero-chain{
-      grid-template-columns:repeat(3, minmax(0, 1fr));
-      max-width:none; margin:0; padding:0; gap:0;
+    .hero-wf-left{
+      padding-top:46px; padding-bottom:40px;
+      display:flex; flex-direction:column;
     }
-    .is-split .au-hero-chain::before{display:none;}
-    .is-split .au-chain-node{
-      align-items:flex-start; text-align:left;
-      padding:16px 18px 18px 0;
-      border-right:1px solid rgba(255,255,255,0.14);
-      border-bottom:1px solid rgba(255,255,255,0.14);
-      padding-left:18px;
+    /* Pushes the ask to the bottom of the column, as in the wireframe. */
+    .hero-wf-ask{margin-top:auto; padding-top:44px;}
+    .hero-wf-lower .au-hero-chain{
+      margin:0; padding-bottom:64px;
+      align-self:stretch;
     }
-    .is-split .au-chain-node:first-child{padding-left:0;}
-    .is-split .au-chain-node:nth-child(3){border-right:0; padding-right:0;}
-    .is-split .au-chain-node:nth-child(4){padding-left:0; border-bottom:0;}
-    .is-split .au-chain-node.is-final{
-      grid-column:2 / -1; border-right:0; border-bottom:0; padding-right:0;
-    }
-    .is-split .au-chain-node + .au-chain-node::before{display:none;}
-    .is-split .au-chain-node b{
-      font-size:clamp(23px, 2vw, 30px); color:#FFFFFF; line-height:1;
-    }
-    .is-split .au-chain-node span{
-      margin-top:6px; font-size:12.5px; line-height:1.35; color:rgba(255,255,255,0.58);
-    }
-    .is-split .au-chain-node.is-final b{color:#6EE7B7;}
-    .is-split .au-chain-node.is-final span{color:rgba(255,255,255,0.86);}
-    .is-split .au-hero-chain-note{
-      text-align:left; margin:18px 0 0; font-size:13px; color:rgba(255,255,255,0.5);
-    }
+    .hero-wf-lower .au-chain-node{min-height:150px;}
+  }
+  @media (max-width:999px){
+    /* Stacked: copy, ask, then the grid full width with its own top rule. */
+    .hero-wf-lower .au-hero-chain{border-top:1px solid rgba(15,23,42,0.12); margin-top:40px;}
   }
   /* ================= /EXPERIMENT ============================================ */
 
@@ -4668,14 +4707,6 @@
               title="Ask AI" aria-label="Go to Ask AI">
         <span class="side-nav-dash"></span>
       </button>
-      <button type="button" class="side-nav-item" data-target="auSpotlight" data-kind="section"
-              title="Testimonials" aria-label="Go to Testimonials">
-        <span class="side-nav-dash"></span>
-      </button>
-      <button type="button" class="side-nav-item" data-target="auProof" data-kind="section"
-              title="Case Studies" aria-label="Go to Case Studies">
-        <span class="side-nav-dash"></span>
-      </button>
       <button type="button" class="side-nav-item" data-target="auFaq" data-kind="subtitle"
               title="FAQ" aria-label="Go to FAQ">
         <span class="side-nav-dash"></span>
@@ -4709,22 +4740,28 @@
     <div class="hero-fade" aria-hidden="true"></div>
 
     <!-- Hero Typography Content -->
-    <div class="hero-content-wrap is-split">
-      <div class="hero-split-copy">
-        <!-- One typographic lockup, not two stacked chips. The glass pill and its -->
+    <!-- Wireframe layout: headline band, a full-bleed hairline, then two columns
+         under it. The copy and the ask hold the left, and the figures run as a
+         3x2 ruled grid flush to the right edge of the page. -->
+    <div class="hero-content-wrap is-wf">
+      <div class="hero-wf-head">
         <div class="au-hero-lockup">
           <div class="au-eyebrow" id="auHeroEyebrow">B2B Field Marketers Running Own &amp; Third Party Events</div>
         </div>
-
         <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events you are already running.</h1>
+      </div>
+    </div>
+
+    <!-- Edge-to-edge rule. Sits where the emerald has finished dissolving. -->
+    <div class="hero-wf-rule" id="auHeroRule" aria-hidden="true"></div>
+
+    <div class="hero-wf-lower">
+      <div class="hero-wf-left">
         <p class="hero-editorial-sub" id="auHeroSub">You already gamify the booth. Spin the wheel - scan the badge - take the swag. It ends with a set of data in a spreadsheet.</p>
         <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn. One scan, one tap, and a post you already wrote goes out on LinkedIn. Your Product messaging reaches their network from their profile.</p>
-      </div>
 
-      <!-- Below the hairline: the ask on the left, what the ask produces on the -->
-      <!-- right as a five-cell grid. -->
-      <div class="hero-split-row">
-        <div class="hero-split-cta">
+        <div class="hero-wf-ask">
+          <p class="au-hero-chain-note">Same booth. Same swag budget. Zero ad spend.</p>
           <form class="au-form au-form-hero" id="auHeroForm" novalidate>
             <label for="auHeroEmail" class="sr-only">Work email</label>
             <div class="au-form-bar">
@@ -4741,34 +4778,40 @@
             <div class="au-form-note" id="auHeroPill">Free playbook &middot; 4 chapters &middot; no call required</div>
           </form>
         </div>
-
-        <div class="au-hero-chain-wrap">
-          <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
-            <div class="au-chain-node">
-              <b>400</b>
-              <span>booth visitors</span>
-            </div>
-            <div class="au-chain-node">
-              <b>200</b>
-              <span>posts to LinkedIn</span>
-            </div>
-            <div class="au-chain-node">
-              <b>240,000</b>
-              <span>potential reach</span>
-            </div>
-            <div class="au-chain-node">
-              <b>500</b>
-              <span>clicks to your page</span>
-            </div>
-            <div class="au-chain-node is-final">
-              <b>200-250</b>
-              <span>net-new leads</span>
-            </div>
-          </div>
-          <p class="au-hero-chain-note">Same booth. Same swag budget. Zero ad spend.</p>
-        </div>
       </div>
 
+      <!-- Three across, two down. The sixth cell is deliberately empty, and the
+           vertical rules run past the last row rather than closing the box. -->
+      <div class="au-hero-chain" id="auHeroChain" aria-label="How 400 booth visitors become 200 to 250 net-new leads">
+        <span class="wf-vrule" style="left:0"></span>
+        <span class="wf-vrule" style="left:33.3333%"></span>
+        <span class="wf-vrule" style="left:66.6666%"></span>
+
+        <div class="au-chain-node">
+          <b>400</b>
+          <span>booth visitors</span>
+        </div>
+        <div class="au-chain-node">
+          <b>200</b>
+          <span>posts to LinkedIn</span>
+        </div>
+        <div class="au-chain-node">
+          <b>240,000</b>
+          <span>potential reach</span>
+        </div>
+        <div class="au-chain-node">
+          <b>500</b>
+          <span>clicks to your page</span>
+        </div>
+        <div class="au-chain-node is-final">
+          <b>200-250</b>
+          <span>net-new leads</span>
+        </div>
+        <div class="au-chain-node is-empty" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="hero-content-wrap">
       <!-- Video Showcase Header Section (introduces the live event video carousel) -->
       <div class="au-hero-video-header" id="auHeroVideoHeader">
         <span class="au-tag">
@@ -5235,8 +5278,8 @@
             <h3 class="au-pb-h">And the leads are real.</h3>
             <p class="au-pb-p">Red Hat wanted delegates at a full-day conference to pull their own networks into the livestream. No ad budget behind it. A Social Champ contest and a live leaderboard did the rest.</p>
 
-            <a href="#auProof" class="au-pb-link">
-              View all case studies
+            <a href="#auCta" class="au-pb-link">
+              Get the full breakdown
               <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7h9M8 3.5l3.5 3.5-3.5 3.5"/></svg>
             </a>
           </div>
@@ -5480,164 +5523,6 @@
           <pre class="au-ask-prompt-box" id="auAskPromptText">I'm reading about Wozku on wozku.com/kb/ - interesting. It's an advocacy-led growth platform: it turns event attendees into advocates who post about you on LinkedIn, so the events we already run keep producing leads and registrations after everyone flies home. What caught my attention, and worth remembering as a use case: their Red Hat campaign drove 987 net-new livestream registrations from 499 attendee shares, with zero paid media. Help me think through how this would apply to us - our ICP, our products, and the events or other campaigns we're running and have coming up. Where would it fit, and where wouldn't it? Worth keeping for the next time we're planning something like this.</pre>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="au-spotlight" id="auSpotlight">
-    <div class="wrap">
-      <div class="au-proof-split-card reveal" id="auProofSplit">
-        
-        <!-- Left Section: Dynamic Speaker, Designation, Company -->
-        <div class="au-proof-split-left" id="auProofMeta">
-          <!-- Avatar Circle -->
-          <div class="au-proof-avatar-circle" id="auProofAvatar" aria-hidden="true">
-            <img src="/avatars/abhishek.opt.jpg" alt="Abhishek Sharma" class="au-proof-avatar-img" width="58" height="58" decoding="async" onerror="this.src='/avatars/abhishek.jpg'" />
-          </div>
-
-          <!-- Person Name & Role -->
-          <div class="au-proof-person-info">
-            <h3 class="au-proof-person-name" id="auProofName">Abhishek Sharma</h3>
-            <p class="au-proof-person-role" id="auProofRole">Growth &amp; Field Marketing</p>
-          </div>
-
-          <!-- Company Logo (below name/role, above verified tag) -->
-          <div class="au-proof-company-row">
-            <img src="/src/assets/MongoDB_Forest-Green.svg" alt="MongoDB" class="au-proof-logo-split" id="auProofLogo" onerror="this.src='/MongoDB_Forest-Green.svg'" />
-          </div>
-
-          <!-- Verified Tag -->
-          <div class="au-proof-verified-pill" id="auProofVerified">
-            <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            <span id="auProofVerifiedText">Verified Customer Spotlight</span>
-          </div>
-        </div>
-
-        <!-- Right Section: Stacked Interactive Sticky Notes (Drag / Peel / Flip) -->
-        <div class="au-proof-split-right">
-          <div class="au-sticky-stack" id="auStickyStack">
-            
-            <!-- Note 1: MongoDB (Emerald) -->
-            <div class="au-sticky-note is-emerald pos-0" data-index="0">
-              <div class="au-sticky-tape"></div>
-              <div class="au-sticky-peel-hint" aria-hidden="true">Drag or click to flip →</div>
-              <p class="au-sticky-text">
-                &ldquo;Wozku transformed how our attendees advocate for us. Seeing our speakers and attendees flood LinkedIn in real-time brought thousands of high-intent enterprise buyers to our pages through authentic, 1-click organic distribution.&rdquo;
-              </p>
-            </div>
-
-            <!-- Note 2: Salesforce (Sky Blue) -->
-            <div class="au-sticky-note is-sky pos-1" data-index="1">
-              <div class="au-sticky-tape"></div>
-              <div class="au-sticky-peel-hint" aria-hidden="true">Drag or click to flip →</div>
-              <p class="au-sticky-text">
-                &ldquo;Wozku helped us reduce our per registration cost by 70% helping us get much better ROI from our events investments.&rdquo;
-              </p>
-            </div>
-
-            <!-- Note 3: Veeam Software (Sunny Yellow) -->
-            <div class="au-sticky-note is-yellow pos-2" data-index="2">
-              <div class="au-sticky-tape"></div>
-              <div class="au-sticky-peel-hint" aria-hidden="true">Drag or click to flip →</div>
-              <p class="au-sticky-text">
-                &ldquo;Our triumph on LinkedIn during the Propartner Summit Social Champ campaign highlights the significant benefits of inventive approaches and cooperative alliances. Through the utilization of gamification and garnering support from within our partner network, we attained unparalleled visibility and engagement, affirming our status as frontrunners in the industry.&rdquo;
-              </p>
-            </div>
-
-            <!-- Note 4: Women In Cloud (Lavender / Lilac) -->
-            <div class="au-sticky-note is-purple pos-3" data-index="3">
-              <div class="au-sticky-tape"></div>
-              <div class="au-sticky-peel-hint" aria-hidden="true">Drag or click to flip →</div>
-              <p class="au-sticky-text">
-                &ldquo;Women In Cloud is more than a community - it’s a movement. With Wozku, we have been able to transform a static process with dynamic engagement, create visibility into a super fan base, and distribute economic opportunities to the global market. We look forward to scaling our mission with this powerful tool.&rdquo;
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- WALL OF PROOF -->
-  <section class="au-section au-proof" id="auProof">
-    <div class="wrap">
-      <div class="au-head reveal">
-        <span class="au-tag">Enterprise case studies</span>
-        <h2 class="au-h2">The numbers, all in one place.</h2>
-        <p class="au-sub">Real programs, real numbers. Every figure traces back to named advocates.</p>
-      </div>
-
-      <!-- A bento rather than an equal grid: these case studies carry very -->
-      <div class="au-bento reveal">
-
-        <article class="bn bn-sf">
-          <div class="bn-media">
-            <img src="/cs-salesforce.opt.jpg" alt="Salesforce event floor" loading="lazy">
-            <div class="bn-ov"><span class="bn-co">Salesforce</span><span class="bn-cat">Community &amp; customers</span></div>
-          </div>
-          <div class="bn-body">
-            <div class="bn-stat"><b>11&times;</b><span>Verified<br>program ROI</span></div>
-            <h3 class="bn-title">Proved community advocacy delivers 11&times; ROI</h3>
-            <p class="bn-desc">Sharing built into post-signup flows turned quiet moments into a steady growth loop, generating 23.3K clicks and 46.2K reactions.</p>
-            <div class="bn-footer">
-              <p class="bn-metrics">&minus;70% cost per reg &middot; 10.7M potential reach</p>
-            </div>
-          </div>
-        </article>
-
-        <article class="bn bn-vm">
-          <div class="bn-media">
-            <img src="/cs-veeam.opt.jpg" alt="Veeam partner summit" loading="lazy">
-            <div class="bn-ov"><span class="bn-co">Veeam</span></div>
-          </div>
-          <div class="bn-body">
-            <div class="bn-stat"><b>2.1M</b><span>Potential reach</span></div>
-            <h3 class="bn-title">Reach earned through the global partner network</h3>
-            <div class="bn-footer">
-              <p class="bn-metrics">15K likes &middot; partner activation</p>
-            </div>
-          </div>
-        </article>
-
-        <article class="bn bn-wc">
-          <div class="bn-media">
-            <img src="/cs-wic.opt.jpg" alt="Women In Cloud community" loading="lazy">
-            <div class="bn-ov"><span class="bn-co">Women In Cloud</span></div>
-          </div>
-          <div class="bn-body">
-            <div class="bn-stat"><b>3.9M</b><span>Potential reach</span></div>
-            <h3 class="bn-title">Member advocacy across 120K members, 80+ countries</h3>
-            <div class="bn-footer">
-              <p class="bn-metrics">9.7K clicks &middot; 25.1K reactions</p>
-            </div>
-          </div>
-        </article>
-
-        <article class="bn bn-el">
-          <div class="bn-media">
-            <img src="/cs-elastic.opt.jpg" alt="Elastic live session" loading="lazy">
-            <div class="bn-ov"><span class="bn-co">Elastic</span><span class="bn-cat">Events &amp; experiences</span></div>
-          </div>
-          <div class="bn-body">
-            <div class="bn-lead">
-              <div class="bn-stat"><b>930K+</b><span>Potential reach</span></div>
-            </div>
-            <div class="bn-el-mid">
-              <h3 class="bn-title">930K+ reach from gamified attendee engagement</h3>
-              <p class="bn-desc">A contest series turned on-site attendees into promoters across several cities, using live leaderboards and rewards.</p>
-            </div>
-            <div class="bn-footer">
-              <p class="bn-metrics">Live attendee engagement &middot; multi-geo activation</p>
-            </div>
-          </div>
-        </article>
-
-      </div>
-      <div class="au-proof-cta">
-        <a href="#auCta" class="btn btn-primary">Download all four case studies</a>
-      </div>
-
     </div>
   </section>
 
@@ -6089,9 +5974,7 @@ if (scrollToTopBtn) {
 
 // Nav targets
 const NAV_TARGETS = {
-  'Case Studies':   '#auProof',
   'ROI Calculator': '#auRoi',
-  'Customers':      '#auProof',
   'Calculate ROI':  '#auCta',
 };
 const NAV_CTA_LABEL = 'Get playbook';
@@ -7215,8 +7098,6 @@ initBookingCalendar();
       if (anyVisible) start(); else stop();
     }, { threshold: 0 });
     io.observe(section);
-    const proof = document.getElementById('auSpotlight');
-    if (proof) io.observe(proof);
   }
   start();
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
@@ -7604,15 +7485,14 @@ initBookingCalendar();
 
     let tailRect = tail && tail.getBoundingClientRect();
 
-    // In the split layout the ask and the figures sit below the copy but still
-    // on the emerald, so the band is measured from that row instead. In the
-    // stacked layout the figures live below the band and must not be counted,
-    // or the emerald would swallow them.
-    const splitRow = hero.querySelector('.hero-split-row');
-    const split = splitRow && getComputedStyle(splitRow).display === 'grid';
-    if (split) {
-      const rr = splitRow.getBoundingClientRect();
-      if (rr.height) tailRect = rr;
+    // In the wireframe layout the emerald belongs to the headline band only:
+    // it has to be spent by the time the rule arrives, because everything under
+    // the rule is dark type on white.
+    const rule = hero.querySelector('.hero-wf-rule');
+    const split = !!rule;
+    if (rule) {
+      const rr = rule.getBoundingClientRect();
+      if (rr.height || rr.top) tailRect = { bottom: rr.top, height: 1 };
     }
 
     let band, fadeTop;
@@ -7621,15 +7501,18 @@ initBookingCalendar();
       // Dissolve opens just past the content and runs long enough to read as a
       // gradient rather than the hard edge a 50px fade produced. Shorter on
       // small screens, where 200px of fade is most of a viewport.
-      const fadeLen = split ? 170 : (window.innerWidth < 820 ? 150 : 200);
-      // Split keeps a tighter shoulder: the row already ends in empty space, so
-      // the emerald can start letting go almost immediately under it.
-      fadeTop = Math.max(0, tailBottom + (split ? 14 : 28));
-      band = fadeTop + fadeLen;
-
-      // Only the stacked layout needs the figures pushed clear of the dissolve;
-      // in split they sit inside the band by design.
-      if (!split) {
+      if (split) {
+        // The emerald has to be spent by the time the rule arrives: everything
+        // below it is dark type on white. So the band closes at the rule and
+        // the dissolve runs backwards from there.
+        const fadeLen = window.innerWidth < 820 ? 170 : 240;
+        band = tailBottom + 8;
+        fadeTop = Math.max(0, band - fadeLen);
+      } else {
+        const fadeLen = window.innerWidth < 820 ? 150 : 200;
+        fadeTop = Math.max(0, tailBottom + 28);
+        band = fadeTop + fadeLen;
+        // Only the stacked layout needs the figures pushed clear of the fade.
         hero.style.setProperty('--hero-chain-gap', Math.round(band - tailBottom + 28) + 'px');
       }
     } else {
