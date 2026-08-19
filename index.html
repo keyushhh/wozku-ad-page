@@ -563,7 +563,127 @@
   .au-how{padding:80px 0 36px;}
   .au-roi{padding:36px 0 40px;}
   .au-proof{padding:44px 0 104px;}
+  /* Emerald wash entering from off the left edge and dissolving into the white
+     page, the same treatment the how-it-works section used to carry.
+     Traced from the reference this was art-directed against (backgrounds.supply),
+     whose glow is a painted PNG, not a gradient, which is why matching it by eye
+     kept failing. Sampling that artwork gave the three properties that matter:
+       - It is a tilted band, not a radial blob. Isolating the bright core puts
+         it at +9deg with a 2.6:1 elongation. Only the faint outer haze is level,
+         which is why the tilt is easy to miss and why an untilted ellipse reads
+         as wrong even when the colour is right.
+       - The falloff holds a near-flat plateau across the first third and only
+         then decays. Decaying straight from the core is what makes a CSS
+         gradient look like a blob floating in the middle of the section.
+       - Their layer is centred left-of-middle and set to overflow visibly,
+         rather than being fitted to the section.
+     The band is therefore drawn as a rotated box whose gradient reaches zero at
+     its own edges, so nothing is ever clipped and no seam can form at the
+     section boundary. Geometry is exposed as custom properties because it is
+     pure art direction: --ask-glow-tilt and --ask-glow-x are the two worth
+     touching, and the mobile override below only re-points those. */
+  .au-ask{
+    position:relative;
+    padding:92px 0 116px;
+    background:#FFFFFF;
+    /* Scaled as a pair so the band keeps its 2.6:1 proportion and its angle. */
+    --ask-glow-w:170%;
+    --ask-glow-h:92%;
+  }
+  .au-ask::before{
+    content:''; position:absolute; z-index:0; pointer-events:none;
+    left:var(--ask-glow-x, 13%);
+    top:var(--ask-glow-y, 52%);
+    width:var(--ask-glow-w, 170%);
+    height:var(--ask-glow-h, 92%);
+    transform:translate(-50%, -50%) rotate(var(--ask-glow-tilt, 9deg));
+    background:
+      radial-gradient(closest-side ellipse at 50% 50%,
+        rgba(16, 185, 129, 0.42) 0%,
+        rgba(16, 185, 129, 0.40) 12%,
+        rgba(16, 185, 129, 0.34) 26%,
+        rgba(16, 185, 129, 0.26) 40%,
+        rgba(16, 185, 129, 0.18) 54%,
+        rgba(16, 185, 129, 0.11) 66%,
+        rgba(16, 185, 129, 0.05) 78%,
+        rgba(16, 185, 129, 0.015) 88%,
+        rgba(16, 185, 129, 0) 100%);
+  }
+  /* The denser inner core, the same band at roughly a third the length. */
+  .au-ask::after{
+    content:''; position:absolute; z-index:0; pointer-events:none;
+    left:var(--ask-glow-x, 13%);
+    top:var(--ask-glow-y, 52%);
+    width:calc(var(--ask-glow-w, 170%) * 0.42);
+    height:calc(var(--ask-glow-h, 92%) * 0.52);
+    transform:translate(-50%, -50%) rotate(var(--ask-glow-tilt, 9deg));
+    background:
+      radial-gradient(closest-side ellipse at 50% 50%,
+        rgba(5, 150, 105, 0.26) 0%,
+        rgba(5, 150, 105, 0.20) 22%,
+        rgba(5, 150, 105, 0.12) 46%,
+        rgba(5, 150, 105, 0.05) 68%,
+        rgba(5, 150, 105, 0) 100%);
+  }
+  .au-ask > .wrap{position:relative; z-index:1;}
+  @media (max-width:768px){
+    .au-ask{--ask-glow-x:6%; --ask-glow-w:256%; --ask-glow-h:70%; --ask-glow-tilt:7deg;}
+  }
   .au-cta{padding:64px 0 104px;}
+
+  /* ---- ask-your-ai section ---- */
+  .au-ask-card{
+    position:relative; max-width:900px; margin:0 auto; background:#FFFFFF;
+    border:1px solid var(--line); border-radius:20px; padding:6px 6px 10px;
+    box-shadow:0 20px 44px -28px rgba(15,23,42,0.18);
+  }
+  .au-ask-prompt-box{
+    font-family:var(--font-body, inherit); font-size:14px; line-height:1.5; color:var(--ink);
+    white-space:pre-wrap; margin:0; padding:14px 52px 6px 18px;
+    max-height:none; overflow:visible;
+  }
+  .au-ask-icon-btn{
+    position:absolute; top:14px; right:16px; z-index:2;
+    display:flex; align-items:center; justify-content:center;
+    width:28px; height:28px; padding:0; border-radius:8px;
+    background:transparent; border:none;
+    color:var(--brand-emerald-deep); cursor:pointer;
+  }
+  .au-ask-icon-btn svg{
+    width:19px; height:19px; display:block;
+    transition:transform .22s cubic-bezier(.2,.7,.2,1), filter .22s ease-out;
+  }
+  .au-ask-icon-btn:hover svg,
+  .au-ask-icon-btn:focus-visible svg{
+    transform:scale(1.18);
+    filter:drop-shadow(0 0 6px rgba(16, 185, 129, 0.55));
+  }
+  .au-ask-tooltip{
+    position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%) translateY(4px);
+    font-family:var(--font-mono); font-size:11px; font-weight:600; white-space:nowrap;
+    padding:6px 10px; border-radius:6px; background:var(--dark-pill); color:#FFFFFF;
+    opacity:0; pointer-events:none; transition:opacity .15s ease-out, transform .15s ease-out;
+  }
+  .au-ask-tooltip::after{
+    content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    border:5px solid transparent; border-top-color:var(--dark-pill);
+  }
+  .au-ask-icon-btn:hover .au-ask-tooltip,
+  .au-ask-icon-btn:focus-visible .au-ask-tooltip{opacity:1; transform:translateX(-50%) translateY(0);}
+  .au-ask-icon-btn.is-copied .au-ask-tooltip{opacity:1; transform:translateX(-50%) translateY(0); background:var(--brand-emerald-deep);}
+  .au-ask-icon-btn.is-copied .au-ask-tooltip::after{border-top-color:var(--brand-emerald-deep);}
+  /* Instrument Serif runs smaller on the body than Space Grotesk at the same
+     px size, so it needs a nudge up to sit level with the sans around it. */
+  .au-ask-em{
+    font-family:"Instrument Serif", Georgia, serif;
+    font-weight:400; font-style:italic; letter-spacing:0;
+    font-size:1.1em; line-height:1;
+    position:relative; display:inline-block; padding:0 3px;
+  }
+  .au-ask-em::after{
+    content:''; position:absolute; left:0; right:0; bottom:-0.16em; height:0.17em;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M3 14 C 48 5, 96 18, 140 9 S 186 4, 197 10' stroke='%2310B981' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%;
+  }
 
   /* ---- shared section furniture ---- */
   .au-head{max-width:720px; margin:0 auto 56px; text-align:center;}
@@ -4027,6 +4147,10 @@
               title="ROI Calc" aria-label="Go to ROI Calc">
         <span class="side-nav-dash"></span>
       </button>
+      <button type="button" class="side-nav-item" data-target="auAsk" data-kind="subtitle"
+              title="Ask AI" aria-label="Go to Ask AI">
+        <span class="side-nav-dash"></span>
+      </button>
       <button type="button" class="side-nav-item" data-target="auSpotlight" data-kind="section"
               title="Testimonials" aria-label="Go to Testimonials">
         <span class="side-nav-dash"></span>
@@ -4607,6 +4731,31 @@
     </div>
   </section>
 
+  <section class="au-section au-ask" id="auAsk">
+    <div class="wrap">
+      <div class="au-head reveal">
+        <span class="au-tag">Don't take our word for it</span>
+        <h2 class="au-h2">Ask ChatGPT, Claude, or Gemini if Wozku <em class="au-ask-em">fits your event</em>.</h2>
+        <p class="au-sub">Paste this in and get a straight answer, not a sales pitch.</p>
+      </div>
+
+      <div class="au-ask-card reveal">
+        <button type="button" class="au-ask-icon-btn" id="auAskCopyBtn" aria-label="Copy prompt" data-default-label="Copy prompt" data-copied-label="Copied">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span class="au-ask-tooltip" id="auAskCopyLabel">Copy prompt</span>
+        </button>
+        <pre class="au-ask-prompt-box" id="auAskPromptText">I'm evaluating Wozku for my company. Here's what it does: at trade shows or conference booths, attendees scan a QR code and tap once. A ready-made LinkedIn post about the event goes out from their own profile, and they earn points or swag for it. The idea is more visibility and leads from events we're already paying to attend.
+
+Here's my situation:
+- We attend or host [number] events a year, mostly [type of event]
+- Right now we get leads from events by [describe your current process]
+- The team that would run this: [who, and how much time they have]
+
+Based on this, is Wozku a good fit for us? What would make it a strong fit, what would make it a bad fit, and what should I ask them before I sign up?</pre>
+      </div>
+    </div>
+  </section>
+
   <section class="au-spotlight" id="auSpotlight">
     <div class="wrap">
       <div class="au-proof-split-card reveal" id="auProofSplit">
@@ -4764,6 +4913,8 @@
 
     </div>
   </section>
+
+  <!-- ASK YOUR AI -->
 
   <!-- FINAL CTA -->
   <section class="au-section au-cta" id="auCta">
@@ -5065,6 +5216,41 @@ if (scrollToTopBtn) {
   }, { passive: true });
   sttSync();
 }
+
+// Ask-your-AI prompt: copy to clipboard
+(function askAiCopy() {
+  const btn = document.getElementById('auAskCopyBtn');
+  const promptEl = document.getElementById('auAskPromptText');
+  const labelEl = document.getElementById('auAskCopyLabel');
+  if (!btn || !promptEl || !labelEl) return;
+  let resetTimer = null;
+  btn.addEventListener('click', async () => {
+    const text = promptEl.textContent;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    } catch (err) {
+      return;
+    }
+    labelEl.textContent = btn.dataset.copiedLabel;
+    btn.classList.add('is-copied');
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => {
+      labelEl.textContent = btn.dataset.defaultLabel;
+      btn.classList.remove('is-copied');
+    }, 2000);
+  });
+})();
 
 // 2D. MOBILE PHONE FRAME. Owns the hero demo below 700px, where the laptop rig
 // is display:none. Three jobs: host the one shared <video>, play it inline while
