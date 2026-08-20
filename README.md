@@ -7,7 +7,6 @@ A high-performance single-page marketing application designed for cold paid traf
 ## 1. Project Architecture
 
 - **`index.html`** at the repo root is the primary application file containing the page structure, inline CSS design tokens, responsive layout rules, WebGL background shaders, and interactive behaviors.
-- **`src/nav-ai.jsx`** powers the interactive chromatic MetalFx star button in the navigation header and the before/after comparison slider handle.
 - **`public/`** contains all production assets:
   - `/fonts/`: Self-hosted webfonts (Satoshi, JetBrains Mono, Space Grotesk, Instrument Serif, Shadows Into Light, Caveat)
   - `/video/`: 5 high-efficiency MP4 video walkthroughs with posters
