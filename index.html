@@ -18,7 +18,23 @@
   <meta name="twitter:description"
     content="Turn event attendees and booth visitors into your highest-ROI pipeline channel on LinkedIn. One scan, one tap, and branded posts reach their qualified network.">
   <meta name="twitter:image" content="https://wozku-ad.vercel.app/hero-plate-emerald-900.jpg">
-  <!-- Fonts are self-hosted from /fonts (see the @font-face block below), so there ... -->
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://wozku-ad.vercel.app/">
+  <meta name="theme-color" content="#059669">
+  <meta name="author" content="Wozku">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Wozku",
+    "description": "Turn event attendees and booth visitors into your highest-ROI pipeline channel on LinkedIn. One scan, one tap, and branded posts reach their qualified network.",
+    "url": "https://wozku-ad.vercel.app/",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -146,7 +162,6 @@
       unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
 
-    /* Metric-matched fallbacks ------------------------------------------ size-adjust equalis... */
     @font-face {
       font-family: "Satoshi Fallback Apple";
       src: local("Helvetica Neue"), local("Helvetica");
@@ -246,7 +261,6 @@
       --ink-dim: #64748B;
       --line: rgba(15, 23, 42, 0.08);
       --line-soft: rgba(15, 23, 42, 0.04);
-      /* Wozku brand accent: emerald #10B981 (design system). Deeper #059669 is the */
       --terracotta: #10B981;
       --terracotta-soft: rgba(16, 185, 129, 0.09);
       --dark-pill: #0A0E27;
@@ -256,7 +270,6 @@
       --amber-soft: rgba(5, 150, 105, 0.08);
       --brand-emerald: #10B981;
       --brand-emerald-deep: #059669;
-      /* Wozku brand type: Space Grotesk display, Satoshi body, JetBrains Mono labels. */
       --font-display: "Space Grotesk", "Grotesk Fallback Apple", "Grotesk Fallback Android", -apple-system, BlinkMacSystemFont, sans-serif;
       --font-body: "Satoshi", "Satoshi Fallback Apple", "Satoshi Fallback Android", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       --font-mono: "JetBrains Mono", "Mono Fallback", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -270,7 +283,6 @@
       --plate: url('/hero-plate-emerald.jpg');
     }
 
-    /* 900px WebP: 6.7KB against 113KB, visually identical at phone width, and it is the mobil... */
     @media (max-width:760px) {
       :root {
         --plate: image-set(url('/hero-plate-emerald-900.webp') type('image/webp'),
@@ -632,7 +644,6 @@
       height: calc(var(--hero-band) - var(--hero-fade-top));
       z-index: 1;
       pointer-events: none;
-      /* The band is seeded in svh but then overwritten with measured pixels by heroBandGeometry... */
       opacity: 0;
       transition: opacity 260ms ease;
       background: linear-gradient(180deg,
@@ -653,7 +664,6 @@
     .hero-content-wrap {
       position: relative;
       z-index: 2;
-      /* .hero-editorial is a column flex box with align-items:center, which makes this a shrink... */
       width: 100%;
       max-width: 1200px;
       margin: 0 auto;
@@ -736,7 +746,6 @@
     }
 
     /* Header transparent styling over hero */
-    /* Header transparent styling over hero */
     body:not(.au-ty-open) header:not(.scrolled) {
       background: transparent !important;
       border-bottom-color: transparent !important;
@@ -778,7 +787,6 @@
       transform: translateY(-1px);
     }
 
-    /* Simple text link for Ask your GPT on desktop, sleek circular button on mobile */
     .nav-text-link {
       display: inline-flex;
       align-items: center;
@@ -892,9 +900,6 @@
       }
     }
 
-    /* Pulse highlight on Ask AI prompt card when navigated from nav */
-
-    /* Pulse highlight on Ask AI prompt card when navigated from nav */
     @keyframes askCardHighlight {
       0% {
         box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
@@ -913,7 +918,6 @@
       animation: askCardHighlight 2s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    /* Footer still hides on the thank-you view; the header now stays and swaps its logo and C... */
     body.au-ty-open footer {
       display: none !important;
     }
@@ -1014,17 +1018,13 @@
       padding: 44px 0 104px;
     }
 
-    /* Emerald wash entering from off the left edge and dissolving into the white page, the sa... */
     .au-ask {
       position: relative;
       padding: 52px 0 116px;
       background: #FFFFFF;
-      /* The band below is wider than the page on purpose, and on phones it is 256% wide, which ... */
       overflow-x: clip;
-      /* Scaled as a pair so the band keeps its 2.6:1 proportion and its angle. */
       --ask-glow-w: 170%;
       --ask-glow-h: 92%;
-      /* Mirrored to the right, and the tilt with it, now that the prompt card */
       /* sits on that side and the copy is on the left. */
       --ask-glow-x: 87%;
       --ask-glow-tilt: -9deg;
@@ -1053,7 +1053,6 @@
           rgba(16, 185, 129, 0) 100%);
     }
 
-    /* The denser inner core, the same band at roughly a third the length. */
     .au-ask::after {
       content: '';
       position: absolute;
@@ -1086,7 +1085,6 @@
         --ask-glow-tilt: -7deg;
       }
 
-      /* Was inheriting the 64px desktop top padding, which stacked with the Commercials banner ... */
       .au-ask {
         padding: 44px 0 72px;
       }
@@ -1097,7 +1095,6 @@
     }
 
     /* ask-your-ai section */
-    /* Two columns: the pitch on the left, the prompt card on the right. */
     .au-ask-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -1475,7 +1472,6 @@
       }
     }
 
-    /* Instrument Serif runs smaller on the body than Space Grotesk at the same px size, so it... */
     .au-ask-em {
       font-family: "Instrument Serif", Georgia, serif;
       font-weight: 400;
@@ -1555,7 +1551,6 @@
       text-transform: uppercase;
       color: #FFFFFF;
       margin: 0;
-      /* Pure white measures only 3.4:1 on the lit part of the hero shader and cannot go brighte... */
       text-shadow: 0 1px 10px rgba(3, 32, 24, 0.55);
     }
 
@@ -1705,8 +1700,6 @@
       text-align: left;
     }
 
-    /* Sound toggle (used by the hero carousel's per-frame mute chip) */
-
     /* Sound Toggle Button */
     .au-sound-btn {
       position: absolute;
@@ -1716,7 +1709,6 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      /* Icon-only: a fixed circle rather than text padding, so the hit area stays */
       width: 38px;
       height: 38px;
       padding: 0;
@@ -1731,7 +1723,6 @@
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* A translucent emerald wash picked up the purple video behind it and read as */
     .au-sound-btn:hover,
     .au-sound-btn:focus-visible {
       background: var(--brand-emerald-deep);
@@ -1793,7 +1784,6 @@
       animation-play-state: paused;
     }
 
-    /* This ran forever, including when scrolled kilometres off-screen. */
     .marquee:not(.is-onscreen) .marquee-track {
       animation-play-state: paused;
     }
@@ -1839,7 +1829,6 @@
       position: relative;
     }
 
-    /* THE REALITY CHECK: bento, after backgrounds.supply's usecases grid */
     .au-prob-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -1873,7 +1862,6 @@
         gap: 16px;
       }
 
-      /* Two bottlenecks, one row. The file list keeps the narrower column. */
       .au-prob-tall {
         grid-column: 1 / span 2;
         grid-row: 1;
@@ -1946,7 +1934,6 @@
       transform: scale(1.08);
     }
 
-    /* Their card label is the loudest thing in the card - 32px at weight 400. */
     .au-prob-title {
       font-family: var(--font-display);
       font-size: 23px;
@@ -1965,7 +1952,6 @@
       margin: 0;
     }
 
-    /* the media well: clipped, scrimmed, bleeds to the card's edges */
     .au-prob-well {
       position: relative;
       margin: 14px -24px 0;
@@ -2001,7 +1987,6 @@
       color: #94A3B8;
     }
 
-    /* Edge scrim, the same idea as their black-to-transparent overlay: the motion */
     .au-well-fade {
       position: absolute;
       inset: 0;
@@ -2056,7 +2041,6 @@
     }
 
     /* vertical marquee (card 02) */
-    /* The track is taken out of flow. min-height:0 alone was not enough: a flex */
     .au-vq {
       overflow: hidden;
       flex: 1;
@@ -2120,7 +2104,6 @@
       gap: 6px;
     }
 
-    /* Dot-matrix plot, after morphin.dev's animated dot matrix sales chart. */
     .au-decay-dots {
       display: flex;
       justify-content: center;
@@ -2143,7 +2126,6 @@
       }
     }
 
-    /* Each label shares its bar's track (same flex:1 and same 7px gap) so the two */
     .au-decay-axis {
       display: flex;
       gap: 7px;
@@ -2336,7 +2318,6 @@
       flex-direction: column;
       justify-content: center;
       cursor: grab;
-      /* pan-y, not none: the note fills a ~360px block, so touch-action:none meant a vertical s... */
       touch-action: pan-y;
       box-shadow:
         0 20px 45px -10px rgba(0, 0, 0, 0.15),
@@ -2494,9 +2475,6 @@
     }
 
     /* proof banner (Red Hat) */
-    /* This plate is the proof of the section directly above it, so it sits close */
-    /* Used to tuck up under the old bottleneck grid with a negative margin. The */
-    /* section above it is now prose, so it needs ordinary breathing room. */
     .au-interstitial {
       padding: 40px 0 56px;
       margin-top: 0;
@@ -2553,7 +2531,6 @@
       height: 20px;
       width: auto;
       flex: none;
-      /* the official lockup ships red-on-black; brightness(0) flattens both the */
       filter: brightness(0) invert(1);
     }
 
@@ -2644,7 +2621,6 @@
       box-shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.85);
     }
 
-    /* Concentric, not staggered: every card is centred on the same axis and only */
     .au-pb-card {
       left: 50%;
       transform: translateX(-50%);
@@ -2678,7 +2654,6 @@
       box-shadow: 0 26px 54px -22px rgba(0, 0, 0, 0.9);
     }
 
-    /* The ring is a real arc, so "$0 spent" draws as an empty one. The arc lives */
     .au-pb-ring {
       position: relative;
       flex: none;
@@ -2765,7 +2740,6 @@
         border-radius: 24px;
       }
 
-      /* shingled cards need the width to overlap legibly; stacked, they are a list. */
       .au-pb-stack {
         height: auto;
         display: flex;
@@ -2811,8 +2785,6 @@
       }
     }
 
-    /* This section's head is flush left, unlike the rest of the page - a pricing */
-    /* 1000px, not 760: the second line is one sentence set on one line, and at the 42px cap i... */
     .au-math .au-head {
       max-width: 1000px;
       margin-left: 0;
@@ -3614,7 +3586,6 @@
       margin: 0;
     }
 
-    /* Card Visual Stage (Uniform height & perfect alignment across all 3 cards) */
     .au-norma-card-visual {
       position: relative;
       height: 280px;
@@ -3729,7 +3700,6 @@
       height: 2px;
       background: linear-gradient(90deg, transparent, #10B981 30%, #34D399 50%, #10B981 70%, transparent);
       box-shadow: 0 0 6px #10B981;
-      /* Was animating `top` from 6% to 92%, which relayouts and repaints on every frame, forever. */
       top: 6%;
       animation: auNormaLaser 2.2s ease-in-out infinite;
     }
@@ -3748,7 +3718,6 @@
         opacity: 1;
       }
 
-      /* 86% of the 84px .au-norma-qr-box, matching the old 6% -> 92% travel. */
       100% {
         transform: translateY(72px);
         opacity: 0;
@@ -3989,7 +3958,6 @@
       margin: 0 auto;
     }
 
-    /* Light on the left is the point of the object - the dark half is what makes */
     .au-calc-panel {
       display: grid;
       grid-template-columns: 1fr;
@@ -4341,7 +4309,6 @@
       opacity: 1;
     }
 
-    /* Five stacked full-width sliders were over 400px of the panel on their own, */
     .au-row-sliders {
       margin-top: 10px;
       display: grid;
@@ -4382,8 +4349,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    /* Their slider, rebuilt on a native range input: a 36px well with a flat fill */
-    /* A segmented level meter rather than a flat fill: an unbroken block of colour */
     .au-sl input[type=range] {
       -webkit-appearance: none;
       appearance: none;
@@ -4410,7 +4375,6 @@
       cursor: grabbing;
     }
 
-    /* A handle you can see you are meant to grab: a plain white key with an emerald */
     .au-sl input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -4467,7 +4431,6 @@
     }
 
     /* outcome half */
-    /* The outcome half is fed the same ground as the winning panel in the viral */
     .au-calc-out {
       display: flex;
       flex-direction: column;
@@ -4479,7 +4442,6 @@
         #04211A;
     }
 
-    /* The plate keeps light passages even under the scrim, same as up there. */
     .au-calc-out :where(p, span, b) {
       text-shadow: 0 1px 2px rgba(0, 20, 14, 0.45);
     }
@@ -4490,7 +4452,6 @@
       }
     }
 
-    /* No rule between the halves - the change of ground is the division, which is */
     @media (min-width:1100px) {
       .au-calc-out {
         padding: 30px 32px;
@@ -4518,7 +4479,6 @@
       align-items: flex-start;
     }
 
-    /* One slot per digit: a 1ch window with a 0-9 column sliding behind it. This is */
     .au-odo-s {
       position: relative;
       display: inline-block;
@@ -4548,7 +4508,6 @@
       line-height: 1;
     }
 
-    /* Must centre exactly as the digit slots do. As a plain inline-block its text */
     .au-odo-x {
       display: inline-flex;
       align-items: center;
@@ -4645,7 +4604,6 @@
       display: none;
     }
 
-    /* After the text, not before it - and drawn from two borders rather than set as */
     .au-row-math summary::after,
     .au-calc-how summary::after {
       content: "";
@@ -4803,7 +4761,6 @@
       transform: scale(1.045);
     }
 
-    /* the photos are busy, so the labels get their own ground rather than a shadow */
     .bn-media::after {
       content: "";
       position: absolute;
@@ -5008,7 +4965,6 @@
 
     @media (min-width:1020px) {
 
-      /* the band's figure and title sit on one line, its metrics & button at the far end */
       .bn-el .bn-body {
         flex-direction: row;
         align-items: center;
@@ -5130,7 +5086,6 @@
 
     @media (hover:none) {
 
-      /* No hover to reward on touch, so the bloom is simply present - but a permanent filter:bl... */
       .au-cta-card::before {
         opacity: 0.5;
         transform: none;
@@ -5202,7 +5157,6 @@
       z-index: 1;
       display: flex;
       justify-content: flex-end;
-      /* padding-left is the open cover's swing clearance; padding-right is what */
       padding-left: 104px;
       padding-right: 44px;
       perspective: 1700px;
@@ -5213,18 +5167,15 @@
       width: 246px;
       height: 340px;
       transform-style: preserve-3d;
-      /* Pose matched to book-mockup.png: the same ~10deg counter-clockwise lean */
       transform: rotate(-9.5deg) rotateX(4deg) rotateY(-15deg);
       transition: transform .8s cubic-bezier(.22, 1, .36, 1);
     }
 
-    /* Straightens up as it opens, and steps to the right while it does: the cover */
     .au-book:hover {
       transform: translateX(30px) rotate(-2deg) rotateX(2deg) rotateY(-5deg);
     }
 
     /* the block of pages the cover closes onto */
-    /* The recto page, set the way a real contents page is set: a running head over */
     .au-book-pages {
       position: absolute;
       inset: 0;
@@ -5318,7 +5269,6 @@
       color: rgba(46, 36, 18, 0.45);
     }
 
-    /* the leader: a dotted rule run out to the folio, lifted onto the baseline */
     .au-book-toc li i {
       flex: 1 1 auto;
       min-width: 10px;
@@ -5377,7 +5327,6 @@
       box-shadow: 0 34px 64px -26px rgba(0, 0, 0, 0.8), 0 0 60px -30px rgba(16, 185, 129, 0.5);
     }
 
-    /* the artwork is the cover; the book's ratio is set to the file's own 0.723 */
     .au-book-face img {
       position: absolute;
       inset: 0;
@@ -5387,7 +5336,6 @@
       display: block;
     }
 
-    /* the inside of the cover - what you see once it has swung past 90deg */
     .au-book-liner {
       transform: rotateY(180deg);
       border-radius: 12px 3px 3px 12px;
@@ -5417,7 +5365,6 @@
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.05));
     }
 
-    /* Stacked, the book is centred, so the cover has the whole card width to */
     @media (max-width:939px) {
       .au-cta-vis {
         justify-content: center;
@@ -5444,11 +5391,9 @@
 
     /* Thank-You View Redesign */
     .au-ty {
-      /* 80px cleared nothing back when this view hid the header outright. */
       padding: 144px 0 100px;
       background: radial-gradient(circle at 50% 15%, rgba(16, 185, 129, 0.06) 0%, transparent 65%);
       min-height: 100vh;
-      /* dvh tracks the mobile URL bar; 100vh is the *largest* viewport, which left a dead scrol... */
       min-height: 100dvh;
     }
 
@@ -6124,7 +6069,6 @@
         padding: 34px 22px;
       }
 
-      /* the book is a fixed-ratio 3D object now, so it scales rather than reflows */
       .au-book {
         width: 214px;
         height: 296px;
@@ -6135,14 +6079,12 @@
         grid-template-columns: 1fr;
       }
 
-      /* iOS Safari zooms the viewport whenever a focused control computes under 16px, and it ne... */
       .au-form-input,
       .au-row-num,
       .au-cs-trigger {
         font-size: 16px;
       }
 
-      /* The number/select controls were 34px tall; 44px is the minimum comfortable touch target... */
       .au-row-num,
       .au-cs-trigger {
         height: 44px;
@@ -6151,7 +6093,6 @@
 
     /* Reveal Motion System */
 
-    /* Word tokens. inline-block so translate/blur apply per word; the trailing */
     .bsw {
       display: inline-block;
     }
@@ -6160,7 +6101,6 @@
       opacity: 0.001;
     }
 
-    /* Block-level appear (grids, cards, forms) parked before the engine runs. */
     .bsa-pre {
       opacity: 0.001;
     }
@@ -6174,7 +6114,6 @@
       transition: none;
     }
 
-    /* tsParticles overlay: their canvas is position:absolute, pointer-events:none, */
     .bs-particles {
       position: absolute;
       left: 0;
@@ -6188,7 +6127,6 @@
       pointer-events: none;
     }
 
-    /* Hover lift. Their button: y -4px with a two-stop white rim shadow, spring */
     .au-form-btn {
       transition: background .2s ease, transform .4s cubic-bezier(.34, 1.42, .64, 1), box-shadow .4s cubic-bezier(.34, 1.42, .64, 1);
     }
@@ -6224,11 +6162,9 @@
       }
     }
 
-    /* HERO VIDEO CAROUSEL (#auHeroCarousel) =================== ONE frame to look at, with th... */
     .vc {
       /* The browser window's width. */
       --winw: clamp(280px, 62vw, 760px);
-      /* browser height x (iphone width / iphone height) = matching total heights. */
       --phonew: calc(var(--winw) * 0.30137);
       /* Corner softening for the browser frame, tracking its width. */
       --desk-r: calc(var(--winw) * 0.022);
@@ -6242,25 +6178,20 @@
       /* FIXED, and deliberately so. */
       width: calc(var(--winw) + 2 * var(--vc-peek));
       max-width: 100%;
-      /* Belt and braces against the shrink-to-fit problem noted on .hero-content-wrap: this mus... */
       min-width: 0;
       margin: 46px auto 0;
     }
 
     .vc-viewport {
       overflow: hidden;
-      /* Just enough room for a focus ring, which is 2px wide at 3px offset. */
       padding: 6px 0;
       margin: -6px 0;
-      /* CONTENT box, against the page-wide border-box rule, and this matters: the script sets t... */
       box-sizing: content-box;
       touch-action: pan-y;
-      /* Bottom anchored, so when the row is taller than the viewport it is the TOP that gets cl... */
       display: flex;
       align-items: flex-end;
       transition: height 0.5s cubic-bezier(0.22, 1, 0.28, 1);
 
-      /* Dissolves the ghosts into the page edge, so they read as the row carrying on rather tha... */
       -webkit-mask-image: linear-gradient(90deg,
           transparent 0, #000 var(--vc-fade),
           #000 calc(100% - var(--vc-fade)), transparent 100%);
@@ -6274,7 +6205,6 @@
     }
 
     /* Three states. */
-    /* The frame that lands in the centre sits forward; the two beside it sit back. */
     .vc-slide {
       transform-origin: 50% 100%;
       transition: opacity 0.45s ease, transform 0.55s cubic-bezier(0.34, 1.36, 0.52, 1);
@@ -6296,7 +6226,6 @@
       pointer-events: auto;
     }
 
-    /* A phone is much narrower than a browser window, so when the phone is the main frame its... */
     .vc.is-phone-main .vc-slide.is-near {
       opacity: 0.08;
     }
@@ -6347,7 +6276,6 @@
       position: relative;
     }
 
-    /* The mockup draws its own 10px corner, which at this scale is about 6px and reads as squ... */
     .vc-slide--desk .vframe {
       border-radius: var(--desk-r);
       overflow: hidden;
@@ -6357,31 +6285,25 @@
       display: block;
       width: 100%;
       height: auto;
-      /* Chrome, not content: the clicks belong to the video underneath it. */
       pointer-events: none;
       -webkit-user-select: none;
       user-select: none;
     }
 
-    /* The screen cutout, placed over the mockup's own blank screen. */
     .vframe-screen {
       position: absolute;
       overflow: hidden;
-      /* Black, so any letterbox from a clip whose ratio is not the screen's reads as letterbox ... */
       background: #000000;
     }
 
-    /* browser.svg: screen is 0 / 53 / 1280 / 731 inside a 1280 x 784 window. */
     .vc-slide--desk .vframe-screen {
       left: 0;
       top: 6.7602%;
       width: 100%;
       height: 93.2398%;
-      /* Matches the softened corner above, so the video's own square corners do not poke back o... */
       border-radius: 0 0 var(--desk-r) var(--desk-r);
     }
 
-    /* iphone.svg: screen is 12.47 / 9.97 / 320.02 / 680.76 inside 345 x 701. */
     .vc-slide--phone .vframe-screen {
       left: 3.61414%;
       top: 1.42284%;
@@ -6401,7 +6323,6 @@
       background: #000000;
     }
 
-    /* Up until the file can actually paint, so a frame whose video has not been uploaded yet ... */
     .vframe-idle {
       position: absolute;
       inset: 0;
@@ -6419,7 +6340,6 @@
 
     .vframe-idle span {
       font-family: var(--font-display);
-      /* Tracks the frame, so the plate does not shout inside a small phone. */
       font-size: clamp(9px, calc(var(--winw) * 0.024), 15px);
       font-weight: 700;
       letter-spacing: 0.34em;
@@ -6452,7 +6372,6 @@
       gap: 6px;
     }
 
-    /* .au-sound-btn is absolutely positioned by default, for the frame it used to live in. */
     .vframe-tools .au-sound-btn {
       position: relative;
       top: auto;
@@ -6541,7 +6460,6 @@
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s ease, opacity 0.25s ease;
     }
 
-    /* Centred in the visible sliver of the ghost frame, so each arrow sits on the frame it ta... */
     .vc-prev {
       left: calc((var(--vc-fade) - 44px) / 2);
     }
@@ -6560,7 +6478,6 @@
       transform: translateY(-50%) scale(1.06);
     }
 
-    /* The click itself, so the control answers before the row has finished moving. */
     .vc-arrow:active:not([disabled]) {
       transform: translateY(-50%) scale(0.9);
       transition-duration: 0.08s;
@@ -6627,7 +6544,6 @@
 
       /* Only the two source measurements change. */
       .vc {
-        /* The peek has to come out of the width here, or the row would be wider than the gutter a... */
         --winw: calc(88vw - 60px);
         --vc-peek: 30px;
         --vc-gap: 12px;
@@ -6637,7 +6553,6 @@
         margin-top: 30px;
       }
 
-      /* Redundant next to swipe, and they cover the footage at this size. */
       .vc-arrow {
         display: none;
       }
@@ -6646,7 +6561,6 @@
         margin-top: 16px;
       }
 
-      /* The carousel is a complete object here and needs its own breathing room, but not the de... */
       .hero-editorial {
         padding-bottom: 56px;
       }
@@ -6665,7 +6579,6 @@
         transition: none;
       }
 
-      /* No entrance and no pop: the row is simply there, at full strength. */
       .vc.vc-anim .vframe {
         opacity: 1;
         transform: none;
@@ -6684,7 +6597,6 @@
       }
     }
 
-    /* Proximity side navigation (rareui.com/components/proximitysidebar) A dash-only minimap:... */
     .side-nav {
       position: fixed;
       right: 22px;
@@ -6707,7 +6619,6 @@
       display: none !important;
     }
 
-    /* Own the box: a global nav rule was contributing 16px/24px here, which pushed the rail 2... */
     .side-nav {
       padding: 14px 16px;
     }
@@ -6719,7 +6630,6 @@
       gap: 8px;
     }
 
-    /* The button is the full 110px track and only 1px tall, so the hit area comes from paddin... */
     .side-nav-item {
       display: flex;
       align-items: center;
@@ -6745,7 +6655,6 @@
       transition: background-color 0.15s ease-out;
     }
 
-    /* Weight by length and colour, not by stroke: titles and subtitles carry the full ink, th... */
     .side-nav-item[data-kind="title"] .side-nav-dash,
     .side-nav-item[data-kind="subtitle"] .side-nav-dash {
       background-color: rgba(15, 23, 42, 0.5);
@@ -6756,7 +6665,6 @@
       background-color: rgba(100, 116, 139, 0.28);
     }
 
-    /* Pointer inside the rail lifts the whole stack a little - the marks only need to assert ... */
     .side-nav:hover .side-nav-item[data-kind="title"] .side-nav-dash,
     .side-nav:hover .side-nav-item[data-kind="subtitle"] .side-nav-dash {
       background-color: rgba(15, 23, 42, 0.72);
@@ -6767,8 +6675,6 @@
       background-color: rgba(100, 116, 139, 0.45);
     }
 
-    /* Kept from the previous rail: the section you are in is worth marking in brand colour, n... */
-    /* Active stays 1px like every other mark - the reference varies weight by length and colo... */
     .side-nav-item.active .side-nav-dash {
       background-color: #059669;
     }
@@ -6843,7 +6749,6 @@
       height: 20px;
     }
 
-    /* Clear of the desktop rail, which occupies right:22px at the vertical centre. */
     @media (min-width: 901px) {
       .scroll-to-top-btn {
         right: 74px;
@@ -6865,7 +6770,6 @@
       }
     }
 
-    /* Modern Seamless Footer ---------- Restored: the footer markup survived the single-view ... */
     footer {
       padding: 28px 0 40px;
       background: var(--bg);
@@ -6938,7 +6842,6 @@
       }
     }
 
-    /* TOUCH TARGETS ==================================== Everything tappable reaches the 44px... */
     @media (pointer:coarse) {
 
       /* 1. elements that can simply grow */
@@ -6963,7 +6866,6 @@
         padding: 12px 4px;
       }
 
-      /* Also here rather than only under max-width:600px - iPads have a coarse pointer and the ... */
       .au-form-input,
       .au-row-num,
       .au-cs-trigger {
@@ -6996,7 +6898,6 @@
         padding-right: 16px;
       }
 
-      /* Inline text links: inline-flex + min-height gives them a real box without disturbing th... */
       .au-pb-link {
         min-height: 44px;
       }
@@ -7007,7 +6908,6 @@
         min-height: 44px;
       }
 
-      /* The logo link grows to 44px while the wordmark itself stays 30px, so the header bar hei... */
       .logo {
         display: inline-flex;
         align-items: center;
@@ -7029,7 +6929,6 @@
         height: 40px;
       }
 
-      /* Calendar days fill their already-square cell rather than sitting 36px inside it, and th... */
       .au-cal-day-cell {
         min-width: 44px;
         min-height: 44px;
@@ -7063,10 +6962,8 @@
       }
     }
 
-    /* MOBILE DENSITY ========================================= The page ran to 17.4 screens o... */
     @media (max-width:700px) {
 
-      /* #2 - the bottleneck section closed with 64px of padding and the proof spotlight opened ... */
       #auProblem {
         padding-bottom: 30px;
       }
@@ -7075,20 +6972,17 @@
         padding-top: 4px;
       }
 
-      /* #3 - the notes are rotated, and rotation inflates each one's bounding box by ~10px per ... */
       .au-sticky-stack {
         width: 84%;
         margin-left: auto;
         margin-right: auto;
       }
 
-      /* Narrower notes rewrap the text taller, and the longest quote (364 chars) then ran 23px ... */
       .au-sticky-text {
         font-size: 18px;
         line-height: 1.42;
       }
 
-      /* #5 - three steps at 512px each meant 3-4 swipes to read them. */
       .au-norma-card-visual {
         min-height: 0;
         padding: 16px 16px;
@@ -7103,7 +6997,6 @@
         padding-bottom: 44px;
       }
 
-      /* #7 - the playbook cover was 296px of very dark, low-contrast artwork at the bottom of a... */
       .au-cta-vis {
         padding-top: 6px;
       }
@@ -7114,7 +7007,6 @@
       }
     }
 
-    /* #6 LIVE ROI READOUT (mobile) ============================ Stacked, the inputs panel is ... */
     .au-roi-peek {
       position: fixed;
       left: 12px;
@@ -7177,7 +7069,6 @@
       max-width: 38%;
     }
 
-    /* Desktop shows both panels side by side, so it never needs this. */
     @media (min-width:901px) {
       .au-roi-peek {
         display: none;
@@ -7204,7 +7095,6 @@
       }
     }
 
-    /* While the platform player owns the video, the page's own chrome must not float above it. */
     body.au-fs-active .scroll-to-top-btn,
     body.au-fs-active .au-roi-peek,
     body.au-fs-active header {
@@ -7214,7 +7104,6 @@
     /* MOBILE REFINEMENTS (round 2) */
     @media (max-width:700px) {
 
-      /* #2 - the carousel closed with 40px and the reality-check section opened with 64px, so 1... */
       .au-trust {
         padding-bottom: 18px;
       }
@@ -7223,7 +7112,6 @@
         padding-top: 28px;
       }
 
-      /* #3 - the three metric cards repeat figures the headline already makes, and cost 284px t... */
       .au-pb-stack {
         display: none;
       }
@@ -7246,7 +7134,6 @@
         height: 16px;
       }
 
-      /* #5 - the playbook leads on mobile: the artifact first, then the pitch, then the field. */
       .au-cta-card {
         gap: 26px;
         padding: 34px 22px 30px;
@@ -7266,7 +7153,6 @@
         margin-bottom: -124px;
       }
 
-      /* The cover swings rotateY(-116deg) about its left edge, and perspective projects it abou... */
       .au-book:hover {
         transform: translateX(44px) scale(0.634) rotateY(-10deg);
       }
@@ -7334,9 +7220,7 @@
     }
 
     /* Hero mobile sizing (content-v2). */
-    /* The note sits inside the hero's green-to-white dissolve, so a flat colour is unreadable... */
     /* Plain text, no chip. */
-    /* Measured over HTTP with the hero shader live, this note sits on the pale end of the dis... */
     .au-form-hero .au-form-note {
       color: #07422F;
       font-weight: 600;
@@ -7362,8 +7246,6 @@
       margin-top: 34px;
     }
 
-    /* EXPERIMENT: wireframe hero ============================== Headline band, a full-bleed h... */
-    /* Aligns the lower band's left edge to the same inset as .hero-content-wrap (max-width 12... */
     .hero-wf-rule,
     .hero-wf-lower {
       --wf-inset: max(24px, calc((100% - 1200px) / 2 + 24px));
@@ -7378,8 +7260,6 @@
       background: rgba(15, 23, 42, 0.12);
     }
 
-    /* .hero-editorial is a centred flex column, so without width:100% this shrink-to-fits and... */
-    /* Same track as the nav: header nav is max-width var(--container) with 24px padding, so m... */
     .hero-wf-lower {
       width: 100%;
       box-sizing: border-box;
@@ -7403,7 +7283,6 @@
       line-height: 1.6;
       color: var(--ink-dim);
       margin-bottom: 14px;
-      /* The base rule carries a shadow for white type on the emerald. */
       text-shadow: none;
     }
 
@@ -7425,14 +7304,12 @@
       box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.14);
     }
 
-    /* EXPERIMENT: wireframe hero ============================== Headline band, a full-bleed h... */
     .hero-wf-rule,
     .hero-wf-lower {
       position: relative;
       z-index: 2;
     }
 
-    /* EXPERIMENT: wireframe hero ============================== Headline band, a full-bleed h... */
     .hero-editorial {
       min-height: 100vh;
       box-sizing: border-box;
@@ -7836,11 +7713,6 @@
     /* /EXPERIMENT */
 
     /* Hero funnel figures */
-    /* Five numbers on one baseline, divided by hairlines. Deliberately no card, */
-    /* no per-node boxes, no step chips and no arrows: the row already reads left */
-    /* to right, and every one of those was decoration competing with the figures. */
-    /* These sit on white, below where the emerald dissolves out, so the band can */
-    /* stay short and the figures read as their own section rather than the tail */
     /* of the paragraph above. */
     .au-hero-chain {
       position: relative;
@@ -7864,8 +7736,6 @@
       background: var(--line);
     }
 
-    /* Owns the gap above the rule, so the break is one number, not two margins. */
-    /* heroBandGeometry() sets --hero-chain-gap from the measured dissolve, so the dark figure... */
     .au-hero-chain-wrap {
       position: relative;
       z-index: 2;
@@ -7881,7 +7751,6 @@
       padding: 0 12px;
     }
 
-    /* Hairline between figures, inset from the baseline so it never touches type. */
     .au-chain-node+.au-chain-node::before {
       content: "";
       position: absolute;
@@ -8003,6 +7872,7 @@
       font-style: italic;
       color: var(--brand-emerald-deep);
       padding-right: 2px;
+      white-space: nowrap;
     }
 
     .au-video-head-sub {
@@ -8014,7 +7884,6 @@
       margin: 0 auto;
     }
 
-    /* Five across becomes a 2x3 grid on narrow screens, with the outcome given */
     /* the full last row. Row hairlines replace the column ones. */
     @media (max-width:820px) {
       .au-hero-chain {
@@ -8069,8 +7938,6 @@
     }
 
     /* content-v3: how-it-works kicker + closing body line */
-    /* .au-norma-how .au-head is left-aligned, so these must not centre */
-    /* themselves with `margin:0 auto` or they drift off the headline's edge. */
     .au-how-kicker {
       max-width: 620px;
       margin: 18px 0 0;
@@ -8079,8 +7946,6 @@
       color: var(--ink-dim);
     }
 
-    /* A lone sentence floating under the three cards read as leftover text, so */
-    /* it now sits in a contained strip that spans the grid it belongs to. */
     .au-how-body {
       position: relative;
       margin: 34px 0 0;
@@ -8107,8 +7972,6 @@
     }
 
     /* content-v3: before/after kicker line above H2 */
-    /* .au-math .au-head is left-aligned by design, so this must not centre */
-    /* itself with `margin:0 auto` or it floats away from the headline. */
     .au-before-after-kicker {
       max-width: 600px;
       margin: 0 0 16px;
@@ -8117,7 +7980,6 @@
       color: var(--ink-dim);
     }
 
-    /* The CTA belongs under the pair, not crowded against the last outcome. */
     .au-math-cta {
       display: flex;
       justify-content: center;
@@ -8603,8 +8465,6 @@
     }
 
     /* content-v3: shared prose column */
-    /* Centred by default so it sits with the centred heading, quote and callout */
-    /* around it. Only the long five-paragraph block opts into a left-aligned */
     /* reading column, where a ragged right edge genuinely helps. */
     .au-story-body {
       max-width: 58ch;
@@ -8639,9 +8499,6 @@
     }
 
     /* content-v3: editorial two-column prose sections */
-    /* Stacked centre-aligned eyebrow / headline / quote / paragraphs / callout */
-    /* reads like a blog post. Anchoring the headline in its own column and */
-    /* setting the argument beside it turns each one back into a designed */
     /* statement, and matches the asymmetry .au-math already uses. */
     .au-outperform,
     .au-leadsource {
@@ -8652,7 +8509,6 @@
       padding: 40px 0;
     }
 
-    /* These sections were built desktop-first with no phone override, so two of them meeting ... */
     @media (max-width:768px) {
 
       .au-outperform,
@@ -8696,7 +8552,6 @@
 
     @media (min-width:900px) {
 
-      /* Holds the headline in view while the argument beside it scrolls past. */
       .au-editorial-head {
         position: sticky;
         top: 120px;
@@ -8723,8 +8578,6 @@
       font-weight: 600;
     }
 
-    /* Lead statement: the sentence the section is really about. Scoped under */
-    /* .au-editorial-body so it outranks the `.au-editorial-body p` size above. */
     .au-editorial .au-editorial-lead {
       font-family: "Instrument Serif", Georgia, serif;
       font-size: clamp(25px, 2.5vw, 33px);
@@ -8742,7 +8595,6 @@
       color: var(--brand-emerald-deep);
     }
 
-    /* Closing note: a hairline rule instead of a filled card, so it reads as an */
     /* aside rather than another block competing with the section. */
     /* Scoped like the lead above, for the same specificity reason. */
     .au-editorial .au-editorial-note {
@@ -8756,8 +8608,6 @@
       color: var(--ink);
     }
 
-    /* The Sify tail sits under a stat row rather than opening a section, so its */
-    /* lead is a touch quieter and the block carries its own top rule. */
     .au-editorial.is-tail {
       margin-top: 52px;
       padding-top: 44px;
@@ -8769,7 +8619,6 @@
       margin: 0;
     }
 
-    /* Pull-quote: deliberately a different voice from the H2 (serif italic, */
     /* emerald) so the two never read as competing headlines. */
     .au-pb-quote {
       max-width: 760px;
@@ -8790,13 +8639,11 @@
       font-size: clamp(24px, 3vw, 34px);
     }
 
-    /* This quote sits on the white .au-pb-frame, not on the dark plate, so it */
     /* keeps the dark emerald. */
     .au-interstitial .au-pb-quote {
       margin: 30px auto 0;
     }
 
-    /* Swapped with the form lead below: the funnel figures are restated here as plain fact, a... */
     .au-interstitial .au-pb-quote {
       font-family: var(--font-body), system-ui, sans-serif;
       font-style: normal;
@@ -8808,12 +8655,10 @@
       max-width: 820px;
     }
 
-    /* Red Hat campaign photos: stacked at rest, fanned on hover ---- Three cards on one centr... */
     .au-rh-fan {
       --shot-w: min(272px, 30vw);
       /* Roughly 8:7. */
       --shot-h: calc(var(--shot-w) * 0.88);
-      /* A full card width plus a gap, so the fanned row does not overlap. */
       --spread: calc(var(--shot-w) + 16px);
       position: relative;
       height: calc(var(--shot-h) + 46px);
@@ -8840,7 +8685,6 @@
       will-change: transform;
     }
 
-    /* The photo covers the placeholder rather than replacing it in the markup. */
     .au-rh-shot img {
       position: absolute;
       inset: 0;
@@ -8861,7 +8705,6 @@
       opacity: 0.75;
     }
 
-    /* At rest: a pile. Centre card sits forward, the other two tilt out behind. */
     .au-rh-shot--1 {
       transform: translate(-50%, -50%) translateX(-24px) rotate(-7deg);
     }
@@ -8896,7 +8739,6 @@
       box-shadow: 0 22px 40px -22px rgba(15, 23, 42, 0.34);
     }
 
-    /* A phone has no hover, so a pile that only opens on hover would never open. */
     @media (hover: none),
     (max-width:700px) {
       .au-rh-fan {
@@ -8928,8 +8770,6 @@
       }
     }
 
-    /* Red Hat funnel: four rows stepping down to the registrations figure. */
-    /* Replaced a ring-badge stack that could not hold a six-digit number. */
     .au-pb-funnel {
       list-style: none;
       margin: 0;
@@ -9009,8 +8849,6 @@
     }
 
     /* content-v3: FAQ */
-    /* Same two-column editorial frame as the prose sections: the heading holds */
-    /* the left column, the questions stack on the right as hairline-divided rows */
     /* rather than nine separate boxes. */
     .au-faq {
       padding: 80px 0;
@@ -9068,7 +8906,6 @@
       display: none;
     }
 
-    /* Plus that becomes a minus: one rule rotates, the other stays put. */
     .au-faq-item summary::before,
     .au-faq-item summary::after {
       content: "";
@@ -9117,7 +8954,6 @@
     }
 
     /* content-v3: commercials */
-    /* Commercials reads as one short statement, not a section, so it is set as a horizontal b... */
     .au-comm-banner {
       display: grid;
       grid-template-columns: 1fr;
@@ -9153,7 +8989,6 @@
         padding: 38px 44px;
       }
 
-      /* The hairline is the only thing separating the two halves, in the same language the hero... */
       .au-comm-p {
         padding-left: 48px;
         margin-left: -48px;
@@ -9162,8 +8997,6 @@
     }
 
     /* content-v3: Red Hat CTA form */
-    /* This form sits on the white .au-pb-frame below the dark plate, so its */
-    /* label and note are dark, not the inverted treatment used inside the plate. */
     .au-form-pb {
       margin: 26px auto 4px;
       max-width: 820px;
@@ -9349,8 +9182,6 @@
       color: rgba(255, 255, 255, 0.5);
     }
 
-    /* .au-form-input is borderless by design (it lives inside .au-form-bar), so */
-    /* the standalone fields here get their own box, inverted for the dark plate. */
     .au-sim-field .au-form-input {
       width: 100%;
       padding: 13px 15px;
@@ -9381,7 +9212,6 @@
       box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18);
     }
 
-    /* .au-form-btn is inline-flex, so it needs to become a block-level flex box */
     /* before it will stretch to the form width. */
     .au-sim-submit {
       display: flex;
@@ -9408,8 +9238,6 @@
     <nav>
       <a href="#top" class="logo" aria-label="Wozku Home">
         <img src="/wozku_logo-black.svg" alt="Wozku" class="logo-img">
-        <!-- Swapped in for the logo only on the thank-you view: a browsing mark -->
-        <!-- reads oddly next to a confirmation message, a status mark does not. -->
         <span class="logo-check" aria-hidden="true">
           <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
             stroke-linejoin="round">
@@ -9417,7 +9245,6 @@
           </svg>
         </span>
       </a>
-      <!-- Nav links intentionally empty for now. Drop <a> tags back in here and the -->
       <div class="nav-links"></div>
       <div class="nav-cta">
         <a href="#auAsk" class="nav-text-link" id="navAskGptBtn" aria-label="Ask your GPT">
@@ -9427,8 +9254,6 @@
           <span class="nav-gpt-text">Ask your GPT</span>
         </a>
         <a href="#roi" class="btn btn-primary btn-small">Calculate ROI</a>
-        <!-- 'Get playbook' makes no sense once it has already been sent, so the -->
-        <!-- thank-you view shows this instead and hides the anchor above. -->
         <button type="button" class="btn btn-primary btn-small nav-back-btn" id="navBackBtn">Go back</button>
       </div>
       <button class="nav-toggle" aria-label="Menu">
@@ -9489,23 +9314,17 @@
 
       <!-- Hero Section -->
       <section class="hero-editorial" id="hero">
-        <!-- Gradient Mesh Background (recoloured to brand emerald in CSS). -->
         <div class="hero-mesh-bg"></div>
 
-        <!-- Live emerald flow field. Hand-written WebGL - no three.js/ogl - so it -->
         <canvas class="hero-fx" id="auHeroFx" aria-hidden="true"></canvas>
 
-        <!-- Soft Overlay Mask for text contrast and seamless bottom fade -->
         <div class="hero-overlay-mask"></div>
 
-        <!-- Drifting motes. Same config as the tsParticles overlay on their hero: -->
         <canvas class="bs-particles" id="auHeroParticles" aria-hidden="true"></canvas>
 
-        <!-- Dissolve into the page: sub-headline -> top of the video card. -->
         <div class="hero-fade" aria-hidden="true"></div>
 
         <!-- Hero Typography Content -->
-        <!-- Wireframe layout: headline band, a full-bleed hairline, then two columns unde... -->
         <div class="hero-content-wrap is-wf">
           <div class="hero-wf-head">
             <div class="hero-wf-head-copy">
@@ -9519,7 +9338,6 @@
           </div>
         </div>
 
-        <!-- Edge-to-edge rule. Sits where the emerald has finished dissolving. -->
         <div class="hero-wf-rule" id="auHeroRule" aria-hidden="true"></div>
 
         <div class="hero-wf-lower">
@@ -9654,13 +9472,12 @@
         </div>
 
         <div class="hero-content-wrap">
-          <!-- Video Showcase Header Section (introduces the live event video carousel) -->
           <div class="au-hero-video-header" id="auHeroVideoHeader">
             <span class="au-tag">
               <span class="au-live-dot"></span>
               Live Event Footage
             </span>
-            <h2 class="au-video-head-title is-plain"><strong>See how brands are using Wozku at</strong> <em>live events.</em></h2>
+            <h2 class="au-video-head-title is-plain"><strong>See how brands are using Wozku at</strong><br><em>live events.</em></h2>
             <p class="au-video-head-sub">Attendees scan, tap once, and share pre-written posts from their own LinkedIn.
               Watch real footage recorded on the exhibition floor.</p>
           </div>
@@ -9888,9 +9705,6 @@
       </section>
 
       <!-- THE REALITY CHECK (agitation) -->
-      <!-- BEFORE / AFTER (repurposed from the old "viral calculus" math section: -->
-      <!-- same old-way/new-way card pattern, now carrying the doc's before/after -->
-      <!-- argument instead of the ROI-ceiling framing it used to make.) -->
       <section class="au-section au-math" id="auMath">
         <div class="wrap">
           <div class="au-head reveal">
@@ -9906,7 +9720,6 @@
               <div class="au-compare-layer is-after">
                 <div class="au-compare-grid">
 
-                  <!-- Left Context Column (Revealed when slider moves left) -->
                   <div class="au-c-col is-after-context">
                     <div class="au-stage-wrap">
                       <div class="au-context-card">
@@ -9917,7 +9730,6 @@
                     </div>
                   </div>
 
-                  <!-- Right Main Column (With Wozku: Checklist transitioning to Stats Box) -->
                   <div class="au-c-col is-after-main">
                     <div class="au-mcard-top">
                       <span class="au-mkicker is-with">With Wozku</span>
@@ -9981,7 +9793,6 @@
                         </li>
                       </ul>
 
-                      <!-- View B: Stats Box (Transitions in when slider is on extreme left) -->
                       <div class="au-stage-stats au-wozku-stats-card">
                         <div class="au-stats-card-head">
                           <span class="au-stats-badge">Live Campaign Outcomes</span>
@@ -10015,13 +9826,11 @@
               <div class="au-compare-layer is-before">
                 <div class="au-compare-grid">
 
-                  <!-- Left Main Column (Without Wozku: Checklist transitioning to Dead-end stats) -->
                   <div class="au-c-col is-before-main">
                     <div class="au-mcard-top">
                       <span class="au-mkicker is-without">Without Wozku</span>
                     </div>
 
-                    <!-- Dynamic Content Stage: Deadend Checklist OR Reality Stats Box -->
                     <div class="au-stage-wrap">
                       <!-- View A: Deadend Checklist (Default 50% state) -->
                       <ul class="au-mfeatures au-mfeatures-simple au-stage-list">
@@ -10041,7 +9850,6 @@
                         </li>
                       </ul>
 
-                      <!-- View B: Reality Stats Box (Transitions in when slider is on extreme right) -->
                       <div class="au-stage-stats au-old-stats-card">
                         <div class="au-stats-card-head">
                           <span class="au-stats-badge is-dead">The Old Reality</span>
@@ -10069,7 +9877,6 @@
 
                   </div>
 
-                  <!-- Right Context Column (Revealed when slider moves right) -->
                   <div class="au-c-col is-before-context">
                     <div class="au-stage-wrap">
                       <div class="au-context-card is-dead-context">
@@ -10112,7 +9919,6 @@
       </section>
 
       <section class="au-section au-norma-how" id="auHow">
-        <!-- Ambient Luminous Green Beam Flare (backgrounds.supply style) -->
         <div class="au-how-beam-glow" aria-hidden="true">
           <div class="au-how-beam-ambient"></div>
           <div class="au-how-beam-ray"></div>
@@ -10140,7 +9946,7 @@
               </div>
               <div class="au-norma-card-visual">
                 <div class="au-norma-img-box">
-                  <img src="/step 1.png" alt="Attendees scan the QR code on the booth screen"
+                  <img src="/step 1.webp" alt="Attendees scan the QR code on the booth screen"
                     class="au-norma-step-img au-norma-step-img--1" loading="lazy" decoding="async">
                 </div>
               </div>
@@ -10156,7 +9962,7 @@
               </div>
               <div class="au-norma-card-visual">
                 <div class="au-norma-img-box">
-                  <img src="/step 2.png" alt="Pre-written, branded post ready for one-tap sharing to LinkedIn"
+                  <img src="/step 2.webp" alt="Pre-written, branded post ready for one-tap sharing to LinkedIn"
                     class="au-norma-step-img au-norma-step-img--2" loading="lazy" decoding="async">
                 </div>
               </div>
@@ -10172,7 +9978,7 @@
               </div>
               <div class="au-norma-card-visual">
                 <div class="au-norma-img-box">
-                  <img src="/step 3.jpg" alt="Live leaderboard with instant points and reward verification"
+                  <img src="/step 3.webp" alt="Live leaderboard with instant points and reward verification"
                     class="au-norma-step-img au-norma-step-img--3" loading="lazy" decoding="async">
                 </div>
               </div>
@@ -10203,12 +10009,12 @@
                   <div class="au-story-media">
                     <div class="au-thumb-fan" role="button" tabindex="0" aria-label="View Elastic campaign visuals" data-gallery="elastic">
                       <!-- Card 1 (Back) -->
-                      <figure class="au-thumb-shot au-thumb-shot--1" data-src="/elastic 1.png" data-title="Elastic Event Campaign · Snapshot 1">
-                        <img src="/elastic 1.png" alt="Elastic campaign snapshot 1" loading="lazy" />
+                      <figure class="au-thumb-shot au-thumb-shot--1" data-src="/elastic 1.webp" data-title="Elastic Event Campaign · Snapshot 1">
+                        <img src="/elastic 1.webp" alt="Elastic campaign snapshot 1" loading="lazy" />
                       </figure>
                       <!-- Card 2 (Front) -->
-                      <figure class="au-thumb-shot au-thumb-shot--2" data-src="/elastic 2.png" data-title="Elastic Event Campaign · Snapshot 2">
-                        <img src="/elastic 2.png" alt="Elastic campaign snapshot 2" loading="lazy" />
+                      <figure class="au-thumb-shot au-thumb-shot--2" data-src="/elastic 2.webp" data-title="Elastic Event Campaign · Snapshot 2">
+                        <img src="/elastic 2.webp" alt="Elastic campaign snapshot 2" loading="lazy" />
                         <span class="au-thumb-zoom-icon" aria-hidden="true">
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
                         </span>
@@ -10246,12 +10052,12 @@
                   <div class="au-story-media">
                     <div class="au-thumb-fan" role="button" tabindex="0" aria-label="View Sify campaign visuals" data-gallery="sify">
                       <!-- Card 1 (Back) -->
-                      <figure class="au-thumb-shot au-thumb-shot--1" data-src="/sify 1.png" data-title="Sify Gartner Campaign · Snapshot 1">
-                        <img src="/sify 1.png" alt="Sify campaign snapshot 1" loading="lazy" />
+                      <figure class="au-thumb-shot au-thumb-shot--1" data-src="/sify 1.webp" data-title="Sify Gartner Campaign · Snapshot 1">
+                        <img src="/sify 1.webp" alt="Sify campaign snapshot 1" loading="lazy" />
                       </figure>
                       <!-- Card 2 (Front) -->
-                      <figure class="au-thumb-shot au-thumb-shot--2" data-src="/sify 2.png" data-title="Sify Gartner Campaign · Snapshot 2">
-                        <img src="/sify 2.png" alt="Sify campaign snapshot 2" loading="lazy" />
+                      <figure class="au-thumb-shot au-thumb-shot--2" data-src="/sify 2.webp" data-title="Sify Gartner Campaign · Snapshot 2">
+                        <img src="/sify 2.webp" alt="Sify campaign snapshot 2" loading="lazy" />
                         <span class="au-thumb-zoom-icon" aria-hidden="true">
                           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
                         </span>
@@ -10302,14 +10108,9 @@
 
       <!-- PROOF SPOTLIGHT (Multi-Testimonial Sticky Pad) -->
 
-
-      <!-- BEFORE / AFTER (repurposed from the old "viral calculus" math section: -->
-      <!-- same old-way/new-way card pattern, now carrying the doc's before/after -->
-      <!-- argument instead of the ROI-ceiling framing it used to make.) -->
       <!-- PROOF INTERSTITIAL 2 (Red Hat) -->
       <section class="au-section au-interstitial" id="auProofBanner">
         <div class="wrap">
-          <!-- One compact plate inside a white frame. The claim is set flush left and -->
           <div class="au-pb-frame reveal">
             <article class="au-pb">
 
@@ -10333,8 +10134,6 @@
                 </a>
               </div>
 
-              <!-- The funnel, exactly as it ran. Four figures that step down to the -->
-              <!-- registrations, so the last row is the one that carries the claim. -->
               <ol class="au-pb-funnel">
                 <li>
                   <b>499</b>
@@ -10356,26 +10155,25 @@
 
             </article>
 
-            <!-- Campaign photos. Stacked at rest, fanned into a row on hover. -->
             <div class="au-rh-fan reveal" id="auRhFan" tabindex="0"
               aria-label="Red Hat campaign photos. Hover or focus to fan out.">
               <!-- 3: Left card -->
               <figure class="au-rh-shot au-rh-shot--1">
-                <img src="/redhat-3.png"
+                <img src="/redhat-3.webp"
                   alt="Delegates at the Red Hat Enterprise Linux 10 stand, sharing to LinkedIn from the QR code"
                   loading="lazy" decoding="async">
                 <span class="au-rh-ph">Red Hat 3</span>
               </figure>
               <!-- 1: Centre card -->
               <figure class="au-rh-shot au-rh-shot--2">
-                <img src="/redhat-1.png"
+                <img src="/redhat-1.webp"
                   alt="Attendees at the Red Hat and Intel booth, scanning the Scan Share and Win QR code on the leaderboard screen"
                   loading="lazy" decoding="async">
                 <span class="au-rh-ph">Red Hat 1</span>
               </figure>
               <!-- 2: Right card -->
               <figure class="au-rh-shot au-rh-shot--3">
-                <img src="/redhat-2.png"
+                <img src="/redhat-2.webp"
                   alt="A crowd around the Red Hat and Intel booth screen during the Social Champs contest"
                   loading="lazy" decoding="async">
                 <span class="au-rh-ph">Red Hat 2</span>
@@ -10538,9 +10336,6 @@
           </div>
       </section>
 
-      <!-- DEDICATED SIMULATION. A grey box under the calculator read as an -->
-      <!-- afterthought, so this is its own dark band: the offer stated on the left, -->
-      <!-- the fields on the right, styled like the rest of the proof plates. -->
       <section class="au-section au-simband" id="auSimBand">
         <div class="wrap">
           <div class="au-simband-plate reveal">
@@ -10597,8 +10392,6 @@
 
       <section class="au-section au-ask" id="auAsk">
         <div class="wrap">
-          <!-- Copy on the left, the prompt itself on the right, so the card reads -->
-          <!-- as the artefact you take away rather than a block of body text. -->
           <div class="au-ask-grid reveal">
             <div class="au-ask-copy">
               <span class="au-tag">Don't take our word for it</span>
@@ -10641,7 +10434,6 @@
                 </button>
               </div>
 
-              <!-- IDE Code Body with JetBrains Mono Syntax Highlighting & Line Numbers Gutter -->
               <div class="au-ide-body">
                 <div class="au-ide-gutter" aria-hidden="true" id="auIdeGutter">
                   <span>1</span>
@@ -10673,7 +10465,6 @@
 
       <!-- ASK YOUR AI -->
 
-      <!-- FAQ: merged from the doc's two FAQ blocks (Section 8 + Section 12) -->
       <section class="au-section au-faq" id="auFaq">
         <div class="wrap">
           <div class="au-editorial au-faq-grid reveal">
@@ -10939,7 +10730,6 @@
                 </div>
               </div>
 
-              <!-- Right Sub-column: Time Slot Selector with AM/PM Switch -->
               <div class="au-cal-time-col">
                 <div class="au-cal-time-head">
                   <div class="au-cal-time-title-row">
@@ -10998,7 +10788,6 @@
 
   </main>
 
-  <!-- ================= MODERN 4-COLUMN FOOTER ================= -->
   <footer>
     <div class="wrap">
       <div class="footer-inner">
@@ -11018,7 +10807,6 @@
     </div>
   </footer>
 
-  <!-- ================= SCROLL TO TOP FLOATING CIRCULAR BUTTON ================= -->
   <button type="button" class="scroll-to-top-btn" id="scrollToTopBtn" aria-label="Scroll to top" title="Scroll to top">
     <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
       stroke-linejoin="round" class="stt-icon" aria-hidden="true">
@@ -11059,9 +10847,6 @@
       });
     }
 
-
-
-    // Initialize Before/After Comparison Split Slider with Snapping Engine
     (function initCompareSlider() {
       const container = document.getElementById('auCompareContainer');
       const handleBtn = document.getElementById('auCompareHandleBtn');
@@ -11136,10 +10921,6 @@
         container.classList.remove('is-dragging');
         try { handleBtn.releasePointerCapture(e.pointerId); } catch (_) { }
 
-        // Snapping physics:
-        // If dragged < 40%, snap to 0% (extreme left - reveal With Wozku & its stats)
-        // If dragged > 60%, snap to 100% (extreme right - reveal Without Wozku & its reality stats)
-        // If within 40% - 60%, snap back to 50% (center)
         if (currentPct < 40) {
           animateTo(0, 380);
         } else if (currentPct > 60) {
@@ -11206,9 +10987,6 @@
         }
       });
 
-      // Its own visibility gate, independent of the desktop-only proximity rail.
-      // Reads scrollY and nothing else, so it forces no layout, and coalesces to
-      // one class write per frame.
       let sttPending = false;
       let sttShown = false;
       const sttSync = () => {
@@ -11287,10 +11065,6 @@
       window.addEventListener('resize', updateLines, { passive: true });
     })();
 
-    // 6B. LIVE ROI READOUT (mobile). The results panel sits below a 945px input
-    // panel once the calculator stacks, so dragging a slider changes numbers that
-    // are off screen. This mirrors the headline figures into a pinned bar that is
-    // only up while the inputs are visible.
     (function roiPeek() {
       const side = document.querySelector('.au-calc-side');
       const out = document.querySelector('.au-calc-out');
@@ -11321,8 +11095,6 @@
         document.body.classList.toggle('au-roi-peek-on', on);
       };
 
-      // Up while the inputs are on screen, down once the real output is reached so
-      // the two are never showing the same number at the same time.
       if ('IntersectionObserver' in window) {
         let inputsVisible = false, outputVisible = false;
         const sync = () => show(inputsVisible && !outputVisible);
@@ -11332,8 +11104,6 @@
           { rootMargin: '0px 0px -35% 0px' }).observe(out);
       }
 
-      // The calculator writes #auOutSaveSr and #auOutMult on every recalc; mirroring
-      // those keeps this in step without duplicating any of the maths.
       const src = document.getElementById('auOutSaveSr');
       const mult = document.getElementById('auOutMult');
       const valEl = document.getElementById('auRoiPeekVal');
@@ -11369,16 +11139,6 @@
     }
     applyNavTargets();
 
-    // 2C. HERO VIDEO CAROUSEL. Five frames in one row, ONE on screen at a time:
-    // three browser windows and two phones, landing on the middle one. Replaced the
-    // scroll-driven laptop rig, which now lives in laptop-parallax-kit.zip for reuse.
-    // Two rules matter here:
-    // The row is positioned in PIXELS, by measuring the active slide and
-    // centring it. Slides are deliberately different widths (a phone is not a
-    // window), so the usual translateX(-index * 100%) does not apply.
-    // Exactly one video is ever armed and ever playing: the one you are looking
-    // at. So arriving on the page costs one video, not five, and moving through
-    // the row fetches them one at a time as they are asked for.
     (function videoCarousel() {
       const root = document.getElementById('auHeroCarousel');
       const track = document.getElementById('auVcTrack');
@@ -11395,34 +11155,23 @@
       const videoOf = (slide) => slide.querySelector('.vframe-video');
       const frameOf = (slide) => slide.querySelector('.vframe');
 
-      // Opts the row into the entrance animation. Purely a script-is-alive signal:
-      // the frames are visible by default so a dead script cannot blank the hero.
       root.classList.add('vc-anim');
 
       // Start on the centre frame, which is the desktop main.
       let index = Math.floor(slides.length / 2);
       let onScreen = true;
-      // The resting offset of the row, in px. Drag works relative to it.
       let base = 0;
 
-      // lazy source attachment
-      // Idempotent: re-arming a video that already has its src is a no-op, so a
-      // frame revisited ten times still only ever kicks off one download.
       function arm(video) {
         if (!video || video.dataset.armed === '1') return;
         const src = video.dataset.src;
         if (!src) return;
         video.dataset.armed = '1';
-        // The poster is attached here rather than in the markup: a poster in the
-        // markup is fetched eagerly, which would pull five images on page load for
-        // frames nobody has looked at. The idle plate covers the gap until then.
         if (video.dataset.poster) video.poster = video.dataset.poster;
         video.src = src;
         video.load();
       }
 
-      // The idle plate stays up until the file can actually paint, so a frame whose
-      // video is missing reads as deliberate rather than broken.
       slides.forEach((slide) => {
         const video = videoOf(slide);
         const frame = frameOf(slide);
@@ -11433,10 +11182,6 @@
         video.addEventListener('error', () => frame.classList.remove('is-playing'));
       });
 
-      // playback
-      // Only the frame on screen is armed and playing. Everything else is paused
-      // and re-muted, so leaving a frame never leaves its audio armed for the next
-      // visit, and a frame nobody has reached is never fetched at all.
       function syncPlayback() {
         slides.forEach((slide, i) => {
           const video = videoOf(slide);
@@ -11452,11 +11197,6 @@
         });
       }
 
-      // position
-      // The row's WIDTH is fixed by the stylesheet and is never touched here, so the
-      // arrows never move. Only the height is set, to the frame on screen. On desktop
-      // the phone and the browser are the same height, so even that never moves; on
-      // mobile a phone is much taller than a window and it animates between the two.
       function sizeRow(current) {
         const h = current.offsetHeight + 'px';
         if (viewport.style.height !== h) viewport.style.height = h;
@@ -11465,25 +11205,15 @@
       function render() {
         const current = slides[index];
         sizeRow(current);
-        // Governs how far back the ghosts sit: see the .is-phone-main note in the
-        // stylesheet for why a phone in the middle needs them much fainter.
         root.classList.toggle('is-phone-main', current.classList.contains('vc-slide--phone'));
 
-        // offsetLeft and offsetWidth are layout measurements, unaffected by the
-        // transform below, so this stays correct across repeated calls. clientWidth is
-        // safe to read now that nothing animates the row's width.
         base = (viewport.clientWidth / 2) - (current.offsetLeft + current.offsetWidth / 2);
         track.style.transform = 'translate3d(' + base.toFixed(2) + 'px, 0, 0)';
 
         slides.forEach((slide, i) => {
           const active = i === index;
           slide.classList.toggle('is-active', active);
-          // The two neighbours show as faded ghosts under the arrows. They are still
-          // aria-hidden: a ghost is a visual cue about the row, not content, and it
-          // is not playing.
           slide.classList.toggle('is-near', !active && Math.abs(i - index) === 1);
-          // Frames off screen are out of the tab order: tabbing must not land on a
-          // control nobody can see.
           slide.setAttribute('aria-hidden', active ? 'false' : 'true');
           slide.querySelectorAll('button').forEach((b) => {
             if (active) b.removeAttribute('tabindex');
@@ -11506,8 +11236,6 @@
         syncPlayback();
       }
 
-      // The row is measured, so anything that changes its measurements has to
-      // re-centre it. Coalesced into a frame so a drag-resize does not thrash.
       let reflow = 0;
       function scheduleReflow() {
         if (reflow) return;
@@ -11515,9 +11243,6 @@
       }
       window.addEventListener('resize', scheduleReflow);
       window.addEventListener('orientationchange', scheduleReflow);
-      // Deliberately NOT the viewport: sizeRow() writes its height, so
-      // observing it would feed the observer its own output. A slide tracks the same
-      // CSS variables and is never written to.
       if ('ResizeObserver' in window) new ResizeObserver(scheduleReflow).observe(slides[0]);
 
       // controls
@@ -11530,9 +11255,6 @@
         else if (e.key === 'ArrowRight') { goTo(index + 1); e.preventDefault(); }
       });
 
-      // swipe
-      // Pointer events, with the horizontal intent test that keeps a vertical drag
-      // scrolling the page instead of grabbing the carousel.
       let startX = 0, startY = 0, dx = 0, dragging = false, decided = false;
 
       viewport.addEventListener('pointerdown', (e) => {
@@ -11548,12 +11270,10 @@
         if (!decided) {
           if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
           decided = true;
-          // Vertical intent: let go entirely so the page scrolls normally.
           if (Math.abs(dy) > Math.abs(dx)) { dragging = false; return; }
           track.classList.add('is-dragging');
           try { viewport.setPointerCapture(e.pointerId); } catch (err) { /* not supported */ }
         }
-        // Rubber-band at the two ends so the row cannot be dragged into space.
         const atEdge = (dx > 0 && index === 0) || (dx < 0 && index === slides.length - 1);
         const shift = atEdge ? dx * 0.28 : dx;
         track.style.transform = 'translate3d(' + (base + shift).toFixed(2) + 'px, 0, 0)';
@@ -11563,9 +11283,6 @@
         if (!dragging) return;
         dragging = false;
         track.classList.remove('is-dragging');
-        // Measured against the frame you are on rather than the viewport: the row
-        // holds frames of two very different widths, and a swipe past a narrow
-        // phone should not need the travel a wide window would.
         const threshold = Math.max(40, slides[index].offsetWidth * 0.22);
         if (dx <= -threshold) goTo(index + 1);
         else if (dx >= threshold) goTo(index - 1);
@@ -11575,8 +11292,6 @@
       viewport.addEventListener('pointerup', endDrag);
       viewport.addEventListener('pointercancel', endDrag);
       viewport.addEventListener('pointerleave', endDrag);
-      // A completed swipe must not also fire the mute or fullscreen button that
-      // happened to be under the finger.
       viewport.addEventListener('click', (e) => {
         if (Math.abs(dx) > 8) { e.stopPropagation(); e.preventDefault(); }
       }, true);
@@ -11603,22 +11318,12 @@
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
           video.muted = !video.muted;
-          // Unmuting is a user gesture, so an audible play is allowed from here.
           if (!video.muted) { arm(video); if (video.paused) video.play().catch(() => { }); }
           syncMute(slide);
         });
         syncMute(slide);
       });
 
-      // fullscreen
-      // Two genuinely different platforms, carried over from the old phone frame:
-      // iPhone Safari has no element Fullscreen API. The only route is
-      // video.webkitEnterFullscreen(), which opens the native iOS player. That
-      // player rotates to landscape and brings its own controls, which is the
-      // behaviour we want. It must be called synchronously inside the tap.
-      // Android/Chromium supports element fullscreen, but these <video>s have no
-      // controls attribute, so they are switched on for the duration or there is
-      // no way to scrub, unmute or exit.
       let fsVideo = null;
       let fsWasMuted = true;
       let fsRestoreControls = false;
@@ -11670,7 +11375,6 @@
             Promise.resolve(standard.call(video))
               .then(() => {
                 video.play().catch(() => { });
-                // Best effort: unsupported on iOS, and rejects unless fullscreen is active.
                 if (screen.orientation && typeof screen.orientation.lock === 'function') {
                   screen.orientation.lock('landscape').catch(() => { });
                 }
@@ -11686,7 +11390,6 @@
           else exitState();
         });
 
-        // iOS fires this on the video element instead of the document.
         video.addEventListener('webkitendfullscreen', exitState);
       });
 
@@ -11694,16 +11397,10 @@
         if (!document.fullscreenElement) exitState();
       });
 
-      // visibility
-      // Nothing plays while the carousel is off screen, and nothing is fetched
-      // until it has been seen once: the hero renders without touching the network
-      // for video at all.
       if ('IntersectionObserver' in window) {
         new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             onScreen = entry.isIntersecting;
-            // One way: the frames animate in the first time the row is reached and
-            // stay in. Replaying it on every scroll past would be noise.
             if (onScreen) root.classList.add('is-in');
             syncPlayback();
           });
@@ -11719,8 +11416,6 @@
       });
 
       render();
-      // Fonts and the hero image can settle after first paint and move the row, so
-      // re-measure once everything has loaded.
       window.addEventListener('load', scheduleReflow);
     })();
 
@@ -11796,9 +11491,6 @@
       [...sponsorLogos, ...sponsorLogos].forEach((item) => el.appendChild(buildLogo(item)));
     });
 
-    // Pause the sponsor marquee whenever it is off-screen. The CSS animation is
-    // compositor-friendly but it was running unconditionally for the life of the
-    // page, keeping a compositor layer awake far below the fold.
     (function gateSponsorMarquee() {
       const rails = document.querySelectorAll('.marquee');
       if (!rails.length) return;
@@ -11878,7 +11570,6 @@
           return;
         }
         if (err) err.textContent = '';
-        // TODO(backend): POST { email: value } -> Slack notification. Ghost for now.
         showThankYou();
       });
     }
@@ -11887,11 +11578,8 @@
     wireCaptureForm('auCtaForm', 'auCtaEmail', 'auCtaErr');
     wireCaptureForm('auRedhatForm', 'auRedhatEmail', 'auRedhatErr');
 
-    // Calculator "dedicated simulation" form: name + email required, phone/event optional.
     (function wireSimForm() {
       const form = document.getElementById('auSimForm');
-      // The name field was dropped on Roy's call: email, phone, and the event box
-      // only. Email is the one required field left.
       const email = document.getElementById('auSimEmail');
       const err = document.getElementById('auSimErr');
       if (!form || !email) return;
@@ -11904,7 +11592,6 @@
           return;
         }
         if (err) err.textContent = '';
-        // TODO(backend): POST { email, phone, event } -> Slack notification. Ghost for now.
         showThankYou();
       });
     })();
@@ -11914,7 +11601,6 @@
       navBackBtn.addEventListener('click', hideThankYou);
     }
 
-    // Ensure clicking header logo while on thank-you view returns to main landing page
     document.querySelectorAll('header a.logo').forEach((link) => {
       link.addEventListener('click', () => {
         if (document.body.classList.contains('au-ty-open')) {
@@ -11974,7 +11660,6 @@
       function renderCalendar() {
         monthTitle.textContent = `${MONTH_NAMES[currentMonth]} ${currentYear}`;
 
-        // Disable prev button if already on or before current month in current year
         if (currentYear === now.getFullYear() && currentMonth <= now.getMonth()) {
           prevBtn.disabled = true;
         } else {
@@ -12138,13 +11823,11 @@
       const HERO_START = 0.5;        // their startDelay
       const EFFECT = { blur: 10, y: 10, opacity: 0.001 };
 
-      // Framer/Motion's bounce+duration form maps to a real spring as
       function fromBounce(bounce, duration) {
         const omega = (2 * Math.PI) / duration;
         return { stiffness: omega * omega, damping: 2 * omega * (1 - bounce), mass: 1 };
       }
 
-      // Integrate x'' = (-k*x - c*x')/m from x=1 (distance remaining) to rest, and
       const springCache = new Map();
       function springCurve(cfg) {
         const key = cfg.stiffness + '|' + cfg.damping + '|' + cfg.mass;
@@ -12163,7 +11846,6 @@
           samples.push(1 - x);
           if (Math.abs(x) < 0.0005 && Math.abs(v) < 0.005) break;
         }
-        // resample to ~40 keyframes; more is wasted on the compositor
         const N = 40;
         const frames = [];
         for (let i = 0; i <= N; i++) {
@@ -12232,7 +11914,6 @@
         const hero = document.getElementById('hero');
         if (!hero || reduced) return;
         if (heroPlayed && !force) return;
-        // Ensure hero element has layout before playing reveal animation
         if (!hero.getBoundingClientRect().height) return;
         heroPlayed = true;
         const blocks = [
@@ -12241,14 +11922,12 @@
           ...hero.querySelectorAll('.hero-editorial-sub'),
         ].filter(Boolean);
 
-        // Framer's word stagger runs *within* each text layer, not across the page
         blocks.forEach((block, b) => {
           const base = HERO_START + b * STAGGER * 2;
           tokenize(block).forEach((word, i) => {
             animateAppear(word, SPRING, (base + i * STAGGER) * 1000);
           });
         });
-        // The form is one block, not words, and lands after the copy.
         const formBase = HERO_START + blocks.length * STAGGER * 2;
         [hero.querySelector('.au-form-bar'), hero.querySelector('.au-form-note')]
           .filter(Boolean)
@@ -12273,11 +11952,9 @@
           '.au-row'
         )].filter((el) => !heads.includes(el));
 
-        // Park everything up front so nothing flashes before its observer fires.
         heads.forEach((el) => { tokenize(el).forEach(() => { }); });
         blocks.forEach((el) => el.classList.add('bsa-pre'));
 
-        // threshold 0.5 for headings (their onScrollTarget), 0 for blocks (onInView)
         const headIo = new IntersectionObserver((entries) => {
           entries.forEach((e) => {
             if (!e.isIntersecting) return;
@@ -12305,7 +11982,6 @@
           if (!stuck.length) { sweep = function () { }; return; }
           stuck.forEach((el) => {
             const r = el.getBoundingClientRect();
-            // Only nodes entirely above the viewport: those can no longer produce a
             if (r.height && r.bottom < 0) {
               el.classList.remove('bsa-pre', 'bsw-pre');
               headIo.unobserve(el); blockIo.unobserve(el);
@@ -12360,7 +12036,6 @@
       countUps();
       heroReveal();
 
-      // Rescue passes: on scroll (cheap - sweep() is a querySelectorAll over the
       const onScrollSweep = () => sweep();
       window.addEventListener('scroll', onScrollSweep, { passive: true });
 
@@ -12388,7 +12063,6 @@
         const extent = () => set.getBoundingClientRect()[side];
         const container = track.parentElement;
 
-        // Measure the room ONCE, before cloning. Re-reading it inside the loop is a
         const room = axis === 'X' ? container.clientWidth : container.clientHeight;
         const cycle = extent() + gap;
         const want = room + cycle * 2;               // one screen plus slack to wrap into
@@ -12406,13 +12080,11 @@
         build(track, 'Y', parseFloat(track.parentElement.dataset.vqSpeed) || 14);
       });
 
-      // One cycle is one set plus the gap that follows it. Measured lazily so it
       function span(r) {
         const box = r.set.getBoundingClientRect();
         return (r.axis === 'X' ? box.width : box.height) + r.gap;
       }
 
-      // the proof card: one share multiplying across the strip. It lives in the
       const REACH_COLS = [1, 2, 3, 4, 5, 6, 7];
       const REACH_CYCLE = 3.8;
       const reachEl = document.querySelector('[data-reach]');
@@ -12447,12 +12119,10 @@
 
         if (reachCols.length) {
           const p = (t % REACH_CYCLE) / REACH_CYCLE;
-          // the wave crosses in the first 55% of the cycle, then everything holds lit
           const head = Math.min(1, p / 0.55) * reachCols.length;
           for (let c = 0; c < reachCols.length; c++) {
             const dots = reachCols[c];
             for (let d = 0; d < dots.length; d++) {
-              // dots inside a column arrive in sequence too, so the column grows
               const at = c + (d / Math.max(dots.length, 1)) * 0.9;
               const on = Math.max(0, Math.min(1, (head - at) * 3));
               const eased = on * on * (3 - 2 * on);
@@ -12467,7 +12137,6 @@
       function stop() { running = false; cancelAnimationFrame(raf); }
 
       if ('IntersectionObserver' in window) {
-        // Watch the proof card too - its chart is on the same clock, and it sits in
         const io = new IntersectionObserver((es) => {
           const anyVisible = es.some((e) => e.isIntersecting);
           if (anyVisible) start(); else stop();
@@ -12476,17 +12145,12 @@
       }
       start();
       document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-      // Re-measure after fonts land, or the chip row's cycle length is wrong.
       window.addEventListener('resize', () => rows.forEach((r) => { r.span = 0; }));
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(() => rows.forEach((r) => { r.span = 0; })).catch(() => { });
       }
     })();
 
-    // Bottleneck 03's decay plot: morphin.dev's dot matrix, ported. Built here
-    // rather than in markup because it is ~700 dots of pure decoration (the well is
-    // aria-hidden). It renders already lit on the day-0 peak - the highlight is the
-    // chart's whole point, so it should not wait for a pointer that may never come.
     (function decayDots() {
       const host = document.querySelector('[data-decay-dots]');
       if (!host) return;
@@ -12498,17 +12162,12 @@
       const PITCH = DOT + GAP;
       const SPREAD = 4;                 // activeColumnSpread: how far the glow carries
 
-      // Their palette is white-alpha on a dark card. Same five roles, inverted for
-      // this light well, with our emerald where theirs is #34d399.
       const IDLE = 'rgba(15, 23, 42, 0.08)';
       const FILLED = 'rgba(15, 23, 42, 0.2)';
       const ABOVE = 'rgba(15, 23, 42, 0.13)';   // their hoverColor: the lit column's headroom
       const ACTIVE = '#10B981';
       const APEX = '#047857';                  // their topDotColor, which was white
 
-      // The five axis labels below are flex:1, so their centres sit at 10/30/50/70/90%.
-      // Keeping the column count a multiple of 5 puts each label over the middle of
-      // its own group. Anchors are day 0, +1, +2, +3, +7.
       const ANCHORS = [[10, 1], [30, 0.42], [50, 0.16], [70, 0.06], [90, 0.01]];
       const valueAt = (x) => {
         if (x <= ANCHORS[0][0]) return ANCHORS[0][1];
@@ -12522,8 +12181,6 @@
       const SVG_NS = 'http://www.w3.org/2000/svg';
       let cols = 0, heights = [], dots = [], active = 0;
 
-      // Distance falloff to the lit column, exactly theirs: nothing past the spread,
-      // otherwise 1 - dist / (spread + 1).
       const glow = (col) => {
         const d = Math.abs(active - col);
         return d > SPREAD ? 0 : 1 - d / (SPREAD + 1);
@@ -12546,7 +12203,6 @@
         }
       }
 
-      // Repaint only what the move can have changed: the old glow band and the new.
       function setActive(next) {
         next = Math.max(0, Math.min(cols - 1, next));
         if (next === active) return;
@@ -12561,8 +12217,6 @@
         const width = host.clientWidth;
         if (!width) return;
 
-        // Their column count is floor(width / pitch); rounded to a multiple of 5 so
-        // the day labels still line up with their groups.
         const raw = Math.max(5, Math.floor(width / PITCH));
         const next = Math.max(5, Math.round(raw / 5) * 5);
         if (next === cols && dots.length) return;
@@ -12597,7 +12251,6 @@
         host.textContent = '';
         host.appendChild(svg);
 
-        // Lit by default on the day-0 peak - the centre of the first label's group.
         active = Math.floor(cols / 5 / 2);
         for (let c = 0; c < cols; c++) paintColumn(c);
 
@@ -12642,7 +12295,6 @@
       figs.forEach((f) => io.observe(f));
     })();
 
-    // Multi-Testimonial Interactive Sticky Note Pad (Drag & Flip)
     (function stickyNotePad() {
       const stack = document.getElementById('auStickyStack');
       if (!stack) return;
@@ -12850,9 +12502,6 @@
       if (!hero) return;
 
       function apply() {
-        // The emerald now ends with the sub-headline. The figures sit below it on
-        // white, which keeps the band short and leaves room for a long dissolve
-        // instead of the hard crop a 50px fade produced.
         const subs = hero.querySelectorAll('.hero-editorial-sub');
         const tail = subs.length ? subs[subs.length - 1] : hero.querySelector('.hero-editorial-title');
         const hr = hero.getBoundingClientRect();
@@ -12860,9 +12509,6 @@
 
         let tailRect = tail && tail.getBoundingClientRect();
 
-        // In the wireframe layout the emerald belongs to the headline band only:
-        // it has to be spent by the time the rule arrives, because everything under
-        // the rule is dark type on white.
         const rule = hero.querySelector('.hero-wf-rule');
         const split = !!rule;
         if (rule) {
@@ -12873,13 +12519,7 @@
         let band, fadeTop;
         if (tailRect && tailRect.height) {
           const tailBottom = tailRect.bottom - hr.top;
-          // Dissolve opens just past the content and runs long enough to read as a
-          // gradient rather than the hard edge a 50px fade produced. Shorter on
-          // small screens, where 200px of fade is most of a viewport.
           if (split) {
-            // The emerald has to be spent by the time the rule arrives: everything
-            // below it is dark type on white. So the band closes at the rule and
-            // the dissolve runs backwards from there.
             const fadeLen = window.innerWidth < 820 ? 170 : 240;
             band = tailBottom + 8;
             fadeTop = Math.max(0, band - fadeLen);
@@ -12887,7 +12527,6 @@
             const fadeLen = window.innerWidth < 820 ? 150 : 200;
             fadeTop = Math.max(0, tailBottom + 28);
             band = fadeTop + fadeLen;
-            // Only the stacked layout needs the figures pushed clear of the fade.
             hero.style.setProperty('--hero-chain-gap', Math.round(band - tailBottom + 28) + 'px');
           }
         } else {
@@ -12898,7 +12537,6 @@
         hero.style.setProperty('--hero-band', Math.round(band) + 'px');
         hero.style.setProperty('--hero-fade-top', Math.round(Math.min(fadeTop, band - 50)) + 'px');
         hero.classList.add('hero-band-ready');
-        // The shader paints the dissolve, so it needs to know when these move.
         window.dispatchEvent(new Event('hero:band'));
       }
 
@@ -12906,7 +12544,6 @@
       window.addEventListener('resize', apply);
       window.addEventListener('load', apply);
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply).catch(() => { });
-      // The card holds a video, so its box can change after metadata arrives.
       if ('ResizeObserver' in window) {
         const ro = new ResizeObserver(apply);
         ro.observe(hero);
@@ -12929,12 +12566,7 @@
       const MID = 'vec3(0.063, 0.725, 0.506)';   // #10B981 brand emerald
       const LITE = 'vec3(0.655, 0.953, 0.816)';   // #A7F3D0 emerald light
       const TINT = LITE;                          // stands in for rgb(1,.459,.792)
-      // backgrounds.supply's own hero plate, hue-rotated to emerald. Same pixels,
-      // Matches the CSS breakpoint above so the small plate is reused from cache
-      // rather than pulling the 113KB original a second time for the texture.
       const PLATE_SMALL = window.matchMedia('(max-width:760px)').matches;
-      // WebP so this shares the exact file the CSS already fetched, instead of
-      // pulling a second copy of the same pixels as JPEG.
       const PLATE_SRC = PLATE_SMALL ? '/hero-plate-emerald-900.webp' : '/hero-plate-emerald.jpg';
       const PLATE_W = PLATE_SMALL ? 900 : 1600, PLATE_H = PLATE_SMALL ? 518 : 920;
 
@@ -13075,7 +12707,6 @@
     uniform sampler2D uPing;
     uniform sampler2D uPlate;
 
-    // Their layer-1 sampler, verbatim: a cover fit of the plate onto the
     vec4 samplePlate(vec2 canvasUV){
       vec2 canvasPos = vec2(canvasUV.x * uRes.x, (1.0 - canvasUV.y) * uRes.y);
       float imageAspect = ${PLATE_W}.0 / ${PLATE_H}.0;
@@ -13092,10 +12723,8 @@
     void main(){
       vec2 uv = vUv;
 
-      // The plate is backgrounds.supply's own hero texture, rotated -172deg in
       vec3 bg = samplePlate(uv).rgb;
 
-      // their layer-2 composite, verbatim: strength 0.05, tint mix 0.50,
       vec3 mouseRgb = texture2D(uPing, uv).rgb;
       vec3 mouseTrail = rgb2hsv(mouseRgb);
       float strength = mouseTrail.z * (0.0500 * 5.0);
@@ -13105,7 +12734,6 @@
       gl_FragColor = vec4(mix(bg, blendedRgb, mouseTrail.z), 1.0);
     }`;
 
-      // The fog noise field, shared by the blur passes and the composite. Every
       const FOG_NOISE = `
     const float PHI = 1.618033988;
     float dot_noise(vec3 p){
@@ -13225,18 +12853,15 @@
       float yTop = 1.0 - uv.y;                        // 0 at the top of the band
       col = mix(col, ${DEEP}, (1.0 - smoothstep(0.0, 0.76, yTop)) * 0.30);
 
-      // The boundary is curved, not ruled. On their hero the dark rises out of the
       float arc = 0.070 * (1.0 - cos((uv.x - 0.5) * PI));      // 0 centre, 0.07 edges
       float wobble = (fnoise(uv * 0.55) - 0.5) * 0.075;
       float fy = uFade + arc + wobble;
 
-      // Finish a little above the band's bottom edge rather than exactly on it: a
       float fe = 0.07 + (arc + wobble) * 0.5;
       float f = clamp((fy - uv.y) / max(fy - fe, 1.0e-4), 0.0, 1.0);
       f = f * f * (3.0 - 2.0 * f);                    // ease both ends, no hard start
       col = mix(col, vec3(1.0), f);
 
-      // Triangular dither at 1/255. Without it a ramp this long quantises into
       float d = hashF(gl_FragCoord.xy + fract(uTime)) + hashF(gl_FragCoord.yx - fract(uTime)) - 1.0;
       col += d / 255.0;
 
@@ -13248,7 +12873,6 @@
         gl.shaderSource(sh, src);
         gl.compileShader(sh);
         if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
-          console.warn('hero shader:', gl.getShaderInfoLog(sh));
           return null;
         }
         return sh;
@@ -13260,7 +12884,6 @@
         const pr = gl.createProgram();
         gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
         if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) {
-          console.warn('hero link:', gl.getProgramInfoLog(pr));
           return null;
         }
         return pr;
@@ -13297,7 +12920,6 @@
         },
       };
 
-      // The plate texture. Until it decodes the shader has nothing to composite, so
       let plateTex = null, plateReady = false;
       (function loadPlate() {
         const img = new Image();
@@ -13309,12 +12931,10 @@
           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
           gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-          // Their engine uploads flipped, which is what cancels the `1.0 - imageUV.y`
           gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
           gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
           plateReady = true;
         };
-        img.onerror = () => { console.warn('hero plate failed to load'); };
         img.src = PLATE_SRC;
       })();
 
@@ -13334,11 +12954,9 @@
         return { fb: f, tex: tx };
       }
 
-      // Their scene runs at dpi 1.5; a six-pass chain at 1.5x is not worth the
       const SCALE = 0.7;
       const FOG_SCALE = 0.25;
 
-      // Where the dissolve starts, as a vUv.y (0 = bottom of the band). Kept in sync
       let fadeY = 0.28;
       function readBand() {
         const cs = getComputedStyle(hero);
@@ -13360,7 +12978,6 @@
       }
 
       function resize() {
-        // The canvas is clipped to the coloured band, which is shorter than the hero
         const r = canvas.getBoundingClientRect();
         if (!r.width || !r.height) return false;
         const nw = Math.max(2, Math.round(r.width * SCALE));
@@ -13389,7 +13006,6 @@
         gl.bindTexture(gl.TEXTURE_2D, tex);
       }
 
-      // Pointer in 0..1 hero space with y up, matching their uMousePos. mouseMomentum
       let mx = 0.5, my = 0.5, pmx = 0.5, pmy = 0.5;
       window.addEventListener('pointermove', (e) => {
         const r = canvas.getBoundingClientRect();
@@ -13463,7 +13079,6 @@
         if (!live && plateReady) {
           live = true;
           canvas.classList.add('is-live');
-          // The scrim and the dissolve are painted in the composite above, so the CSS
           setTimeout(() => { if (live) hero.classList.add('fx-live'); }, 340);
         }
       }
@@ -13479,7 +13094,6 @@
       function start() {
         if (reduced) return;
         if (!running) { running = true; raf = requestAnimationFrame(draw); }
-        // Paint one frame synchronously rather than waiting for the next rAF. The
         if (!t0) t0 = performance.now();
         if (resize()) render((performance.now() - t0) / 1000);
         if (live) hero.classList.add('fx-live');
@@ -13487,7 +13101,6 @@
       function stop() {
         running = false;
         cancelAnimationFrame(raf);
-        // Nothing is painting the scrim or the dissolve now, so let the CSS
         hero.classList.remove('fx-live');
       }
 
@@ -13532,7 +13145,6 @@
         p.y = Math.random() * h;
         p.r = rnd(SIZE_MIN, SIZE_MAX) * dpr;
         p.o = Math.random();                  // opacityType false -> random 0..1
-        // straight:false -> each particle keeps its own slight angle offset
         const a = DIR + rnd(-0.35, 0.35);
         const s = SPEED * dpr * (FRAME / (1000 / 60));
         p.vx = Math.cos(a) * s;
@@ -13559,7 +13171,6 @@
           const p = parts[i];
           p.x += p.vx;
           p.y += p.vy;
-          // outMode "out": gone off the edge, reappear on the opposite one
           const m = p.r + 2;
           if (p.x - m > w) p.x = -m;
           if (p.x + m < 0) p.x = w + m;
@@ -13599,15 +13210,12 @@
       const addBtn = document.getElementById('auCalcAdd');
       if (!rowsHost) return;
 
-      // What Wozku charges per person who actually shares. The production card
       const COST_PER_SHARER = 2;
 
-      // The visible dropdown values come from the production screenshot. The
       const CAMPAIGNS = ['Virtual / Physical Events', 'Webinar Series', 'Partner Network Co-Marketing', 'Employee Advocacy', 'Asset & Content Launch'];
       const AUDIENCES = ['Event Attendees', 'Speakers', 'Sponsors & Partners', 'Employees', 'Customers & Community'];
       const GOALS = ['Registration', 'Demo Request', 'Content Download', 'Booth Visit'];
 
-      // `pre` puts a unit in front of the read-out ($45), `unit` behind it (40%).
       const FIELDS = [
         { key: 'shareRate', label: 'Share rate', min: 1, max: 100, step: 1, def: 40, unit: '%' },
         { key: 'network', label: 'Average network size', min: 50, max: 2000, step: 10, def: 1500, unit: '' },
@@ -13632,7 +13240,6 @@
               : '<span class="au-odo-x">' + c + '</span>'))
             .join('');
           host._cols = [...host.querySelectorAll('.au-odo-c')];
-          // a small stagger left to right, so the number rolls rather than snapping
           host._cols.forEach((col, i) => { col.style.transitionDelay = (i * 26) + 'ms'; });
         }
         let i = 0;
@@ -13643,14 +13250,12 @@
         });
       }
 
-      // A range input exposes no progress to CSS, so the fill stop is pushed in as a
       function paintSlider(input) {
         const min = Number(input.min), max = Number(input.max);
         const pct = max > min ? ((Number(input.value) - min) / (max - min)) * 100 : 0;
         input.style.setProperty('--fill', pct.toFixed(2) + '%');
       }
 
-      // 1600 -> "1.6K", 192000 -> "192K", 38016 -> "38K" (drop a trailing .0)
       function compact(n) {
         const abs = Math.abs(n);
         if (abs >= 1e6) return trim(n / 1e6) + 'M';
@@ -13814,7 +13419,6 @@
         recalc();
       }
 
-      // The rows are labelled by position, not by creation order, so removing the
       function renumber() {
         rows.forEach(({ el }, i) => {
           const n = el.querySelector('.au-row-n');
@@ -13859,7 +13463,6 @@
 
         const set = (id, txt) => { const n = document.getElementById(id); if (n) n.textContent = txt; };
 
-        // the headline: what the same outcome costs through paid channels, less what
         const saveText = '$' + int(savings);
         const odo = document.getElementById('auOutSave');
         if (odo) odometer(odo, saveText);
@@ -13879,7 +13482,6 @@
 
       }
 
-      // Recompute when a row's math panel is opened so it is never stale.
       rowsHost.addEventListener('toggle', (e) => {
         if (e.target.classList && e.target.classList.contains('au-row-math')) recalc();
       }, true);
@@ -13888,7 +13490,6 @@
       function syncDelete() {
         rowsHost.querySelectorAll('.au-row-del').forEach((b) => { b.disabled = rows.length <= 1; });
       }
-      // Re-evaluate the disabled state after a row is removed (the row's own handler
       rowsHost.addEventListener('click', (e) => {
         if (e.target.classList.contains('au-row-del')) setTimeout(syncDelete, 0);
       });
@@ -14015,7 +13616,6 @@
         const deltaY = (lastScrollY - currentScrollY) * dpr;
         lastScrollY = currentScrollY;
 
-        // Shift particle y positions with scroll delta so they stay locked to the elements as they scroll
         for (let i = 0; i < particles.length; i++) {
           particles[i].y += deltaY;
         }
@@ -14113,10 +13713,6 @@
     (function initSideNav() {
       const sideNav = document.getElementById('sideNav');
       if (!sideNav) return;
-      // The rail is display:none under 900px, but the JS behind it was still running:
-      // a getBoundingClientRect() per tracked section on every scroll frame, plus a
-      // proximity pulse, all to drive an invisible element. It is a pointer-proximity
-      // affordance with no touch equivalent, so on mobile we drop it outright.
       if (!window.matchMedia('(min-width: 901px) and (hover: hover)').matches) {
         sideNav.remove();
         return;
@@ -14125,19 +13721,11 @@
       const items = [...sideNav.querySelectorAll('.side-nav-item')];
       if (!rail || !items.length) return;
 
-      // the reference's constants, unchanged
-      // RADIUS is the vertical reach of the pointer's influence; MAX_DASH_WIDTH is
-      // the track every dash is drawn at, so a dash of width w renders at scaleX
-      // w / MAX_DASH_WIDTH. IDLE_RESET is how long after the last scroll tick the
-      // pulled-out active dash is released.
       const RADIUS = 40;
       const MAX_DASH_WIDTH = 55;
       const IDLE_RESET = 80;
       const ACTIVE_OFFSET = 0.4;
       const SPRING = { stiffness: 320, damping: 34, mass: 0.7 };
-      // Half the reference's lengths - its 110px track reads as a slab at this
-      // scale. Every ratio is preserved, so base/MAX (and therefore every scaleX the
-      // spring sees) is untouched; only the pixel track shrank.
       const PRESETS = {
         title: { base: 20, bump: 35 },
         subtitle: { base: 18, bump: 32 },
@@ -14164,9 +13752,6 @@
       const sectionIds = items.map((item) => item.dataset.target);
       const sectionEl = (id) => document.getElementById(id);
 
-      // pointer proximity
-      // One shared pointer position; each dash measures its own distance from it,
-      // which is what makes the falloff continuous rather than per-item hover.
       let pointerY = Infinity;
       let pointerInside = false;
       let resetTimer = null;
@@ -14184,10 +13769,6 @@
         wake();
       }
 
-      // the spring
-      // motion's useSpring, integrated here: a = (-k(x - target) - cv) / m, stepped
-      // at a fixed 1/240s so a long frame cannot make it explode. The loop parks
-      // itself once every dash is at rest, so an idle rail costs nothing.
       let raf = 0, lastT = 0;
       const STEP = 1 / 240;
 
@@ -14219,7 +13800,6 @@
 
       function wake() {
         if (reduce.matches) {
-          // No spring under reduced motion - the dashes still resize, instantly.
           for (const d of dashes) {
             d.x = d.target; d.v = 0;
             d.node.style.setProperty('--dash-scale', d.x.toFixed(4));
@@ -14242,10 +13822,6 @@
         retarget();
       });
 
-      // the scroll pulse
-      // Reuses the same pointer channel: park the virtual pointer on the active
-      // dash, then release it a beat after scrolling stops. The spring turns that
-      // brief pull into a bump that settles on its own.
       function pulse(id) {
         const d = dashes.find((entry) => entry.item.dataset.target === id);
         if (resetTimer) { clearTimeout(resetTimer); resetTimer = null; }
@@ -14261,9 +13837,6 @@
         }, IDLE_RESET);
       }
 
-      // active section
-      // Nearest section to an anchor line 40% down the viewport, the section that
-      // straddles it winning outright.
       let activeId = sectionIds[0];
 
       function setActive(id) {
@@ -14296,7 +13869,6 @@
         setActive(nextId);
         if (!pointerInside) pulse(nextId);
 
-        // Visibility gate, carried over: the rail stays out of the hero.
         const heroCarousel = document.getElementById('auHeroCarousel');
         let past;
         if (heroCarousel) {
@@ -14319,8 +13891,6 @@
           if (!el) return;
 
           setActive(id);
-          // Lenis owns the scroll on this page, so hand it the target rather than
-          // calling scrollIntoView - native smooth scrolling fights its inertia.
           if (typeof lenis !== 'undefined' && lenis && typeof lenis.scrollTo === 'function') {
             lenis.scrollTo(el, { offset: id === 'hero' ? 0 : -30, duration: reduce.matches ? 0 : 1.2 });
           } else {
@@ -14337,7 +13907,6 @@
       update();
     })();
 
-    // FAQ Accordion: ensure only one FAQ item can be open at any time
     (function initFaqAccordion() {
       const faqItems = document.querySelectorAll('.au-faq-item');
       faqItems.forEach((item) => {
@@ -14478,7 +14047,7 @@
       <button type="button" class="au-img-modal-close" id="auImgModalClose" aria-label="Close preview">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
-      
+
       <div class="au-img-modal-figure">
         <img id="auImgModalImg" src="" alt="Full Preview" />
         <div class="au-img-modal-caption" id="auImgModalCaption"></div>

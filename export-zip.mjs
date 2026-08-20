@@ -15,6 +15,7 @@ const excludes = [
   '*.git*',
   '*.claude*',
   '*.gemini*',
+  '*.agents*',
   '*node_modules*',
   '*dist*',
   '*.assetcache*',
@@ -22,7 +23,11 @@ const excludes = [
   '*wozku-preview.html*',
   '*.tsbuildinfo*',
   '*.DS_Store*',
-  '*.zip*'
+  '*.zip*',
+  '*CLAUDE.md*',
+  '*tsconfig*',
+  '*.oxlintrc*',
+  '*src/*'
 ];
 
 const excludeFlags = excludes.map(pattern => `-x "${pattern}"`).join(' ');
