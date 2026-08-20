@@ -8,10 +8,9 @@ A high-performance single-page marketing application designed for cold paid traf
 
 - **`index.html`** at the repo root is the primary application file containing the page structure, inline CSS design tokens, responsive layout rules, WebGL background shaders, and interactive behaviors.
 - **`public/`** contains all production assets:
-  - `/fonts/`: Self-hosted webfonts (Satoshi, JetBrains Mono, Space Grotesk, Instrument Serif, Shadows Into Light, Caveat)
+  - `/fonts/`: Self-hosted webfonts (Satoshi, Space Grotesk, JetBrains Mono, Instrument Serif)
   - `/video/`: 5 high-efficiency MP4 video walkthroughs with posters
   - `/logos/`: Vector partner and customer brand logos
-  - `/avatars/`: Verified executive spotlight headshots
   - `/frames/`: Browser and iPhone SVG frame wrappers
 
 ---
