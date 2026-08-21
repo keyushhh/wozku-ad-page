@@ -519,11 +519,12 @@
       opacity: 1;
       position: relative;
       width: 100%;
-      min-height: 86vh;
+      min-height: calc(100vh - 120px);
+      box-sizing: border-box;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 140px 0 110px;
+      padding: 100px 0 40px;
       overflow: clip;
       text-align: center;
       background-color: #FFFFFF;
@@ -805,7 +806,7 @@
         max-width: 96px;
       }
 
-      .nav-cta > .btn {
+      .nav-cta>.btn {
         height: 32px;
         padding: 0 14px;
         font-size: 12px;
@@ -1503,8 +1504,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 34px;
+      gap: 0;
+      margin-bottom: 24px;
     }
 
     .au-eyebrow {
@@ -1516,14 +1517,6 @@
       color: #FFFFFF;
       margin: 0;
       text-shadow: 0 1px 10px rgba(3, 32, 24, 0.55);
-    }
-
-    .au-hero-lockup::after {
-      content: "";
-      order: 1;
-      width: 34px;
-      height: 1px;
-      background: rgba(255, 255, 255, 0.28);
     }
 
     /* the capture form (hero + final CTA share this) */
@@ -1709,11 +1702,11 @@
 
     /* Trust Bar Marquee */
     .au-trust {
-      padding: 44px 0 40px;
+      padding: 20px 0 28px;
       background: #FFFFFF;
       position: relative;
       z-index: 3;
-      margin-top: -3px;
+      margin-top: 0;
       border: none;
       overflow: hidden;
     }
@@ -1726,7 +1719,7 @@
       text-transform: uppercase;
       color: var(--ink-dim);
       text-align: center;
-      margin: 0 0 28px;
+      margin: 0 0 14px;
     }
 
     .marquee {
@@ -2725,10 +2718,10 @@
 
     .au-mfeat-payoff-num {
       font-family: var(--font-display);
-      font-size: clamp(20px, 2.2vw, 25px);
+      font-size: clamp(17px, 1.8vw, 22px);
       font-weight: 700;
-      letter-spacing: -0.025em;
-      line-height: 1.15;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
       color: #FFFFFF;
     }
 
@@ -3158,7 +3151,15 @@
       color: #334155;
       font-weight: 500;
       margin: 0;
-      max-width: 540px;
+      max-width: 100%;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      .au-norma-how .au-sub {
+        white-space: normal;
+        font-size: 16px;
+      }
     }
 
     /* 3-Cards Responsive Grid */
@@ -4688,6 +4689,610 @@
     @media (max-width:719px) {
       .bn-sf .bn-media {
         height: 170px;
+      }
+    }
+
+    /* ==========================================================================
+       GALLERY SHOWCASE SECTION (2-Row Infinite Marquee + Overlay CTA)
+       ========================================================================== */
+    .au-gallery-section {
+      padding-top: 24px;
+      padding-bottom: 24px;
+      position: relative;
+    }
+
+    .au-gallery-card {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      border-radius: 32px;
+      background: #04120D;
+      color: #FFFFFF;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5);
+      transition: border-color 0.5s ease;
+    }
+
+    .au-gallery-card:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .au-gallery-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 32px;
+      pointer-events: none;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: border-color 0.5s ease;
+    }
+
+    .au-gallery-card:hover::after {
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .au-gallery-glow {
+      position: absolute;
+      z-index: 1;
+      pointer-events: none;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 70%;
+      height: 260px;
+      border-radius: 9999px;
+      background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.08) 50%, transparent 75%);
+      filter: blur(60px);
+      opacity: 0.8;
+      transition: opacity 0.6s ease;
+    }
+
+    .au-gallery-card:hover .au-gallery-glow {
+      opacity: 1;
+    }
+
+    .au-gallery-marquee-container {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 16px;
+      padding-top: 24px;
+      overflow: hidden;
+      pointer-events: auto;
+      user-select: none;
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+
+    .au-gallery-row {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      overflow: visible;
+      position: relative;
+      padding: 8px 0;
+    }
+
+    .au-gallery-track {
+      display: flex;
+      gap: 16px;
+      flex-shrink: 0;
+      will-change: transform;
+    }
+
+    .au-gallery-row--left .au-gallery-track {
+      animation: auMarqueeLeft 42s linear infinite;
+    }
+
+    .au-gallery-row--right .au-gallery-track {
+      animation: auMarqueeRight 46s linear infinite;
+    }
+
+    .au-gallery-card:hover .au-gallery-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes auMarqueeLeft {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+
+      100% {
+        transform: translate3d(calc(-100% - 16px), 0, 0);
+      }
+    }
+
+    @keyframes auMarqueeRight {
+      0% {
+        transform: translate3d(calc(-100% - 16px), 0, 0);
+      }
+
+      100% {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    .au-gallery-item {
+      flex: 0 0 280px;
+      width: 280px;
+      height: 165px;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      background: #091a13;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.4);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+      cursor: pointer;
+    }
+
+    .au-gallery-item:hover {
+      transform: translateY(-5px);
+      border-color: rgba(16, 185, 129, 0.5);
+      box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.2);
+      z-index: 10;
+    }
+
+    .au-gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: inherit;
+    }
+
+    /* Placeholder styling when no image is placed yet */
+    .au-gallery-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(6, 30, 22, 0.8) 50%, rgba(4, 18, 13, 0.95) 100%);
+      position: relative;
+      box-sizing: border-box;
+      border-radius: inherit;
+    }
+
+    .au-gallery-placeholder::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+      background-size: 14px 14px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .au-gallery-ph-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-emerald);
+      position: relative;
+      z-index: 1;
+    }
+
+    .au-gallery-ph-meta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .au-gallery-ph-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--brand-emerald);
+      opacity: 0.9;
+    }
+
+    .au-gallery-ph-name {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: #E2E8F0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Gradient overlay for bottom half + content */
+    .au-gallery-overlay {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 72%;
+      background: linear-gradient(to bottom,
+          rgba(4, 18, 13, 0) 0%,
+          rgba(4, 18, 13, 0.45) 20%,
+          rgba(4, 18, 13, 0.88) 55%,
+          #04120D 85%,
+          #04120D 100%);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0 24px 44px;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .au-gallery-content {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+      pointer-events: auto;
+    }
+
+    /* Gallery Modal (Laptop frame on desktop, simple overlay on mobile) */
+    .au-gal-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .au-gal-modal.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .au-gal-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .au-gal-modal-frame {
+      position: relative;
+      z-index: 2;
+      width: 90vw;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Browser Mockup Frame (Same as video hero at top of page) */
+    .au-gal-browser {
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 32px 80px -12px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      background: #14171A;
+    }
+
+    .au-gal-browser-shell {
+      display: block;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+      -webkit-user-select: none;
+      user-select: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    .au-gal-browser-screen {
+      position: absolute;
+      left: 0;
+      top: 6.7602%;
+      width: 100%;
+      height: 93.2398%;
+      background: #04120D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 0 0 12px 12px;
+      z-index: 3;
+    }
+
+    .au-gal-browser-screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #04120D;
+      display: block;
+      transition: opacity 0.25s ease;
+    }
+
+    /* Interactive macOS Red Traffic Light = Close Button */
+    .au-gal-traffic-close {
+      position: absolute;
+      left: 2.11%;
+      top: 3.32%;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      outline: none;
+    }
+
+    .au-gal-traffic-close::before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #EE6A5F;
+      box-shadow: 0 0 0 0.5px #CE5347;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .au-gal-traffic-close::after {
+      content: "×";
+      position: absolute;
+      font-size: 11px;
+      line-height: 1;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #4c0000;
+      font-weight: 800;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .au-gal-traffic-close:hover::before {
+      transform: scale(1.22);
+      box-shadow: 0 0 10px rgba(238, 106, 95, 0.85), 0 0 0 0.5px #CE5347;
+    }
+
+    .au-gal-traffic-close:hover::after {
+      opacity: 1;
+    }
+
+    .au-gal-traffic-close:active::before {
+      transform: scale(0.92);
+    }
+
+    /* Nav arrows on respective sides outside mockup */
+    .au-gal-arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 10;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .au-gal-arrow--prev {
+      left: -68px;
+      transform: translateY(-50%);
+    }
+
+    .au-gal-arrow--next {
+      right: -68px;
+      transform: translateY(-50%);
+    }
+
+    .au-gal-arrow:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.15);
+    }
+
+    .au-gal-arrow--prev:hover {
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .au-gal-arrow--next:hover {
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .au-gal-arrow:active {
+      transform: translateY(-50%) scale(0.96);
+    }
+
+    .au-gal-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px;
+    }
+
+    .au-gal-counter {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 0.08em;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+      user-select: none;
+    }
+
+    .au-gal-caption {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      text-align: center;
+    }
+
+    @media (max-width: 1160px) {
+      .au-gal-arrow--prev {
+        left: -20px;
+      }
+
+      .au-gal-arrow--next {
+        right: -20px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .au-gal-laptop-bar {
+        display: none;
+      }
+
+      .au-gal-laptop-base {
+        display: none;
+      }
+
+      .au-gal-laptop {
+        border-radius: 14px;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .au-gal-laptop-screen {
+        border-radius: 14px;
+        aspect-ratio: auto;
+        max-height: 70vh;
+      }
+
+      .au-gal-laptop-screen img {
+        border-radius: 14px;
+      }
+
+      .au-gal-modal-frame {
+        width: 94vw;
+      }
+
+      .au-gal-arrow {
+        width: 40px;
+        height: 40px;
+      }
+
+      .au-gal-arrow--prev {
+        left: 8px;
+      }
+
+      .au-gal-arrow--next {
+        right: 8px;
+      }
+    }
+
+    .au-gallery-h3 {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3.4vw, 36px);
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: -0.025em;
+      color: #FFFFFF;
+      margin: 0 0 24px 0;
+      text-wrap: balance;
+    }
+
+    .au-gallery-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 30px;
+      border-radius: 9999px;
+      background: #FFFFFF;
+      color: #04120D;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.15);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background-color 0.25s ease;
+    }
+
+    .au-gallery-cta-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      background: #F8FAFC;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45), 0 0 24px rgba(16, 185, 129, 0.3);
+      color: #04120D;
+    }
+
+    .au-gallery-cta-btn:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .au-gallery-cta-btn svg {
+      transition: transform 0.25s ease;
+    }
+
+    .au-gallery-cta-btn:hover svg {
+      transform: translateX(3px);
+    }
+
+    @media (max-width: 768px) {
+      .au-gallery-card {
+        min-height: 460px;
+        border-radius: 24px;
+      }
+
+      .au-gallery-card::after {
+        border-radius: 24px;
+      }
+
+      .au-gallery-item {
+        flex: 0 0 220px;
+        height: 135px;
+        border-radius: 14px;
+      }
+
+      .au-gallery-overlay {
+        height: 78%;
+        padding: 0 16px 36px;
+      }
+
+      .au-gallery-h3 {
+        margin-bottom: 20px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .au-gallery-track {
+        animation: none !important;
       }
     }
 
@@ -6907,116 +7512,49 @@
     }
 
     .hero-wf-rule,
-    .hero-wf-lower {
-      --wf-inset: max(24px, calc((100% - 1200px) / 2 + 24px));
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-wf-rule {
-      height: 1px;
-      width: 100%;
-      margin-top: 44px;
-      background: rgba(15, 23, 42, 0.12);
+    .hero-wf-vdiv {
+      display: none !important;
     }
 
     .hero-wf-lower {
       width: 100%;
       box-sizing: border-box;
-      max-width: var(--container);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr;
+      max-width: 980px;
+      margin: 24px auto 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       padding: 0 24px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
     }
 
     .hero-wf-left {
-      padding-top: 36px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
     }
 
     .hero-wf-left .hero-editorial-sub {
-      text-align: left;
-      margin-left: 0;
-      margin-right: 0;
-      max-width: 46ch;
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 920px;
       font-size: 16px;
       line-height: 1.6;
       color: var(--ink-dim);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       text-shadow: none;
     }
 
-    .hero-wf-ask {
-      margin-top: 30px;
-    }
-
-    .hero-wf-ask .au-form-hero {
-      margin: 0;
-      max-width: 520px;
-    }
-
-    /* Hero only. */
-    .hero-wf-ask .au-form-bar {
-      box-shadow: none;
-    }
-
-    .hero-wf-ask .au-form-bar:focus-within {
-      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.14);
-    }
-
-    .hero-wf-rule,
-    .hero-wf-lower {
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-editorial {
-      min-height: 100vh;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-
-    .hero-wf-rule,
-    .hero-wf-lower {
-      position: relative;
-      z-index: 2;
-    }
-
-    .hero-wf-rule {
-      height: 1px;
-      width: 100%;
-      margin-top: 52px;
-      background: rgba(15, 23, 42, 0.12);
-    }
-
-    .hero-wf-lower {
-      width: 100%;
-      box-sizing: border-box;
-      max-width: var(--container);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr;
-      padding: 0 24px;
-    }
-
-    .hero-wf-left {
-      padding-top: 20px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .hero-wf-left .hero-editorial-sub {
-      text-align: left;
-      margin-left: 0;
-      margin-right: 0;
-      max-width: 46ch;
-      font-size: 15.5px;
-      line-height: 1.6;
-      color: var(--ink-dim);
-      margin-bottom: 14px;
-      text-shadow: none;
+    @media (min-width: 820px) {
+      .hero-wf-left .hero-editorial-sub:first-child {
+        white-space: nowrap;
+      }
     }
 
     .hero-wf-left .hero-editorial-sub:first-child {
@@ -7024,12 +7562,16 @@
     }
 
     .hero-wf-ask {
-      margin-top: 24px;
+      margin-top: 40px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
 
     .hero-wf-ask .au-form-hero {
-      margin: 0;
+      margin: 0 auto;
       max-width: 520px;
+      width: 100%;
     }
 
     .hero-wf-ask .au-form-bar {
@@ -7041,15 +7583,11 @@
     }
 
     .hero-wf-ask .au-form-note {
-      text-align: left;
-      margin: 10px 0 0 4px;
+      text-align: center;
+      margin: 10px auto 0;
       font-size: 13px;
       color: var(--ink-dim);
       line-height: 1.45;
-    }
-
-    .hero-wf-vdiv {
-      display: none;
     }
 
     /* 5-Step Connected Pipeline (Right Column) */
@@ -7252,87 +7790,96 @@
       }
 
       .is-wf .hero-wf-head {
-        text-align: left;
-        max-width: 920px;
+        text-align: center;
+        max-width: 960px;
+        margin: 0 auto;
         display: block;
       }
 
       .hero-wf-head-copy {
         min-width: 0;
+        text-align: center;
       }
 
       .is-wf .au-hero-lockup {
-        align-items: flex-start;
-        margin-bottom: 18px;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
       }
 
       .is-wf .au-eyebrow {
-        text-align: left;
+        text-align: center;
       }
 
       .is-wf h1.hero-editorial-title {
-        text-align: left;
-        margin-left: 0;
-        margin-right: 0;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
         font-size: clamp(38px, 4.3vw, 55px);
         line-height: 1.08;
       }
 
       .hero-editorial {
-        padding-top: 104px;
-        padding-bottom: 88px;
+        min-height: calc(100vh - 120px);
+        padding-top: 108px;
+        padding-bottom: 40px;
       }
 
       .hero-wf-rule {
-        margin-top: 46px;
+        display: none !important;
       }
 
       .hero-wf-lower {
-        grid-template-columns: minmax(0, 50fr) auto minmax(0, 48fr);
-        column-gap: 0;
-        align-items: stretch;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 980px;
+        margin: 28px auto 0;
         padding: 0 24px;
-        margin-top: 6px;
       }
 
       .hero-wf-left {
-        padding-top: 14px;
-        padding-bottom: 6px;
-        padding-right: 36px;
+        padding: 0;
         display: flex;
         flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
       }
 
       .hero-wf-left .hero-editorial-sub:first-child {
         margin-top: 0;
+        white-space: nowrap;
       }
 
       .hero-wf-left .hero-editorial-sub {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 920px;
         margin-bottom: 12px;
       }
 
       .hero-wf-vdiv {
-        display: block;
-        width: 1px;
-        height: 100%;
-        min-height: 260px;
-        background: rgba(15, 23, 42, 0.12);
-        margin: 0 12px;
-        align-self: stretch;
+        display: none !important;
       }
 
       .hero-wf-right {
-        padding-top: 14px;
-        padding-bottom: 6px;
-        padding-left: 32px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        display: none;
       }
 
       .hero-wf-ask {
-        margin-top: 22px;
+        margin-top: 44px;
         padding-top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .hero-wf-ask .au-form-hero {
+        margin: 0 auto;
+        max-width: 520px;
+        width: 100%;
       }
     }
 
@@ -7341,16 +7888,13 @@
         display: none;
       }
 
+      .hero-wf-rule,
       .hero-wf-vdiv {
-        display: block;
-        height: 1px;
-        width: 100%;
-        background: rgba(15, 23, 42, 0.12);
-        margin: 36px 0 28px;
+        display: none !important;
       }
 
       .hero-wf-right {
-        width: 100%;
+        display: none;
       }
     }
 
@@ -7464,12 +8008,27 @@
       color: var(--ink-dim);
     }
 
+    /* Video Showcase Section (Below Trust Bar) */
+    .au-video-showcase-section {
+      padding: 40px 0 80px;
+      background: #FFFFFF;
+      position: relative;
+      z-index: 2;
+    }
+
+    .au-video-showcase-section .wrap {
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 24px;
+      box-sizing: border-box;
+    }
+
     /* Video Showcase Header (Above Video Carousel) */
     .au-hero-video-header {
       position: relative;
       z-index: 2;
       max-width: 760px;
-      margin: 56px auto 0;
+      margin: 0 auto;
       text-align: center;
       padding: 0 16px;
     }
@@ -7719,6 +8278,31 @@
       letter-spacing: -0.02em;
       margin: 0;
       color: var(--ink);
+    }
+
+    .au-story-brand {
+      display: flex;
+      align-items: center;
+      min-height: 36px;
+      margin: 4px 0 0;
+    }
+
+    .au-story-logo {
+      display: block;
+      width: auto;
+      object-fit: contain;
+      object-position: left center;
+    }
+
+    .au-story-logo--elastic {
+      height: 30px;
+      max-width: 140px;
+    }
+
+    .au-story-logo--sify {
+      height: 30px;
+      max-width: 112px;
+      margin-left: -1px;
     }
 
     .au-story-txt {
@@ -8726,10 +9310,10 @@
       isolation: isolate;
       overflow: hidden;
       border-radius: var(--radius-lg);
-      padding: 44px 40px;
+      padding: 34px 28px 10px;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 36px;
+      gap: 28px;
       align-items: start;
       background:
         linear-gradient(180deg, #0FA972 0%, #077A55 12%, #064530 32%, #04241B 58%, #02100C 82%, #010806 100%);
@@ -8748,9 +9332,18 @@
     @media (min-width:900px) {
       .au-simband-plate {
         grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
-        gap: 64px;
-        padding: 52px 52px;
+        gap: 52px;
+        padding: 38px 46px 10px;
         align-items: start;
+      }
+
+      .au-simband-copy {
+        display: block;
+      }
+
+      .au-simband-list {
+        margin-top: 34px;
+        padding-bottom: 0;
       }
     }
 
@@ -8761,19 +9354,19 @@
 
     .au-simband-h {
       font-family: var(--font-display);
-      font-size: clamp(25px, 2.7vw, 34px);
+      font-size: clamp(24px, 2.5vw, 32px);
       font-weight: 700;
       letter-spacing: -0.03em;
       line-height: 1.14;
       color: #FFFFFF;
-      margin: 0 0 14px;
+      margin: 0 0 16px;
     }
 
     .au-simband-sub {
       font-size: 15px;
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.62);
-      margin: 0 0 22px;
+      margin: 0 0 18px;
     }
 
     .au-simband-list {
@@ -8782,14 +9375,14 @@
       padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 11px;
+      gap: 20px;
     }
 
     .au-simband-list li {
       position: relative;
       padding-left: 26px;
       font-size: 14.5px;
-      line-height: 1.5;
+      line-height: 1.45;
       color: rgba(255, 255, 255, 0.82);
     }
 
@@ -8812,7 +9405,7 @@
     .au-sim-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 14px;
       margin-bottom: 0;
     }
 
@@ -8825,7 +9418,7 @@
     .au-sim-field {
       display: flex;
       flex-direction: column;
-      gap: 7px;
+      gap: 6px;
       min-width: 0;
     }
 
@@ -8844,21 +9437,21 @@
 
     .au-sim-field .au-form-input {
       width: 100%;
-      padding: 13px 15px;
-      font-size: 15px;
+      padding: 10px 14px;
+      font-size: 14.5px;
       color: #FFFFFF;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 12px;
+      border-radius: 10px;
       transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
       box-sizing: border-box;
     }
 
     .au-sim-field textarea.au-form-input {
-      min-height: 92px;
+      min-height: 76px;
       resize: vertical;
       font-family: inherit;
-      line-height: 1.55;
+      line-height: 1.5;
     }
 
     .au-sim-field .au-form-input::placeholder {
@@ -8877,9 +9470,9 @@
       display: flex;
       width: 100%;
       justify-content: center;
-      padding: 16px 24px;
+      padding: 13px 24px;
       font-size: 15px;
-      margin-top: 20px;
+      margin-top: 14px;
     }
 
     .au-form-sim .au-form-err {
@@ -8909,7 +9502,11 @@
       <div class="nav-cta">
         <a href="#auAsk" class="nav-text-link" id="navAskGptBtn" aria-label="Ask your GPT">
           <span class="nav-gpt-icon" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z" />
+            </svg>
           </span>
           <span class="nav-gpt-text">Ask your GPT</span>
         </a>
@@ -8994,150 +9591,56 @@
               </div>
               <h1 class="hero-editorial-title" id="auHeroTitle">Get <em>more leads</em> from events <br
                   class="hero-title-br">you are already running.</h1>
+
+              <div class="hero-wf-ask">
+                <form class="au-form au-form-hero" id="auHeroForm" novalidate>
+                  <label for="auHeroEmail" class="sr-only">Work email</label>
+                  <div class="au-form-bar">
+                    <span class="au-form-ico" aria-hidden="true">
+                      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2.5" y="4.5" width="15" height="11" rx="2" />
+                        <path d="m3 6 7 5 7-5" />
+                      </svg>
+                    </span>
+                    <input type="email" id="auHeroEmail" name="email" class="au-form-input"
+                      placeholder="Enter work email" required autocomplete="email" spellcheck="false">
+                    <button type="submit" class="au-form-btn" id="auHeroSubmit">
+                      <span>Get playbook</span>
+                      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M4 10h11M11 6l4 4-4 4" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="au-form-err" id="auHeroErr" role="alert" aria-live="polite"></div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <div class="hero-wf-rule" id="auHeroRule" aria-hidden="true"></div>
-
-        <div class="hero-wf-lower">
-          <div class="hero-wf-left">
-            <p class="hero-editorial-sub" id="auHeroSub">You already gamify the booth. Spin the wheel - scan the badge -
-              take the swag. It ends with a set of data in a spreadsheet.</p>
-            <p class="hero-editorial-sub" id="auHeroSub2">Wozku points that same game at LinkedIn.</p>
-            <p class="hero-editorial-sub" id="auHeroSub3">One scan, one tap, and a post you already wrote goes out on
-              LinkedIn.</p>
-            <p class="hero-editorial-sub" id="auHeroSub4">Your Product messaging reaches their network from their
-              profile.</p>
-
-            <div class="hero-wf-ask">
-              <form class="au-form au-form-hero" id="auHeroForm" novalidate>
-                <label for="auHeroEmail" class="sr-only">Work email</label>
-                <div class="au-form-bar">
-                  <span class="au-form-ico" aria-hidden="true">
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                      stroke-linejoin="round">
-                      <rect x="2.5" y="4.5" width="15" height="11" rx="2" />
-                      <path d="m3 6 7 5 7-5" />
-                    </svg>
-                  </span>
-                  <input type="email" id="auHeroEmail" name="email" class="au-form-input" placeholder="Enter work email"
-                    required autocomplete="email" spellcheck="false">
-                  <button type="submit" class="au-form-btn" id="auHeroSubmit">
-                    <span>Get playbook</span>
-                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                      stroke-linejoin="round" aria-hidden="true">
-                      <path d="M4 10h11M11 6l4 4-4 4" />
-                    </svg>
-                  </button>
-                </div>
-                <div class="au-form-err" id="auHeroErr" role="alert" aria-live="polite"></div>
-              </form>
-            </div>
-          </div>
-
-          <div class="hero-wf-vdiv" aria-hidden="true"></div>
-
-          <div class="hero-wf-right">
-            <h3 class="hero-wf-pipeline-title">Event <em>leads multiplier</em></h3>
-            <ol class="au-pipeline" id="auHeroPipeline"
-              aria-label="How 400 booth visitors become 200 to 250 net-new leads">
-              <li class="au-pipe-step">
-                <div class="au-pipe-left">
-                  <span class="au-pipe-num">01</span>
-                  <div class="au-pipe-stat">
-                    <b>400</b>
-                    <span class="au-pipe-label">booth visitors</span>
-                  </div>
-                </div>
-                <span class="au-pipe-note">the ones you already paid to meet</span>
-              </li>
-
-              <div class="au-pipe-conn" aria-hidden="true">
-                <svg viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <path d="M5 1v9M2 7l3 3 3-3" />
-                </svg>
-              </div>
-
-              <li class="au-pipe-step">
-                <div class="au-pipe-left">
-                  <span class="au-pipe-num">02</span>
-                  <div class="au-pipe-stat">
-                    <b>200</b>
-                    <span class="au-pipe-label">posts to LinkedIn</span>
-                  </div>
-                </div>
-                <span class="au-pipe-note">one scan, one tap, no app</span>
-              </li>
-
-              <div class="au-pipe-conn" aria-hidden="true">
-                <svg viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <path d="M5 1v9M2 7l3 3 3-3" />
-                </svg>
-              </div>
-
-              <li class="au-pipe-step">
-                <div class="au-pipe-left">
-                  <span class="au-pipe-num">03</span>
-                  <div class="au-pipe-stat">
-                    <b>240,000</b>
-                    <span class="au-pipe-label">potential reach</span>
-                  </div>
-                </div>
-                <span class="au-pipe-note">1,200 reach per attendee post</span>
-              </li>
-
-              <div class="au-pipe-conn" aria-hidden="true">
-                <svg viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <path d="M5 1v9M2 7l3 3 3-3" />
-                </svg>
-              </div>
-
-              <li class="au-pipe-step">
-                <div class="au-pipe-left">
-                  <span class="au-pipe-num">04</span>
-                  <div class="au-pipe-stat">
-                    <b>500</b>
-                    <span class="au-pipe-label">clicks to your page</span>
-                  </div>
-                </div>
-                <span class="au-pipe-note">observed across campaigns</span>
-              </li>
-
-              <div class="au-pipe-conn" aria-hidden="true">
-                <svg viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-                  stroke-linejoin="round">
-                  <path d="M5 1v9M2 7l3 3 3-3" />
-                </svg>
-              </div>
-
-              <li class="au-pipe-step is-payoff">
-                <div class="au-pipe-top">
-                  <div class="au-pipe-left">
-                    <span class="au-pipe-num">05</span>
-                    <div class="au-pipe-stat">
-                      <b>200-250</b>
-                      <span class="au-pipe-label">net-new leads</span>
-                    </div>
-                  </div>
-                  <span class="au-pipe-badge">OUTCOME</span>
-                </div>
-                <span class="au-pipe-subnote">people who were never at your event</span>
-              </li>
-            </ol>
-          </div>
+      <!-- TRUST BAR (Divider between Hero and Live Video Section) -->
+      <section class="au-trust" id="auTrust">
+        <div class="wrap">
+          <p class="au-trust-label">Trusted by global marketing teams at</p>
         </div>
+        <div class="marquee">
+          <div class="marquee-track"></div>
+        </div>
+      </section>
 
-        <div class="hero-content-wrap">
+      <!-- LIVE EVENT FOOTAGE (Video Section) -->
+      <section class="au-section au-video-showcase-section" id="auLiveFootage">
+        <div class="wrap">
           <div class="au-hero-video-header" id="auHeroVideoHeader">
             <span class="au-tag">
               <span class="au-live-dot"></span>
               Live Event Footage
             </span>
-            <h2 class="au-video-head-title is-plain"><strong>See how brands are using Wozku at</strong><br><em>live events.</em></h2>
+            <h2 class="au-video-head-title is-plain"><strong>See how brands are using Wozku at</strong><br><em>live
+                events.</em></h2>
             <p class="au-video-head-sub">Attendees scan, tap once, and share pre-written posts from their own LinkedIn.
               Watch real footage recorded on the exhibition floor.</p>
           </div>
@@ -9354,22 +9857,10 @@
         </div>
       </section>
 
-      <!-- TRUST BAR -->
-      <section class="au-trust">
-        <div class="wrap">
-          <p class="au-trust-label">Trusted by global marketing teams at</p>
-        </div>
-        <div class="marquee">
-          <div class="marquee-track"></div>
-        </div>
-      </section>
-
       <!-- THE REALITY CHECK (agitation) -->
       <section class="au-section au-math" id="auMath">
         <div class="wrap">
           <div class="au-head reveal">
-            <p class="au-before-after-kicker">You built a claw machine, a photo booth and a prize wheel this year. None
-              of them followed anyone home.</p>
             <h2 class="au-h2">Same 400 people. Two very different outcomes.</h2>
           </div>
 
@@ -9446,8 +9937,7 @@
                               </svg>
                             </span>
                             <div class="au-mfeat-payoff-copy">
-                              <div class="au-mfeat-payoff-num">400 + 200 to 250</div>
-                              <div class="au-mfeat-payoff-lbl">net-new leads who were never at the event</div>
+                              <div class="au-mfeat-payoff-num">400 badges + 200 to 250 net new leads</div>
                             </div>
                           </div>
                         </li>
@@ -9494,6 +9984,15 @@
                     <div class="au-stage-wrap">
                       <!-- View A: Deadend Checklist (Default 50% state) -->
                       <ul class="au-mfeatures au-mfeatures-simple au-stage-list">
+                        <li class="au-mfeat">
+                          <span class="au-mfeat-check is-dead-feat" aria-hidden="true">
+                            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.4"
+                              stroke-linecap="round" stroke-linejoin="round">
+                              <path d="M2.5 7.5L5.5 10.5L11.5 3.5" />
+                            </svg>
+                          </span>
+                          <span class="au-mfeat-t">400 badge scans. only</span>
+                        </li>
                         <li class="au-mfeat is-hero">
                           <div class="au-mfeat-hero-inner is-dead-hero">
                             <span class="au-mfeat-check is-dead-hero" aria-hidden="true">
@@ -9503,8 +10002,7 @@
                               </svg>
                             </span>
                             <div class="au-mfeat-payoff-copy">
-                              <div class="au-mfeat-payoff-num is-dead">400 badge scans</div>
-                              <div class="au-mfeat-payoff-lbl is-dead">and that is the end of it</div>
+                              <div class="au-mfeat-payoff-num is-dead">400 badge scans. Nothing more.</div>
                             </div>
                           </div>
                         </li>
@@ -9588,10 +10086,7 @@
         <div class="wrap">
           <div class="au-head reveal">
             <h2 class="au-h2">One tap at the booth. That is the entire ask.</h2>
-            <p class="au-sub">Under 15 minutes to set up. Three steps to run.</p>
-            <p class="au-how-kicker">Whatever your next event is, you are not too late to put this on it. Building the
-              contest takes one person under 15 minutes. No code, no IT ticket, no procurement cycle, nothing new for
-              your team to learn before the show.</p>
+            <p class="au-sub">Under 15 minutes to set up. No integrations, no IT lift.</p>
           </div>
 
           <div class="au-norma-grid reveal">
@@ -9616,7 +10111,7 @@
             <div class="au-norma-card">
               <div class="au-norma-card-head">
                 <span class="au-norma-num">2</span>
-                <h3 class="au-norma-title">They tap once</h3>
+                <h3 class="au-norma-title">They share</h3>
                 <p class="au-norma-desc">The post is already written and branded by you with specific CTA links that you
                   want to push. One tap sends it to their LinkedIn.</p>
               </div>
@@ -9632,7 +10127,7 @@
             <div class="au-norma-card">
               <div class="au-norma-card-head">
                 <span class="au-norma-num">3</span>
-                <h3 class="au-norma-title">They play for something</h3>
+                <h3 class="au-norma-title">They win</h3>
                 <p class="au-norma-desc">Points land instantly. Their name goes up on the leaderboard. Top scorers walk
                   away with the prize.</p>
               </div>
@@ -9664,19 +10159,31 @@
                 <div class="au-story-card-header">
                   <div class="au-story-heading">
                     <div class="au-story-kicker">Treasure Hunt, Singapore</div>
-                    <h3 class="au-story-co">Elastic</h3>
+                    <div class="au-story-brand">
+                      <img src="/Elastic-Logo.svg" alt="Elastic" class="au-story-logo au-story-logo--elastic"
+                        width="130" height="30">
+                    </div>
                   </div>
                   <div class="au-story-media">
-                    <div class="au-thumb-fan" role="button" tabindex="0" aria-label="View Elastic campaign visuals" data-gallery="elastic">
+                    <div class="au-thumb-fan" role="button" tabindex="0" aria-label="View Elastic campaign visuals"
+                      data-gallery="elastic">
                       <!-- Card 1 (Back) -->
-                      <figure class="au-thumb-shot au-thumb-shot--1" data-src="/elastic 1.webp" data-title="Elastic Event Campaign · Snapshot 1">
+                      <figure class="au-thumb-shot au-thumb-shot--1" data-src="/elastic 1.webp"
+                        data-title="Elastic Event Campaign · Snapshot 1">
                         <img src="/elastic 1.webp" alt="Elastic campaign snapshot 1" loading="lazy" />
                       </figure>
                       <!-- Card 2 (Front) -->
-                      <figure class="au-thumb-shot au-thumb-shot--2" data-src="/elastic 2.webp" data-title="Elastic Event Campaign · Snapshot 2">
+                      <figure class="au-thumb-shot au-thumb-shot--2" data-src="/elastic 2.webp"
+                        data-title="Elastic Event Campaign · Snapshot 2">
                         <img src="/elastic 2.webp" alt="Elastic campaign snapshot 2" loading="lazy" />
                         <span class="au-thumb-zoom-icon" aria-hidden="true">
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                          </svg>
                         </span>
                       </figure>
                     </div>
@@ -9697,7 +10204,8 @@
               </div>
 
               <div class="au-story-who">
-                <strong>Who posted.</strong> Among them: Core engineering leads, solutions architects, developer advocates, and internal employee champions.
+                <strong>Who posted.</strong> Among them: Core engineering leads, solutions architects, developer
+                advocates, and internal employee champions.
               </div>
             </article>
 
@@ -9707,19 +10215,31 @@
                 <div class="au-story-card-header">
                   <div class="au-story-heading">
                     <div class="au-story-kicker">Mission Game, Gartner IT Symposium</div>
-                    <h3 class="au-story-co">Sify</h3>
+                    <div class="au-story-brand">
+                      <img src="/Sify.webp" alt="Sify" class="au-story-logo au-story-logo--sify" width="112"
+                        height="30">
+                    </div>
                   </div>
                   <div class="au-story-media">
-                    <div class="au-thumb-fan" role="button" tabindex="0" aria-label="View Sify campaign visuals" data-gallery="sify">
+                    <div class="au-thumb-fan" role="button" tabindex="0" aria-label="View Sify campaign visuals"
+                      data-gallery="sify">
                       <!-- Card 1 (Back) -->
-                      <figure class="au-thumb-shot au-thumb-shot--1" data-src="/sify 1.webp" data-title="Sify Gartner Campaign · Snapshot 1">
+                      <figure class="au-thumb-shot au-thumb-shot--1" data-src="/sify 1.webp"
+                        data-title="Sify Gartner Campaign · Snapshot 1">
                         <img src="/sify 1.webp" alt="Sify campaign snapshot 1" loading="lazy" />
                       </figure>
                       <!-- Card 2 (Front) -->
-                      <figure class="au-thumb-shot au-thumb-shot--2" data-src="/sify 2.webp" data-title="Sify Gartner Campaign · Snapshot 2">
+                      <figure class="au-thumb-shot au-thumb-shot--2" data-src="/sify 2.webp"
+                        data-title="Sify Gartner Campaign · Snapshot 2">
                         <img src="/sify 2.webp" alt="Sify campaign snapshot 2" loading="lazy" />
                         <span class="au-thumb-zoom-icon" aria-hidden="true">
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                          </svg>
                         </span>
                       </figure>
                     </div>
@@ -9740,29 +10260,12 @@
               </div>
 
               <div class="au-story-who">
-                <strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers and VPs of IT at large enterprises.
+                <strong>Who posted.</strong> Among them: Chief Information Officers, Chief Information Security Officers
+                and VPs of IT at large enterprises.
               </div>
             </article>
 
           </div><!-- /.au-story-grid -->
-
-          <div class="au-editorial is-tail reveal">
-            <div class="au-editorial-head">
-              <p class="au-editorial-lead">It is worth sitting with that for a second.</p>
-            </div>
-            <div class="au-editorial-body">
-              <p>Think about what it normally takes to get a CISO to say your product name in public. Not a reply to an
-                email. Not a meeting. A post on their own profile, under their own name, where their board and their
-                peers can see it.</p>
-              <p>There is no ad unit you can buy that produces that. There is no sequence that produces it. It is
-                usually the output of a customer relationship measured in years, and you cannot manufacture it on a
-                normal Tuesday for any amount of money.</p>
-              <p>Here it happened in an afternoon, at a booth, because it was gamified.</p>
-              <p>And the reach that follows is not generic reach. A CIO's network is mostly other CIOs. Those 141,034
-                potential impressions landed in front of the exact titles Sify sells to, which is the audience their
-                paid campaigns spend the most to reach and never get an endorsement from.</p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -9871,50 +10374,6 @@
         </div>
       </section>
 
-      <!-- WHY THE ATTENDEE POST OUTPERFORMS YOURS -->
-      <section class="au-section au-outperform" id="auOutperform">
-        <div class="wrap">
-          <div class="au-editorial reveal">
-            <div class="au-editorial-head">
-              <h2 class="au-h2">The same message, from a person instead of a page.</h2>
-            </div>
-            <div class="au-editorial-body">
-              <p class="au-editorial-lead">Your CEO's keynote deserves better than 40 likes from people who already
-                report to her.</p>
-              <p>Your company page reaches the people who already follow you. Most of them are colleagues, existing
-                customers and competitors. And perhaps, you have already noticed, it is not working anymore.</p>
-              <p>An attendee's post reaches a network of peers who share their job title, and it arrives from someone
-                they already trust. The same message travels 3 to 10 times further from a person than from a brand page.
-              </p>
-              <p class="au-editorial-note">This is why the promo kit never worked. It was the right content, sent
-                through the wrong account.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- WHERE THE LEADS COME FROM -->
-      <section class="au-section au-leadsource" id="auLeadSource">
-        <div class="wrap">
-          <div class="au-editorial reveal">
-            <div class="au-editorial-head">
-              <h2 class="au-h2">Posts are not the outcome. Leads are.</h2>
-            </div>
-            <div class="au-editorial-body">
-              <p>Every share may carry a tracked link (simple UTMed link to your landing page). When someone in that
-                attendee's network clicks it, they land on your registration page, your gated report, or a page that
-                captures their details before it hands them off.</p>
-              <p>Every click, form fill and registration is attributed back to the event campaign you ran. You end up
-                with net new leads, not just an impressions number.</p>
-              <p>Which means when your VP asks what the booth produced, you can answer the question they actually asked.
-              </p>
-              <p class="au-editorial-lead">Nobody cuts the budget for the thing that's visibly working. This is how you
-                make it visible.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section class="au-section au-roi" id="auRoi">
         <div class="wrap">
           <div class="au-head reveal">
@@ -10001,7 +10460,6 @@
           <div class="au-simband-plate reveal">
             <div class="au-simband-copy">
               <h2 class="au-simband-h">Need a dedicated simulation for your upcoming event?</h2>
-              <p class="au-simband-sub">Share the details - Name, email Phone, Event Link or details - submit</p>
               <ul class="au-simband-list">
                 <li>Your own event, modelled on its real attendee count</li>
                 <li>Benchmarks from campaigns we have already run</li>
@@ -10055,7 +10513,8 @@
           <div class="au-ask-grid reveal">
             <div class="au-ask-copy">
               <span class="au-tag">Don't take our word for it</span>
-              <h2 class="au-h2"><span class="au-h2-line">Ask your own AI if</span><span class="au-h2-line">Wozku <em class="au-ask-em">fits your event</em>.</span></h2>
+              <h2 class="au-h2"><span class="au-h2-line">Ask your own AI if</span><span class="au-h2-line">Wozku <em
+                    class="au-ask-em">fits your event</em>.</span></h2>
               <p class="au-sub">Paste this in and get a straight answer, not a sales pitch.</p>
               <ol class="au-ask-steps">
                 <li>Copy the prompt</li>
@@ -10209,8 +10668,6 @@
             <div class="au-cta-col">
               <h2 class="au-cta-h2">Ready to see what your next event could produce?</h2>
               <p class="au-cta-sub">The same system running behind every program on this page, written down.</p>
-              <p class="au-cta-sub au-cta-closing">Your next event is already paid for. The booth, the flights, the
-                stand build. The only question is whether the people who show up leave with something to say.</p>
 
               <form class="au-form au-form-cta" id="auCtaForm" novalidate>
                 <label for="auCtaEmail" class="sr-only">Work email</label>
@@ -11188,8 +11645,49 @@
 
     // Playbook capture (GHOST)
     const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const FREE_EMAIL_DOMAINS = new Set([
+      'gmail.com', 'googlemail.com', 'yahoo.com', 'yahoo.co.in', 'yahoo.co.uk', 'yahoo.ca', 'yahoo.fr', 'yahoo.de',
+      'hotmail.com', 'hotmail.co.uk', 'hotmail.fr', 'outlook.com', 'live.com', 'msn.com',
+      'icloud.com', 'me.com', 'mac.com', 'aol.com', 'mail.com', 'zoho.com',
+      'protonmail.com', 'proton.me', 'yandex.com', 'yandex.ru', 'gmx.com',
+      'gmx.net', 'inbox.com', 'tutanota.com', 'fastmail.com', 'qq.com', '163.com', '126.com', 'rediffmail.com'
+    ]);
 
-    function showThankYou() {
+    window.wozkuLead = {
+      email: '',
+      phone: '',
+      eventDetails: '',
+      source: '',
+      selectedDate: '',
+      selectedTime: '',
+      timezone: '',
+      bookingFormatted: '',
+      submittedAt: '',
+      bookedAt: ''
+    };
+
+    function validateWorkEmail(email) {
+      const trimmed = (email || '').trim().toLowerCase();
+      if (!EMAIL_RE.test(trimmed)) {
+        return { valid: false, message: 'Please enter a valid work email address.' };
+      }
+      const domain = trimmed.split('@')[1];
+      if (domain && FREE_EMAIL_DOMAINS.has(domain)) {
+        return {
+          valid: false,
+          message: `Please use your work email (e.g. name@company.com). Free email providers (@${domain}) are not accepted.`
+        };
+      }
+      return { valid: true, email: trimmed };
+    }
+
+    function showThankYou(leadData) {
+      if (leadData) {
+        Object.assign(window.wozkuLead, leadData);
+        try {
+          sessionStorage.setItem('wozku_lead', JSON.stringify(window.wozkuLead));
+        } catch (e) { }
+      }
       const mainView = document.getElementById('mainView');
       const ty = document.getElementById('auThankYou');
       if (!mainView || !ty) return;
@@ -11223,14 +11721,18 @@
       input.addEventListener('input', () => { if (err) err.textContent = ''; });
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const value = input.value.trim();
-        if (!EMAIL_RE.test(value)) {
-          if (err) err.textContent = 'Enter a valid work email so we can send the playbook.';
+        const check = validateWorkEmail(input.value);
+        if (!check.valid) {
+          if (err) err.textContent = check.message;
           input.focus();
           return;
         }
         if (err) err.textContent = '';
-        showThankYou();
+        showThankYou({
+          email: check.email,
+          source: formId,
+          submittedAt: new Date().toISOString()
+        });
       });
     }
 
@@ -11241,18 +11743,27 @@
     (function wireSimForm() {
       const form = document.getElementById('auSimForm');
       const email = document.getElementById('auSimEmail');
+      const phone = document.getElementById('auSimPhone');
+      const eventField = document.getElementById('auSimEvent');
       const err = document.getElementById('auSimErr');
       if (!form || !email) return;
       email.addEventListener('input', () => { if (err) err.textContent = ''; });
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        if (!EMAIL_RE.test(email.value.trim())) {
-          if (err) err.textContent = 'Enter a valid email.';
+        const check = validateWorkEmail(email.value);
+        if (!check.valid) {
+          if (err) err.textContent = check.message;
           email.focus();
           return;
         }
         if (err) err.textContent = '';
-        showThankYou();
+        showThankYou({
+          email: check.email,
+          phone: phone ? phone.value.trim() : '',
+          eventDetails: eventField ? eventField.value.trim() : '',
+          source: 'auSimForm',
+          submittedAt: new Date().toISOString()
+        });
       });
     })();
 
@@ -11285,9 +11796,13 @@
       if (!monthTitle || !daysGrid || !slotsList) return;
 
       // Auto-detect user's timezone
+      let detectedTz = 'Local Time';
       try {
         const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        if (tz && tzLabel) tzLabel.textContent = tz;
+        if (tz) {
+          detectedTz = tz;
+          if (tzLabel) tzLabel.textContent = tz;
+        }
       } catch (e) { }
 
       const MONTH_NAMES = [
@@ -11452,17 +11967,45 @@
 
       if (confirmBtn) {
         confirmBtn.addEventListener('click', () => {
+          if (!selectedDate) return;
+          const longDay = LONG_DAYS[selectedDate.getDay()];
+          const monthName = MONTH_NAMES[selectedDate.getMonth()];
+          const dayNum = selectedDate.getDate();
+          const yearNum = selectedDate.getFullYear();
+          const formattedBooking = `${longDay}, ${monthName} ${dayNum}, ${yearNum} at ${selectedTime}`;
+          const isoDate = `${yearNum}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+
+          // Fetch and store chosen date & time into global lead state
+          window.wozkuLead.selectedDate = isoDate;
+          window.wozkuLead.selectedTime = selectedTime;
+          window.wozkuLead.timezone = detectedTz;
+          window.wozkuLead.bookingFormatted = formattedBooking;
+          window.wozkuLead.bookedAt = new Date().toISOString();
+
+          try {
+            sessionStorage.setItem('wozku_lead', JSON.stringify(window.wozkuLead));
+          } catch (e) { }
+
+          // Dispatch event for any analytics/webhooks
+          window.dispatchEvent(new CustomEvent('wozku:booked', { detail: window.wozkuLead }));
+          console.log('📅 Wozku Session Scheduled:', window.wozkuLead);
+
           const when = document.getElementById('auCalWhen');
-          if (when && selectedDate) {
-            const longDay = LONG_DAYS[selectedDate.getDay()];
-            const monthName = MONTH_NAMES[selectedDate.getMonth()];
-            when.textContent = `${longDay}, ${monthName} ${selectedDate.getDate()}, ${selectedDate.getFullYear()} at ${selectedTime}`;
+          if (when) {
+            when.textContent = formattedBooking;
           }
+          const note = document.querySelector('.au-cal-note');
+          if (note && window.wozkuLead.email) {
+            note.innerHTML = `A calendar invitation with the meeting link is on its way to <strong>${window.wozkuLead.email}</strong>.`;
+          }
+
           const picker = document.getElementById('auCalPicker');
           const done = document.getElementById('auCalDone');
           if (picker) picker.style.display = 'none';
-          if (done) done.style.display = 'block';
-          fireConfetti();
+          if (done) {
+            done.style.display = 'block';
+            fireConfetti();
+          }
         });
       }
 
@@ -11955,46 +12498,21 @@
       figs.forEach((f) => io.observe(f));
     })();
 
-    // Hero colour band geometry
+    // Hero colour band geometry - restricted strictly to hero title
     (function heroBandGeometry() {
       const hero = document.getElementById('hero');
       if (!hero) return;
 
       function apply() {
-        const subs = hero.querySelectorAll('.hero-editorial-sub');
-        const tail = subs.length ? subs[subs.length - 1] : hero.querySelector('.hero-editorial-title');
         const hr = hero.getBoundingClientRect();
-        if (!hr.height) return;                 // still inside a display:none view
+        if (!hr.height) return;
 
-        let tailRect = tail && tail.getBoundingClientRect();
-
-        const rule = hero.querySelector('.hero-wf-rule');
-        const split = !!rule;
-        if (rule) {
-          const rr = rule.getBoundingClientRect();
-          if (rr.height || rr.top) tailRect = { bottom: rr.top, height: 1 };
-        }
-
-        let band, fadeTop;
-        if (tailRect && tailRect.height) {
-          const tailBottom = tailRect.bottom - hr.top;
-          if (split) {
-            const fadeLen = window.innerWidth < 820 ? 170 : 240;
-            band = tailBottom + 8;
-            fadeTop = Math.max(0, band - fadeLen);
-          } else {
-            const fadeLen = window.innerWidth < 820 ? 150 : 200;
-            fadeTop = Math.max(0, tailBottom + 28);
-            band = fadeTop + fadeLen;
-            hero.style.setProperty('--hero-chain-gap', Math.round(band - tailBottom + 28) + 'px');
-          }
-        } else {
-          band = Math.round(window.innerHeight * 0.72);
-          fadeTop = band * 0.45;
-        }
+        const band = hr.height;
+        const fadeLen = window.innerWidth < 820 ? 140 : 200;
+        const fadeTop = Math.max(0, band - fadeLen);
 
         hero.style.setProperty('--hero-band', Math.round(band) + 'px');
-        hero.style.setProperty('--hero-fade-top', Math.round(Math.min(fadeTop, band - 50)) + 'px');
+        hero.style.setProperty('--hero-fade-top', Math.round(fadeTop) + 'px');
         hero.classList.add('hero-band-ready');
         window.dispatchEvent(new Event('hero:band'));
       }
@@ -13504,7 +14022,11 @@
     <div class="au-img-modal-backdrop" id="auImgModalBackdrop"></div>
     <div class="au-img-modal-dialog">
       <button type="button" class="au-img-modal-close" id="auImgModalClose" aria-label="Close preview">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
       </button>
 
       <div class="au-img-modal-figure">
@@ -13514,11 +14036,17 @@
 
       <div class="au-img-modal-nav">
         <button type="button" class="au-img-modal-arrow is-prev" id="auImgModalPrev" aria-label="Previous image">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
         </button>
         <div class="au-img-modal-thumbs" id="auImgModalThumbs"></div>
         <button type="button" class="au-img-modal-arrow is-next" id="auImgModalNext" aria-label="Next image">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
         </button>
       </div>
     </div>
