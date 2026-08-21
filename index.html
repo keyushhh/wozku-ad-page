@@ -13,7 +13,8 @@
     content="Turn event attendees and booth visitors into your highest-ROI pipeline channel on LinkedIn. One scan, one tap, and branded posts reach their qualified network.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://wozku.com/fmp">
-  <meta property="og:image" content="https://wozku.com/og-image.webp">
+  <meta property="og:image" content="/og-image.webp?v=2">
+  <meta property="og:image:secure_url" content="/og-image.webp?v=2">
   <meta property="og:image:type" content="image/webp">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +23,7 @@
   <meta name="twitter:title" content="Wozku | Get More Leads from Events You Are Already Running">
   <meta name="twitter:description"
     content="Turn event attendees and booth visitors into your highest-ROI pipeline channel on LinkedIn. One scan, one tap, and branded posts reach their qualified network.">
-  <meta name="twitter:image" content="https://wozku.com/og-image.webp">
+  <meta name="twitter:image" content="/og-image.webp?v=2">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://wozku.com/fmp">
   <meta name="theme-color" content="#059669">
@@ -249,14 +250,7 @@
       --shadow-lg: 0 2px 8px rgba(15, 23, 42, 0.04), 0 32px 64px -24px rgba(15, 23, 42, 0.11);
       --container: 1120px;
       /* The hero plate is reused by two cards further down the page. */
-      --plate: url('/hero-plate-emerald.jpg');
-    }
-
-    @media (max-width:760px) {
-      :root {
-        --plate: image-set(url('/hero-plate-emerald-900.webp') type('image/webp'),
-            url('/hero-plate-emerald-900.jpg') type('image/jpeg'));
-      }
+      --plate: url('/og-image.webp');
     }
 
     * {
@@ -12548,8 +12542,7 @@
       const MID = 'vec3(0.063, 0.725, 0.506)';   // #10B981 brand emerald
       const LITE = 'vec3(0.655, 0.953, 0.816)';   // #A7F3D0 emerald light
       const TINT = LITE;                          // stands in for rgb(1,.459,.792)
-      const PLATE_SMALL = window.matchMedia('(max-width:760px)').matches;
-      const PLATE_SRC = PLATE_SMALL ? '/hero-plate-emerald-900.webp' : '/hero-plate-emerald.jpg';
+      const PLATE_SRC = '/og-image.webp';
       const PLATE_W = PLATE_SMALL ? 900 : 1600, PLATE_H = PLATE_SMALL ? 518 : 920;
 
       const COMMON = `
