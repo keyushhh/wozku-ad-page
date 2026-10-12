@@ -26,8 +26,7 @@ const excludes = [
   '*.zip*',
   '*CLAUDE.md*',
   '*tsconfig*',
-  '*.oxlintrc*',
-  '*src/*'
+  '*.oxlintrc*'
 ];
 
 const excludeFlags = excludes.map(pattern => `-x "${pattern}"`).join(' ');
